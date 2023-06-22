@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://xishmum2ac57"]
+
+[ext_resource type="Script" path="res://addons/AudioManager/Singleton/AudioManager.gd" id="1_fuqag"]
+
+[node name="AudioManager" type="Node"]
+script = ExtResource("1_fuqag")
+audio_extensions = Array[String](["ogg", "wav", "mp3"])
+music_paths = "res://AudioManager/Main"
+adaptive_music_paths = "res://AudioManager/Scenes"
+debugging = true
+
+[node name="Adaptive_BGM" type="Node" parent="."]
+
+[node name="Background_Music" type="Node" parent="."]
+
+[node name="Background_Sounds" type="Node" parent="."]

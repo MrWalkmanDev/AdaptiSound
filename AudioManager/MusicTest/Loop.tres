@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3 uid="uid://bwm7dc22sagp3"]
+
+[ext_resource type="Script" path="res://addons/AudioManager/Nodes/BaseAudioTrack.gd" id="1_tka58"]
+
+[resource]
+script = ExtResource("1_tka58")
+audio_file = "res://AudioManager/MusicTest/Loop(Manager).ogg"
+track_name = "Loop"
+bpm = 203.0
+metric = 3
+loop = true
+keys_loop_in_beat = Array[int]([])
+keys_loop_in_measure = Array[int]([4])
+keys_end_in_beat = Array[int]([])
+keys_end_in_measure = Array[int]([5])
