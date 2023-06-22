@@ -33,15 +33,23 @@ var loops = {}
 var loops_audio_streams = []
 
 # Fades
+var tween
 var transition = Transitions.new()
+var fade_out_loop = 1.5
+var fade_in_loop = 0.5
+
+var volume_db = 0.0 : set = set_volume_db, get = get_volume_db
+var pitch = 0.0 : set = set_pitch, get = get_pitch
 
 
 func _ready():
 	intro_player.stream = intro_file
+	intro_player.volume_db = volume_db
 	add_child(intro_player)
 	intro_player.connect("finished", intro_finished)
 	
 	outro_player.stream = outro_file
+	outro_player.volume_db = volume_db
 	add_child(outro_player)
 	outro_player.connect("finished", destroy_track)
 	
@@ -49,10 +57,10 @@ func _ready():
 		if loop_files[0] != null:
 			sec_per_beat = 60.0 / loop_files[0].bpm
 		else:
-			AudioManager.debug._print("ERROR: not found loop files")
+			AudioManager.debug._print("ERROR: Not found loop files")
 			return
 	else:
-		AudioManager.debug._print("ERROR: not found loop files")
+		AudioManager.debug._print("ERROR: Not found loop files")
 		return
 	
 	for i in loop_files:
@@ -73,6 +81,20 @@ func _ready():
 		
 ## PLAYBACK OPTIONS ##
 
+func set_volume_db(value : float):
+	volume_db = value
+	for i in get_children():
+		i.volume_db = volume_db
+	
+func get_volume_db():
+	return volume_db
+	
+func set_pitch(value):
+	pass
+
+func get_pitch():
+	return pitch
+
 ## Play Functions
 	
 func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
@@ -85,7 +107,7 @@ func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
 	if intro_file != null:
 		transition.request_play_transition(self, intro_player, fade_in)
 	else:
-		AudioManager.debug._print("DEBUG: Track Without Intro")
+		AudioManager.debug._print("DEBUG: Track without intro")
 		transition.request_play_transition(self,
 		loops_audio_streams[loop_index], fade_in)
 			
@@ -99,7 +121,15 @@ func on_play_loop(fade_time, loop_index):
 	transition.request_play_transition(self,
 	loops_audio_streams[loop_index], fade_time)
 	
-func change_loop(index, fade_in := 0.0, fade_out := 0.0):
+func change_loop(index, fade_in, fade_out):
+	can_end_track = false #evita el outro retrasado.
+	
+	fade_in_loop = fade_in
+	fade_out_loop = fade_out
+	loops_audio_streams[index].volume_db = volume_db
+	if tween:
+		tween.kill()
+	
 	if loop_files[loop_playing].keys_loop_in_beat != [] \
 	or loop_files[loop_playing].keys_loop_in_measure != []:
 		
@@ -109,52 +139,55 @@ func change_loop(index, fade_in := 0.0, fade_out := 0.0):
 			if audio_playing != outro_player and audio_playing != intro_player:
 				loop_target = index
 				can_change_track = true
-				AudioManager.debug._print("DEBUG: Loop Prepare Change")
+				AudioManager.debug._print("DEBUG: Loop prepare to change")
 			else:
 				transition.request_change_transition(self, audio_playing,
 				loops_audio_streams[index], fade_out, fade_in)
 				AudioManager.debug._print("DEBUG: Go to the loop")
 		else:
 			can_change_track = false
-			AudioManager.debug._print("DEBUG: Loop Continue")
+			AudioManager.debug._print("DEBUG: Loop continue")
 			
 	else:
-		loop_target = index
-		change_track()
-		
-func check_stream_playing():
-	pass
+		if loop_playing != index:
+			loop_target = index
+			change_track(fade_out, fade_in)
+		else:
+			AudioManager.debug._print("DEBUG: Loop continue")
 	
-func on_outro():
+func on_outro(fade_out, fade_in):
+	fade_in_loop = fade_in
+	fade_out_loop = fade_out
+	
 	if outro_file != null:
-		if loop_files[loop_playing].keys_loop_in_beat != [] \
-		or loop_files[loop_playing].keys_loop_in_measure != []:
+		if loop_files[loop_playing].keys_end_in_beat != [] \
+		or loop_files[loop_playing].keys_end_in_measure != []:
 			
-			var audio_playing = get_stream_playing()
-			
-			if audio_playing != outro_player:
-				can_end_track = true
+			if outro_player.playing:
+				can_end_track = false
+				AudioManager.debug._print("DEBUG: Outro continue")
 			else:
-				print("Outro already playing")
+				can_end_track = true
+				AudioManager.debug._print("DEBUG: Outro prepare to change")
 				
 		else:
-			for i in loops_audio_streams:
-				i.stop()
+			var audio_playing = get_stream_playing()
+			transition.request_change_transition(self, audio_playing,
+			outro_player, fade_out, fade_in)
 			outro_player.play()
+			AudioManager.debug._print("DEBUG: Go to the outro")
+	else:
+		if outro_player.playing:
+			AudioManager.debug._print("DEBUG: Outro continue")
+		else:
+			on_stop(fade_out)
+	
+func on_stop(fade_out):
+	if fade_out != 0.0:
+		for i in get_children():
+			transition.fade_out(self, i, fade_out)
 	else:
 		destroy_track()
-	
-func on_stop():
-	"""if intro_player != null:
-		intro_player.stop()
-	
-	for i in loops_audio_streams:
-		i.stop()
-		
-	if outro_player != null:
-		outro_player.stop()"""
-		
-	destroy_track()
 	
 func intro_finished():
 	loops_audio_streams[loop_playing].play()
@@ -168,13 +201,14 @@ func can_loop():
 		loops_audio_streams[loop_playing].play()
 	
 func _physics_process(delta):
-	if loops_audio_streams[loop_playing].playing:
-		song_position = loops_audio_streams[loop_playing].get_playback_position()\
-		+ AudioServer.get_time_since_last_mix()
-		
-		song_position -= AudioServer.get_output_latency()
-		song_position_in_beats = int(floor(song_position / sec_per_beat)) + beats_before_start
-		_report_beat()
+	if loop_files != []:
+		if loops_audio_streams[loop_playing].playing:
+			song_position = loops_audio_streams[loop_playing].get_playback_position()\
+			+ AudioServer.get_time_since_last_mix()
+			
+			song_position -= AudioServer.get_output_latency()
+			song_position_in_beats = int(floor(song_position / sec_per_beat)) + beats_before_start
+			_report_beat()
 
 func _report_beat():
 	if last_reported_beat < song_position_in_beats:
@@ -203,8 +237,9 @@ func change_measure_tracks():
 	if loop_files[loop_playing].keys_end_in_measure.has(measures) \
 	and can_end_track:
 		can_end_track = false
-		for i in loops_audio_streams:
-			i.stop()
+		var audio_playing = get_stream_playing()
+		transition.request_change_transition(self, audio_playing,
+		outro_player, fade_out_loop, fade_in_loop)
 		outro_player.play()
 		
 func change_beat_tracks():
@@ -217,24 +252,25 @@ func change_beat_tracks():
 	if loop_files[loop_playing].keys_end_in_beat.has(song_position_in_beats + 1) \
 	and can_end_track:
 		can_end_track = false
-		for i in loops_audio_streams:
-			i.stop()
+		var audio_playing = get_stream_playing()
+		transition.request_change_transition(self, audio_playing,
+		outro_player, fade_out_loop, fade_in_loop)
 		outro_player.play()
 	
-func change_track():
+func change_track(fade_out = fade_out_loop, fade_in = fade_in_loop):
 	can_change_track = false
 	measures = 1
 	last_reported_beat = 0
 	song_position_in_beats = 0
 	
 	sec_per_beat = 60.0 / loop_files[loop_target].bpm
-	transition.between_fades(self, loops_audio_streams[loop_playing], loops_audio_streams[loop_target])
-	#fade_out(loops_audio_streams[loop_playing], loops_audio_streams[loop_target])
-	#loops_audio_streams[loop_playing].stop()
+	transition.request_change_transition(self, loops_audio_streams[loop_playing],
+	loops_audio_streams[loop_target], fade_out, fade_in)
+	
 	loops_audio_streams[loop_target].play()
 	loop_playing = loop_target
 	
-	print("Change track")
+	AudioManager.debug._print("DEBUG: Change Loop")
 	
 func destroy_track():
 	for i in get_children():

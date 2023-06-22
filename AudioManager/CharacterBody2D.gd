@@ -14,13 +14,16 @@ const JUMP_VELOCITY = -400.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 func _input(_event):
 	if Input.is_action_just_pressed("ui_up"):
-		AudioManager.ABGM.play_music("Theme1")
+		var node = AudioManager.ABGM.play_music("Theme1")
+		
 	if Input.is_action_just_pressed("ui_down"):
 		AudioManager.ABGM.end_music("Theme1")
+		
 	if Input.is_action_just_pressed("ui_left"):
-		AudioManager.ABGM.change_loop("Theme1", 0)
+		AudioManager.ABGM.change_loop("Theme1", 0, true)
+		
 	if Input.is_action_just_pressed("ui_right"):
-		AudioManager.ABGM.change_loop("Theme1", 1)
+		AudioManager.ABGM.change_loop("Theme1", 1, true)
 
 func _ready():
 	pass
