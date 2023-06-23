@@ -3,21 +3,30 @@ extends EditorPlugin
 
 class_name AudioTool
 
+const adaptive_track_icon = preload("res://addons/AudioManager/Icons/Adaptive.png") 
+const parallel_track_icon = preload("res://addons/AudioManager/Icons/Parallel.png")
+const secuencertrack_icon = preload("res://addons/AudioManager/Icons/Secuencer.png")
+
 #const MainPanel := preload("res://addons/AudioManager/Editor/Editor.tscn")
-
 #signal file_names_updated(file_names)
-
 #var main_instance : Control
 
 func _enter_tree():
 	# Add Singleton #
 	add_autoload_singleton("AudioManager", "res://addons/AudioManager/Singleton/AudioManager.tscn")
 	
-	# Add node #
+	# Add nodes #
 	add_custom_type("AdaptiveTrack", "Node",
 	preload("res://addons/AudioManager/Nodes/AdaptiveTrack.gd"), 
-	_get_plugin_icon())
+	adaptive_track_icon)
 	
+	add_custom_type("ParallelTrack", "Node",
+	preload("res://addons/AudioManager/Nodes/ParallelTrack.gd"),
+	parallel_track_icon)
+	
+	add_custom_type("SecuencerTrack", "Node",
+	preload("res://addons/AudioManager/Nodes/SecuencerTrack.gd"),
+	secuencertrack_icon)
 	
 	"""main_instance = MainPanel.instantiate()
 	main_instance.hide()
@@ -35,6 +44,7 @@ func _exit_tree():
 	remove_custom_type("AdaptiveTrack")
 	#remove_control_from_bottom_panel(main_instance)
 	#main_instance.queue_free()
+	
 		
 """func _has_main_screen():
 	return true

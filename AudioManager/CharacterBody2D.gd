@@ -17,10 +17,10 @@ func _input(_event):
 		var _node = AudioManager.ABGM.play_music("Theme1")
 		
 	if Input.is_action_just_pressed("ui_down"):
-		AudioManager.ABGM.change_loop("Theme1", 1, true)
+		AudioManager.ABGM.change_track(null, "Runners")
 		
 	if Input.is_action_just_pressed("ui_left"):
-		AudioManager.ABGM.change_loop("Theme1", 0, true)
+		AudioManager.ABGM.change_track(null, "Theme1")
 		
 	if Input.is_action_just_pressed("ui_right"):
 		AudioManager.ABGM.change_loop("Theme1", 2, true)

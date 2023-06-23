@@ -6,11 +6,11 @@ signal measure
 ## Here you must assign the AudioStreamPlayer that belong to each section. Outro can be omitted.
 @export_group("AudioStreamPlayer Asignaments")
 ## This track is played only once when starting the play function
-@export var intro_file : Resource
+@export var intro_file : AudioStream
 ## These are the tracks that can be looped. the first one will play automatically after the Intro
 @export var loop_files : Array[BaseAudioTrack]
 ## This track is played only once when calling the [b]end_music()[/b] function
-@export var outro_file : Resource
+@export var outro_file : AudioStream
 
 var current_playback : AudioStreamPlayer
 
@@ -121,6 +121,11 @@ func on_play_loop(fade_time, loop_index):
 	
 	current_playback = loops_audio_streams[loop_index]
 
+## No disponible
+func on_reset():
+	for i in get_children():
+		i.stop()
+	on_play()
 
 func change_loop(index, fade_in, fade_out):
 	if current_playback == loops_audio_streams[index]:
@@ -159,6 +164,9 @@ func change_loop(index, fade_in, fade_out):
 	if current_playback == outro_player:
 		change_track(outro_player, loops_audio_streams[index], fade_out, fade_in)
 		AudioManager.debug._print("DEBUG: Outro to loop")
+		
+	## Back to the loop from Intro
+	#if 
 
 
 func on_outro(fade_out, fade_in, can_destroy):
@@ -246,6 +254,8 @@ func can_loop():
 		else:
 			on_outro(1.5, 0.5, false)
 	
+	
+## Measure and Beat Count
 func _physics_process(delta):
 	if loop_files != []:
 		var current_loop_index = loops_audio_streams.find(current_playback)

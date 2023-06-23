@@ -1,5 +1,7 @@
 extends Node
 
+const Adaptive_Track = preload("res://addons/AudioManager/Singleton/AdaptiveMusic.gd")
+
 ## Choose the extension of audio files
 @export var audio_extensions : Array[String]
 
@@ -21,7 +23,7 @@ extends Node
 
 var debug = DEBUG.new()
 var files_tools = Tools.new()
-var ABGM = AdaptiveMusic.new()
+var ABGM = Adaptive_Track.new()
 
 # Arrays de sonidos precargados
 var background_sounds = {}
