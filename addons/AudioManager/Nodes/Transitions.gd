@@ -22,20 +22,24 @@ func request_change_transition(head_track, from_audio, to_audio, fade_out, fade_
 	else:
 		from_audio.stop()
 		
-func fade_in(head_track, audio_stream, fade_in := 0.5):
-	if head_track.tween:
-		head_track.tween.kill()
+func fade_in(head_track, audio_stream, fade_in := 0.5, can_tween := true):
+	if can_tween:
+		if head_track.tween:
+			head_track.tween.kill()
 	head_track.tween = head_track.create_tween()
 	audio_stream.volume_db = -50.0
-	head_track.tween.tween_property(audio_stream, "volume_db", 0.0, fade_in)
+	head_track.tween.tween_property(audio_stream, "volume_db", head_track.volume_db, fade_in)
 	
-func fade_out(head_track, audio_stream, fade_out):
+func fade_out(head_track, audio_stream, fade_out, can_destroy := false):
 	#if head_track.tween:
 	#	head_track.tween.kill()
 	head_track.tween = head_track.create_tween()
 	audio_stream.volume_db = head_track.volume_db
 	head_track.tween.tween_property(audio_stream, "volume_db", -50.0, fade_out)
-	head_track.tween.tween_callback(head_track.destroy_track)
+	if can_destroy:
+		head_track.tween.tween_callback(head_track.destroy_track)
+	else:
+		head_track.tween.tween_callback(stop_section.bind(audio_stream))
 	
 func between_fades(head_track, stream_out, stream_in, fade_out := 1.5, fade_in := 0.5):
 	if head_track.tween:

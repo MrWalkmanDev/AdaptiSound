@@ -7,14 +7,17 @@ class_name AdaptiveMusic
 func play_music(sound_name : String, fade_time := 0.0, skip_intro := false, loop_index := 0):
 	var audio_stream = add_adaptive_track(sound_name)
 	if audio_stream != null:
-		if skip_intro:
-			audio_stream.on_play_loop(fade_time, loop_index)
-		else:
-			audio_stream.on_play(fade_time, skip_intro, loop_index)
+		var audio_on_playing = audio_stream.get_stream_playing()
+		if audio_on_playing == null:
+			if skip_intro:
+				audio_stream.on_play_loop(fade_time, loop_index)
+			else:
+				audio_stream.on_play(fade_time, skip_intro, loop_index)
 			
 	return audio_stream
 		
-func change_loop(sound_name, loop_by_index, can_fade := false, fade_in := 0.5, fade_out := 1.5):
+func change_loop(sound_name, loop_by_index, can_fade := false,
+	fade_in := 0.5, fade_out := 1.5):
 	if can_fade == false:
 		fade_in = 0.0
 		fade_out = 0.0
@@ -37,21 +40,24 @@ func change_track(from_track, to_track, fade_out := 0.0, fade_in := 0.0):
 	if audio_stream != null:
 		audio_stream.on_play()
 	
-func end_music(sound_name : String, can_fade := false, fade_out := 1.5, fade_in := 0.5):
+func end_music(sound_name : String, can_fade := false, fade_out := 1.5,
+	fade_in := 0.5, can_destroy := false):
+		
 	if can_fade == false:
 		fade_in = 0.0
 		fade_out = 0.0
 		
 	var audio_stream = AudioManager.get_audio_track(sound_name, "abgm")
 	if audio_stream != null:
-		audio_stream.on_outro(fade_out, fade_in)
+		audio_stream.on_outro(fade_out, fade_in, can_destroy)
 	else:
 		AudioManager.debug._print("DEBUG: Track not found")
 	
-func stop_music(sound_name : String, fade_out := 0.0):
+func stop_music(sound_name : String, fade_out := 1.5, can_destroy := false):
+	
 	var audio_stream = AudioManager.get_audio_track(sound_name, "abgm")
 	if audio_stream != null:
-		audio_stream.on_stop(fade_out)
+		audio_stream.on_stop(fade_out, can_destroy)
 	else:
 		AudioManager.debug._print("DEBUG: Track not found")
 		
@@ -66,7 +72,8 @@ func add_adaptive_track(sound_name : String):
 	
 	var track = AudioManager.get_audio_track(sound_name, "abgm")
 	if track != null:
-		AudioManager.debug._print("DEBUG: Track already playing")
+		AudioManager.debug._print("DEBUG: Track already added to scene")
+		return track
 	else:
 		var instance = AudioManager.adaptive_bgm[sound_name].instantiate()
 		AudioManager.abgm_container.add_child(instance)

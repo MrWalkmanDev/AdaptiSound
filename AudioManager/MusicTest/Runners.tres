@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3 uid="uid://b5x8fuh3oi58v"]
+
+[ext_resource type="Script" path="res://addons/AudioManager/Nodes/BaseAudioTrack.gd" id="1_5q4ad"]
+
+[resource]
+script = ExtResource("1_5q4ad")
+audio_file = "res://AudioManager/Main/Music/Scene2/Enemy/Runners.ogg"
+track_name = "Runners"
+bpm = 120.0
+metric = 4
+loop = true
+keys_loop_in_beat = Array[int]([])
+keys_loop_in_measure = Array[int]([])
+keys_end_in_beat = Array[int]([])
+keys_end_in_measure = Array[int]([])

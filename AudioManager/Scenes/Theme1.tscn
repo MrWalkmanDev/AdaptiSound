@@ -1,11 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://cuf72o8tgsxex"]
+[gd_scene load_steps=6 format=3 uid="uid://cuf72o8tgsxex"]
 
 [ext_resource type="Script" path="res://addons/AudioManager/Nodes/AdaptiveTrack.gd" id="1_6x6c7"]
 [ext_resource type="Resource" uid="uid://bwm7dc22sagp3" path="res://AudioManager/MusicTest/Loop.tres" id="2_37dg6"]
 [ext_resource type="Resource" uid="uid://ddne2ahrhueal" path="res://AudioManager/MusicTest/Wonejo.tres" id="3_d6uw3"]
 [ext_resource type="AudioStream" uid="uid://qpex7nyu1sjq" path="res://AudioManager/MusicTest/Intro(Manager).ogg" id="4_g5xjt"]
+[ext_resource type="Resource" uid="uid://b5x8fuh3oi58v" path="res://AudioManager/MusicTest/Runners.tres" id="5_n1tjx"]
 
 [node name="Theme1" type="Node2D"]
 script = ExtResource("1_6x6c7")
-loop_files = Array[Resource("res://addons/AudioManager/Nodes/BaseAudioTrack.gd")]([ExtResource("2_37dg6"), ExtResource("3_d6uw3")])
+intro_file = ExtResource("4_g5xjt")
+loop_files = Array[Resource("res://addons/AudioManager/Nodes/BaseAudioTrack.gd")]([ExtResource("2_37dg6"), ExtResource("3_d6uw3"), ExtResource("5_n1tjx")])
 outro_file = ExtResource("4_g5xjt")
