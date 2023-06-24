@@ -2,8 +2,6 @@ extends Node
 
 #class_name AdaptiveMusic
 
-var transition = Transitions.new()
-
 ######################
 ## Playback Options ##
 ######################
@@ -41,6 +39,7 @@ func change_track(from_track, to_track : String, fade_out := 1.5, fade_in := 0.5
 	var audio_stream = add_adaptive_track(to_track)
 	var audio_on_playing = audio_stream.get_stream_playing()
 	
+	## Only can change when current track stopped 
 	if audio_on_playing != null:
 		AudioManager.debug._print("DEBUG: Track already playing")
 		return
@@ -51,6 +50,10 @@ func change_track(from_track, to_track : String, fade_out := 1.5, fade_in := 0.5
 		current_track = current_playback
 	else:
 		current_track = AudioManager.get_audio_track(from_track, "abgm")
+	
+	#if current_track.current_playback == current_track.intro_player:
+	#	AudioManager.debug._print("DEBUG: Can change in intro")
+	#	return
 	
 	## Stop current track
 	if current_track != null and current_track != audio_stream:
@@ -80,6 +83,8 @@ func end_music(sound_name : String, can_fade := false, fade_out := 1.5,
 		audio_stream.on_outro(fade_out, fade_in, can_destroy)
 	else:
 		AudioManager.debug._print("DEBUG: Track not found")
+		
+	return audio_stream
 	
 func stop_music(sound_name : String, fade_out := 1.5, can_destroy := false):
 	

@@ -55,7 +55,7 @@ func _ready():
 	outro_player.volume_db = volume_db
 	outro_player.name = "Outro"
 	add_child(outro_player)
-	#outro_player.connect("finished", destroy_track)
+	outro_player.connect("finished", on_stop.bind(0.0, false))
 	
 	current_playback = null
 	
@@ -98,6 +98,9 @@ func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
 	first_loop_playing = loop_index
 	
 	if intro_file != null:
+		if not intro_player.is_connected("finished", intro_finished):
+			intro_player.connect("finished", intro_finished)
+		
 		intro_player.volume_db = volume_db
 		loops_audio_streams[loop_index].volume_db = volume_db
 		transition.request_play_transition(self, intro_player, fade_in)
@@ -132,7 +135,7 @@ func change_loop(index, fade_in, fade_out):
 		can_change_track = false
 		AudioManager.debug._print("DEBUG: Loop continue")
 		return
-	
+		
 	can_end_track = false # Stop offset Outro by key
 	
 	## Set fade_times values for change by key
@@ -162,6 +165,8 @@ func change_loop(index, fade_in, fade_out):
 	
 	## Back to the loop from Outro
 	if current_playback == outro_player:
+		if outro_player.is_connected("finished", on_stop):
+			outro_player.disconnect("finished", on_stop)
 		change_track(outro_player, loops_audio_streams[index], fade_out, fade_in)
 		AudioManager.debug._print("DEBUG: Outro to loop")
 		
@@ -170,9 +175,9 @@ func change_loop(index, fade_in, fade_out):
 
 
 func on_outro(fade_out, fade_in, can_destroy):
-	if current_playback == outro_player:
+	if loops_audio_streams.has(current_playback) == false:
 		can_end_track = false
-		AudioManager.debug._print("DEBUG: Outro continue")
+		AudioManager.debug._print("DEBUG: Can change from intro or outro")
 		return
 	
 	can_change_track = false
@@ -188,11 +193,17 @@ func on_outro(fade_out, fade_in, can_destroy):
 		if loop_files[current_loop_index].keys_end_in_beat != [] \
 			or loop_files[current_loop_index].keys_end_in_measure != []:
 			
+			if not outro_player.is_connected("finished", on_stop):
+				outro_player.connect("finished", on_stop.bind(0.0, false))
+				
 			can_end_track = true
 			AudioManager.debug._print("DEBUG: Outro prepare to change")
 				
 		else:
 			## Inmediate change to Outro
+			if not outro_player.is_connected("finished", on_stop):
+				outro_player.connect("finished", on_stop.bind(0.0, false))
+			
 			outro_player.volume_db = volume_db
 			
 			if tween:
@@ -214,6 +225,11 @@ func on_outro(fade_out, fade_in, can_destroy):
 
 
 func on_stop(fade_out, can_destroy):
+	if intro_player.is_connected("finished", intro_finished):
+		intro_player.disconnect("finished", intro_finished)
+	if outro_player.is_connected("finished", on_stop):
+		outro_player.disconnect("finished", on_stop)
+		
 	if tween:
 		tween.kill()
 	
@@ -229,9 +245,9 @@ func on_stop(fade_out, can_destroy):
 		else:
 			for i in get_children():
 				i.stop()
-				
-	current_playback = null
 	
+	AudioManager.debug._print("DEBUG: " + self.name + " maintrack end")
+	current_playback = null
 	
 	
 	#############
