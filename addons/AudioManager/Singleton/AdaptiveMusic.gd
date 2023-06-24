@@ -11,14 +11,12 @@ var current_playback : Node
 func play_music(sound_name : String, fade_time := 0.0, skip_intro := false, loop_index := 0):
 	var audio_stream = add_adaptive_track(sound_name)
 	if audio_stream != null:
-		var audio_on_playing = audio_stream.get_stream_playing()
-		if audio_on_playing == null:
-			if skip_intro:
-				audio_stream.on_play_loop(fade_time, loop_index)
-			else:
-				audio_stream.on_play(fade_time, skip_intro, loop_index)
-				
-			current_playback = audio_stream
+		if skip_intro:
+			audio_stream.on_play_loop(fade_time, loop_index)
+		else:
+			audio_stream.on_play(fade_time, skip_intro, loop_index)
+			
+		current_playback = audio_stream
 			
 	return audio_stream
 		
@@ -87,7 +85,6 @@ func end_music(sound_name : String, can_fade := false, fade_out := 1.5,
 	return audio_stream
 	
 func stop_music(sound_name : String, fade_out := 1.5, can_destroy := false):
-	
 	var audio_stream = AudioManager.get_audio_track(sound_name, "abgm")
 	if audio_stream != null:
 		audio_stream.on_stop(fade_out, can_destroy)

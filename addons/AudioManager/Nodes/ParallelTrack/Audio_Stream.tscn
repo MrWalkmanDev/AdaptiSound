@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8oebxvvhwaaa"]
+
+[ext_resource type="Script" path="res://addons/AudioManager/Nodes/ParallelTrack/Audio_Stream.gd" id="1_43c7j"]
+
+[node name="AudioStream" type="AudioStreamPlayer"]
+script = ExtResource("1_43c7j")

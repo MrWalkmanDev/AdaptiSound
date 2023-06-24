@@ -17,7 +17,8 @@ func _input(_event):
 		var _node = AudioManager.ABGM.play_music("Theme1")
 		
 	if Input.is_action_just_pressed("ui_down"):
-		var track = AudioManager.ABGM.end_music("Theme1")
+		AudioManager.stop_all("abgm")
+		#var _track = AudioManager.ABGM.end_music("Theme1")
 		#print(track.current_playback)
 		
 	if Input.is_action_just_pressed("ui_left"):

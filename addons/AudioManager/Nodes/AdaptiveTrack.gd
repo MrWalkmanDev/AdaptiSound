@@ -91,6 +91,12 @@ func _ready():
 ######################
 
 func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
+	## Check if track already playing
+	var audio_on_playing = get_stream_playing()
+	if audio_on_playing != null:
+		return
+	
+	## Check if index is correct
 	if loop_index > loops_audio_streams.size() - 1:
 		AudioManager.debug._print("DEBUG: Not found loop index")
 		return
@@ -110,7 +116,13 @@ func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
 		AudioManager.debug._print("DEBUG: Track without intro")
 
 
-func on_play_loop(fade_time, loop_index):
+func on_play_loop(fade_time := 0.0, loop_index := 0):
+	## Check if track already playing
+	var audio_on_playing = get_stream_playing()
+	if audio_on_playing != null:
+		return
+	
+	## Check if index is correct
 	if loop_index > loops_audio_streams.size() - 1:
 		AudioManager.debug._print("DEBUG: Not found loop index")
 		return
@@ -124,19 +136,20 @@ func on_play_loop(fade_time, loop_index):
 	
 	current_playback = loops_audio_streams[loop_index]
 
-## No disponible
+## No disponible aún
 func on_reset():
 	for i in get_children():
 		i.stop()
 	on_play()
 
-func change_loop(index, fade_in, fade_out):
+func change_loop(index, fade_in := 0.5, fade_out := 1.5):
+	## Verify if target loop is same loop
 	if current_playback == loops_audio_streams[index]:
 		can_change_track = false
 		AudioManager.debug._print("DEBUG: Loop continue")
 		return
 		
-	can_end_track = false # Stop offset Outro by key
+	can_end_track = false # Stop offset Outro change by key
 	
 	## Set fade_times values for change by key
 	fade_in_loop = fade_in
@@ -174,19 +187,19 @@ func change_loop(index, fade_in, fade_out):
 	#if 
 
 
-func on_outro(fade_out, fade_in, can_destroy):
+func on_outro(fade_out := 1.5, fade_in := 0.5, can_destroy := false):
+	## Check if current playback is a loop
 	if loops_audio_streams.has(current_playback) == false:
 		can_end_track = false
 		AudioManager.debug._print("DEBUG: Can change from intro or outro")
 		return
 	
-	can_change_track = false
+	can_change_track = false # Stop offset Loop change by key
 	
 	## Set fade_times values for change by key
 	fade_in_loop = fade_in
 	fade_out_loop = fade_out
 	
-	## Check if current_playback is a Loop
 	var current_loop_index = loops_audio_streams.find(current_playback)
 	
 	if outro_file != null:
@@ -224,7 +237,7 @@ func on_outro(fade_out, fade_in, can_destroy):
 		on_stop(fade_out, can_destroy)
 
 
-func on_stop(fade_out, can_destroy):
+func on_stop(fade_out := 0.0, can_destroy := false):
 	if intro_player.is_connected("finished", intro_finished):
 		intro_player.disconnect("finished", intro_finished)
 	if outro_player.is_connected("finished", on_stop):

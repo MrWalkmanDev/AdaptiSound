@@ -1,6 +1,6 @@
 extends Node
 
-class_name Tools
+#class_name Tools
 
 const EXTENSION_ANDROID = "import"
 

@@ -21,7 +21,11 @@ func _enter_tree():
 	adaptive_track_icon)
 	
 	add_custom_type("ParallelTrack", "Node",
-	preload("res://addons/AudioManager/Nodes/ParallelTrack.gd"),
+	preload("res://addons/AudioManager/Nodes/ParallelTrack/ParallelTrack.gd"),
+	parallel_track_icon)
+	
+	add_custom_type("ParallelLayer", "AudioStreamPlayer",
+	preload("res://addons/AudioManager/Nodes/ParallelTrack/ParallelLayer.gd"),
 	parallel_track_icon)
 	
 	add_custom_type("SecuencerTrack", "Node",

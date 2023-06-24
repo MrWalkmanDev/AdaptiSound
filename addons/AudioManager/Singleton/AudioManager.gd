@@ -1,6 +1,10 @@
 extends Node
 
-const Adaptive_Track = preload("res://addons/AudioManager/Singleton/AdaptiveMusic.gd")
+const ADAPTIVE_TRACKS = preload("res://addons/AudioManager/Singleton/AdaptiveMusic.gd")
+const BGM_TRACKS = preload("res://addons/AudioManager/Singleton/BGM.gd")
+#const BGS_TRACKS = preload()
+const DEBUG = preload("res://addons/AudioManager/Singleton/DEBUG.gd")
+const TOOLS = preload("res://addons/AudioManager/Singleton/Tools.gd")
 
 ## Choose the extension of audio files
 @export var audio_extensions : Array[String]
@@ -22,8 +26,10 @@ const Adaptive_Track = preload("res://addons/AudioManager/Singleton/AdaptiveMusi
 @onready var abgm_container = get_node("Adaptive_BGM")
 
 var debug = DEBUG.new()
-var files_tools = Tools.new()
-var ABGM = Adaptive_Track.new()
+var files_tools = TOOLS.new()
+var ABGM = ADAPTIVE_TRACKS.new()
+var BGM = BGM_TRACKS.new()
+#var BGS = BGS_TRACKS
 
 # Arrays de sonidos precargados
 var background_sounds = {}
@@ -108,14 +114,32 @@ func stop_music(sound_name : String, fade_time := 1.5):
 		fades(audio_stream, -50.0, fade_time, true)
 	else:
 		print("Audio not found to stop")
-		
-func stop_all(fade_time := 1.5):
-	var childs = bgm_container.get_children()
-	for i in childs:
-		fades(i, -50.0, fade_time, true)
-		
-		
-		
+
+
+
+func stop_all(type := "all", fade_time := 1.5, can_destroy := true):
+	var types = [bgm_container, abgm_container, bgs_container]
+	
+	if type == "bgm":
+		var childs = bgm_container.get_children()
+		for i in childs:
+			fades(i, -50.0, fade_time, can_destroy)
+	elif type == "abgm":
+		var childs = abgm_container.get_children()
+		for i in childs:
+			fades(i, -50.0, fade_time, can_destroy)
+	elif type == "bgs":
+		var childs = bgs_container.get_children()
+		for i in childs:
+			fades(i, -50.0, fade_time, can_destroy)
+	else:
+		for i in types:
+			for n in i.get_children():
+				fades(n, -50.0, fade_time, can_destroy)
+	
+	debug._print("DEBUG: All audios destroyed")
+	
+
 # Tools #
 
 func add_audiostream(sound_name, volume_db, loop, pitch_scale := 1):
@@ -144,10 +168,16 @@ func fades(object, value, fade_time, destroy := false):
 	tween.tween_property(object, "volume_db", value, fade_time)
 	if destroy:
 		tween.tween_callback(destroy_audiostream.bind(object))
+	#else:
+	#	if object.is_class("AudioStreamPlayer"):
+	#		tween.tween_callback(object.stop())
+	#	else:
+	#		object.on_stop(fade_time, false)
 
 func destroy_audiostream(track):
 	if track != null:
-		track.stop()
+		if track.is_class("AudioStreamPlayer"):
+			track.stop()
 		track.queue_free()
 
 func get_audio_track(sound_name : String, type : String):
