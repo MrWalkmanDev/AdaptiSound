@@ -10,6 +10,6 @@ bpm = 203.0
 metric = 3
 loop = true
 keys_loop_in_beat = Array[int]([])
-keys_loop_in_measure = Array[int]([])
+keys_loop_in_measure = Array[int]([1])
 keys_end_in_beat = Array[int]([])
 keys_end_in_measure = Array[int]([])

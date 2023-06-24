@@ -3,6 +3,8 @@ extends Node
 signal beat
 signal measure
 
+const AUDIOPLAYER = preload("res://addons/AudioManager/Nodes/ParallelTrack/Audio_Stream.tscn")
+
 ## Here you must assign the AudioStreamPlayer that belong to each section. Outro can be omitted.
 @export_group("AudioStreamPlayer Asignaments")
 ## This track is played only once when starting the play function
@@ -74,7 +76,7 @@ func _ready():
 		loops[i.track_name] = load_file
 	
 	for n in loops:
-		var audio_stream = AudioStreamPlayer.new()
+		var audio_stream = AUDIOPLAYER.instantiate()
 		audio_stream.name = n
 		audio_stream.stream = loops[n]
 		add_child(audio_stream)
@@ -82,7 +84,7 @@ func _ready():
 		loops_audio_streams.append(get_node(audio_stream.get_path()))
 		
 	for i in loops_audio_streams:
-		i.connect("finished", can_loop)
+		i.connect("audio_finished", can_loop)
 
 
 
@@ -271,17 +273,32 @@ func intro_finished():
 	loops_audio_streams[first_loop_playing].play()
 	current_playback = loops_audio_streams[first_loop_playing]
 	
-func can_loop():
+func can_loop(node):
+	## Check if signal coming from loop
 	if loops_audio_streams.has(current_playback):
+		
+		measures = 1
+		
+		## Update Current Playback
+		var key_measure = change_measure_tracks()
+		var key_beat = change_beat_tracks()
+		if key_measure != null or key_beat != null:
+			beat_measure_count = 2 ## Solo para el cambio en el primer tiempo
+			return 
+		
 		var current_loop_index = loops_audio_streams.find(current_playback)
 		if loop_files[current_loop_index].loop:
-			measures = 1
+			print(str(measures) + "(Loop)")
+			#measures = 1
 			beat_measure_count = 2
 			last_reported_beat = 0
 			song_position_in_beats = 0
-			loops_audio_streams[current_loop_index].play()
+			sec_per_beat = 60.0 / loop_files[current_loop_index].bpm
+			
+			#node.play()
 		else:
-			on_outro(1.5, 0.5, false)
+			#on_outro(1.5, 0.5, false)
+			on_stop()
 	
 	
 ## Measure and Beat Count
@@ -306,7 +323,7 @@ func _report_beat(current_loop_index):
 			emit_signal("measure", measures)
 			change_measure_tracks()
 			
-			
+		#print(beat_measure_count)
 		emit_signal("beat", song_position_in_beats)
 		
 		last_reported_beat = song_position_in_beats
@@ -320,13 +337,14 @@ func change_measure_tracks():
 	if loop_files[current_loop_index].keys_loop_in_measure.has(measures) \
 	and can_change_track:
 		change_track(current_playback, loops_audio_streams[loop_target])
+		return true
 		
 	## Change to End by Keys ##
 	if loop_files[current_loop_index].keys_end_in_measure.has(measures) \
 		and can_end_track:
-			
 		can_end_track = false
 		change_outro(fade_out_loop, fade_in_loop)
+		return true
 		
 func change_beat_tracks():
 	var current_loop_index = loops_audio_streams.find(current_playback)
@@ -334,13 +352,14 @@ func change_beat_tracks():
 	if loop_files[current_loop_index].keys_loop_in_beat.has(song_position_in_beats + 1) \
 	and can_change_track:
 		change_track(current_playback, loops_audio_streams[loop_target])
+		return true
 		
 	## Change to End by Keys ##
 	if loop_files[current_loop_index].keys_end_in_beat.has(song_position_in_beats + 1) \
 		and can_end_track:
-		
 		can_end_track = false
 		change_outro(fade_out_loop, fade_in_loop)
+		return true
 		
 func change_outro(fade_out, fade_in):
 	outro_player.volume_db = volume_db
@@ -358,11 +377,10 @@ func change_outro(fade_out, fade_in):
 	current_playback = outro_player
 	
 func change_track(from_track, to_track, fade_out = fade_out_loop, fade_in = fade_in_loop):
-	
 	var loop_index = loops_audio_streams.find(to_track)
-	
 	can_change_track = false
 	measures = 1
+	#beat_measure_count = 2 ### Problemas con loop
 	last_reported_beat = 0
 	song_position_in_beats = 0
 	sec_per_beat = 60.0 / loop_files[loop_index].bpm
@@ -377,7 +395,6 @@ func change_track(from_track, to_track, fade_out = fade_out_loop, fade_in = fade
 		if i != to_track and i != from_track:
 			#transition.fade_out(self, i, fade_out)
 			i.stop()
-	
 	
 	transition.request_change_transition(self, from_track,
 	to_track, fade_out, fade_in)

@@ -5,7 +5,7 @@
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_fuqag")
 audio_extensions = Array[String](["ogg", "wav", "mp3"])
-music_paths = "res://AudioManager/Main"
+music_paths = "res://AudioManager/MusicTest"
 adaptive_music_paths = "res://AudioManager/Scenes"
 debugging = true
 

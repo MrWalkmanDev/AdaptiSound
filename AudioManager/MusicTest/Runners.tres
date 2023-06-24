@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_5q4ad")
-audio_file = "res://AudioManager/Main/Music/Scene2/Enemy/Runners.ogg"
+audio_file = null
 track_name = "Runners"
 bpm = 120.0
 metric = 4
