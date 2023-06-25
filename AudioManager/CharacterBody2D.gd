@@ -22,10 +22,10 @@ func _input(_event):
 		#print(track.current_playback)
 		
 	if Input.is_action_just_pressed("ui_left"):
-		AudioManager.ABGM.change_loop("Theme1", 0, false)
+		AudioManager.ABGM.change_loop("Theme1", 0, true)
 		
 	if Input.is_action_just_pressed("ui_right"):
-		AudioManager.ABGM.change_loop("Theme1", 1, false)
+		AudioManager.ABGM.change_loop("Theme1", 1, true)
 		
 	if Input.is_action_just_pressed("ui_accept"):
 		AudioManager.ABGM.change_track(null, "Theme1")

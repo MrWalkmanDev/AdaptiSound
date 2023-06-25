@@ -7,11 +7,11 @@
 
 [node name="ParallelTrack" type="Node"]
 script = ExtResource("1_gqt1t")
-layers = Array[NodePath]([NodePath("ParallelLayer"), NodePath("ParallelLayer2"), NodePath("")])
 
-[node name="ParallelLayer" type="AudioStreamPlayer" parent="."]
+[node name="Drums" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_ij428")
 script = ExtResource("2_h72rs")
-audio_streams = Array[AudioStream]([ExtResource("3_whuca"), ExtResource("4_ij428")])
 
-[node name="ParallelLayer2" type="AudioStreamPlayer" parent="."]
+[node name="Bass" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_whuca")
 script = ExtResource("2_h72rs")

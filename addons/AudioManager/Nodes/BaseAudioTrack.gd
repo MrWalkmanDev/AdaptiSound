@@ -13,7 +13,7 @@ class_name BaseAudioTrack
 ## If track is loopeable or not.
 @export var loop = true
 
-@export_category("Loop and Playback Options")
+@export_category("Loop Keys Values")
 ## Points where the loop can transition to another Loop. Use Beats Count
 @export var keys_loop_in_beat : Array[int]
 ## Points where the loop can transition to another Loop. Use Measure Count
