@@ -1,8 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=2 format=3 uid="uid://bskquwoa08cpo"]
-
-[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_lc7bx"]
-resource_name = "LowPassFilter"
-cutoff_hz = 10000.0
+[gd_resource type="AudioBusLayout" format=3 uid="uid://bskquwoa08cpo"]
 
 [resource]
 bus/1/name = &"underwater"
@@ -11,5 +7,3 @@ bus/1/mute = false
 bus/1/bypass_fx = false
 bus/1/volume_db = 0.0
 bus/1/send = &"Master"
-bus/1/effect/0/effect = SubResource("AudioEffectLowPassFilter_lc7bx")
-bus/1/effect/0/enabled = true

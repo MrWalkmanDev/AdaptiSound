@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://b8oebxvvhwaaa"]
+[gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://addons/AudioManager/Nodes/ParallelTrack/Audio_Stream.gd" id="1_43c7j"]
 

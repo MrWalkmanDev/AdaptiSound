@@ -59,7 +59,7 @@ func files_load(path, extension):
 		return sounds
 		
 	else:
-		print("Directory not found")
+		AudioManager.debug._print("DEBUG: Directory not found in path " + str(path))
 	
 func preload_adaptive_tracks(path):
 	if path == null:
@@ -91,4 +91,4 @@ func preload_adaptive_tracks(path):
 		return tracks
 		
 	else:
-		print("Directory not found")
+		AudioManager.debug._print("DEBUG: Directory not found in path " + str(path))

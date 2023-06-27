@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0bp7pkf77nly"]
+[gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://addons/AudioManager/Editor/Editor.gd" id="1_gaumg"]
 

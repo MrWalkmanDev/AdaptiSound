@@ -1,11 +1,12 @@
 @tool
 extends EditorPlugin
 
-class_name AudioTool
+#class_name AudioTool
 
 const adaptive_track_icon = preload("res://addons/AudioManager/Icons/Adaptive.png") 
 const parallel_track_icon = preload("res://addons/AudioManager/Icons/Parallel.png")
-const secuencertrack_icon = preload("res://addons/AudioManager/Icons/Secuencer.png")
+const layer_track_icon = preload("res://addons/AudioManager/Icons/Layer.png")
+const secuencetrack_icon = preload("res://addons/AudioManager/Icons/Secuencer.png")
 
 #const MainPanel := preload("res://addons/AudioManager/Editor/Editor.tscn")
 #signal file_names_updated(file_names)
@@ -17,7 +18,7 @@ func _enter_tree():
 	
 	# Add nodes #
 	add_custom_type("AdaptiveTrack", "Node",
-	preload("res://addons/AudioManager/Nodes/AdaptiveTrack.gd"), 
+	preload("res://addons/AudioManager/Nodes/AdaptiveTrack/AdaptiveTrack.gd"), 
 	adaptive_track_icon)
 	
 	add_custom_type("ParallelTrack", "Node",
@@ -26,11 +27,13 @@ func _enter_tree():
 	
 	add_custom_type("ParallelLayer", "AudioStreamPlayer",
 	preload("res://addons/AudioManager/Nodes/ParallelTrack/ParallelLayer.gd"),
-	parallel_track_icon)
+	layer_track_icon)
 	
-	add_custom_type("SecuencerTrack", "Node",
-	preload("res://addons/AudioManager/Nodes/SecuencerTrack.gd"),
-	secuencertrack_icon)
+	add_custom_type("SecuenceTrack", "Node",
+	preload("res://addons/AudioManager/Nodes/SecuenceTrack/SecuenceTrack.gd"),
+	secuencetrack_icon)
+	
+	#AudioServer.add_bus(1)
 	
 	"""main_instance = MainPanel.instantiate()
 	main_instance.hide()
@@ -46,9 +49,11 @@ func _exit_tree():
 	#if main_instance:
 	remove_autoload_singleton("AudioManager")
 	remove_custom_type("AdaptiveTrack")
+	remove_custom_type("ParallelTrack")
+	remove_custom_type("ParallelLayer")
+	remove_custom_type("SecuenceTrack")
 	#remove_control_from_bottom_panel(main_instance)
 	#main_instance.queue_free()
-	
 		
 """func _has_main_screen():
 	return true

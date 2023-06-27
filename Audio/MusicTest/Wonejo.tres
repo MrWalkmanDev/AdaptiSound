@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3 uid="uid://ddne2ahrhueal"]
+[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3 uid="uid://c211n4dqj113g"]
 
 [ext_resource type="Script" path="res://addons/AudioManager/Nodes/BaseAudioTrack.gd" id="1_oplb8"]
 
 [resource]
 script = ExtResource("1_oplb8")
-audio_file = "res://AudioManager/MusicTest/Wonejo_Land.ogg"
+audio_file = null
 track_name = "Wonejo"
 bpm = 160.0
 metric = 4
 loop = true
 keys_loop_in_beat = Array[int]([])
-keys_loop_in_measure = Array[int]([9])
+keys_loop_in_measure = Array[int]([4, 8, 12, 16, 20])
 keys_end_in_beat = Array[int]([])
 keys_end_in_measure = Array[int]([])

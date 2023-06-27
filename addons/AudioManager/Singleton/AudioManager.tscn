@@ -1,12 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://xishmum2ac57"]
+[gd_scene load_steps=2 format=3 uid="uid://u4g0janbib21"]
 
 [ext_resource type="Script" path="res://addons/AudioManager/Singleton/AudioManager.gd" id="1_fuqag"]
 
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_fuqag")
 audio_extensions = Array[String](["ogg", "wav", "mp3"])
-music_paths = "res://AudioManager/MusicTest"
-adaptive_music_paths = "res://AudioManager/Scenes"
 debugging = true
 
 [node name="Adaptive_BGM" type="Node" parent="."]

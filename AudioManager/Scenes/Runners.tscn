@@ -1,8 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://dhp5xa5pwwrab"]
-
-[ext_resource type="Script" path="res://addons/AudioManager/Nodes/AdaptiveTrack.gd" id="1_1o057"]
-[ext_resource type="Resource" uid="uid://b5x8fuh3oi58v" path="res://AudioManager/MusicTest/Runners.tres" id="2_qe3ql"]
-
-[node name="Runners" type="Node"]
-script = ExtResource("1_1o057")
-loop_files = Array[Resource("res://addons/AudioManager/Nodes/BaseAudioTrack.gd")]([ExtResource("2_qe3ql")])

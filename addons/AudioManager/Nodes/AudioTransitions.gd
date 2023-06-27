@@ -1,13 +1,14 @@
 extends Node
 
-class_name Transitions
+class_name AudioTransitions
 
-#var tween
-#var fade_in_time = 0.5
-#var fade_out_time = 1.5
-#var can_fade_in = false
-#var can_fade_out = false
-#var can_parallel_fades = false
+func underwater_effect(bus):
+	var filter = AudioEffectLowPassFilter.new()
+	var bus_index = AudioServer.get_bus_index(bus)
+	AudioServer.add_bus_effect(bus_index, filter, AudioServer.get_bus_effect_count(bus_index))
+	print(AudioServer.get_bus_effect_count(bus_index))
+	#var tween = create_tween()
+	#tween.tween_property(effect, "cutoff_hz", 800, 2.0)
 
 func request_play_transition(head_track, audio_stream, fade_in):
 	if fade_in != 0.0:
@@ -15,6 +16,7 @@ func request_play_transition(head_track, audio_stream, fade_in):
 		fade_in(head_track, audio_stream, fade_in)
 	else:
 		audio_stream.play()
+		
 		
 func request_change_transition(head_track, from_audio, to_audio, fade_out, fade_in):
 	if fade_in != 0.0 or fade_out != 0.0:
