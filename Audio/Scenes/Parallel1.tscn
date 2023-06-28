@@ -1,18 +1,18 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://b1rxrdnp5f1j2"]
 
-[ext_resource type="Script" path="res://addons/AudioManager/Nodes/ParallelTrack/ParallelTrack.gd" id="1_gqt1t"]
-[ext_resource type="Script" path="res://addons/AudioManager/Nodes/ParallelTrack/ParallelLayer.gd" id="2_h72rs"]
-[ext_resource type="AudioStream" uid="uid://df8d2pt86rnwt" path="res://Audio/MusicTest/Parallel/bass.ogg" id="3_whuca"]
-[ext_resource type="AudioStream" uid="uid://cpk6u7lbeprqk" path="res://Audio/MusicTest/Parallel/drum.ogg" id="4_ij428"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelTrack.gd" id="1_18irg"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelLayer.gd" id="2_1t4xm"]
+[ext_resource type="AudioStream" uid="uid://df8d2pt86rnwt" path="res://Audio/MusicTest/Parallel/bass.ogg" id="3_b7hlj"]
+[ext_resource type="AudioStream" uid="uid://cpk6u7lbeprqk" path="res://Audio/MusicTest/Parallel/drum.ogg" id="4_4k5jc"]
 
 [node name="Parallel1" type="Node"]
-script = ExtResource("1_gqt1t")
+script = ExtResource("1_18irg")
 
-[node name="Drums" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_ij428")
-script = ExtResource("2_h72rs")
+[node name="Bass" type="Node" parent="."]
+script = ExtResource("2_1t4xm")
+audio_streams = Array[AudioStream]([ExtResource("3_b7hlj")])
 listening_from_start = false
 
-[node name="Bass" type="AudioStreamPlayer" parent="."]
-script = ExtResource("2_h72rs")
-audio_streams = Array[AudioStream]([ExtResource("3_whuca")])
+[node name="Drums" type="Node" parent="."]
+script = ExtResource("2_1t4xm")
+audio_streams = Array[AudioStream]([ExtResource("4_4k5jc")])

@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-AudioManager="*res://addons/AudioManager/Singleton/AudioManager.tscn"
+AudioManager="*res://addons/AdaptiSound/Singleton/AudioManager.tscn"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/AudioManager/plugin.cfg")
+enabled=PackedStringArray("res://addons/AdaptiSound/plugin.cfg")

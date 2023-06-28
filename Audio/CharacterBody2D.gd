@@ -16,8 +16,7 @@ const JUMP_VELOCITY = -400.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 func _input(_event):
 	if Input.is_action_just_pressed("ui_up"):
-		AudioManager.play_music("bass", 0.0)
-		#AudioManager.ABGM.play_music("Theme1")
+		AudioManager.ABGM.play_music("Theme1")
 		
 	if Input.is_action_just_pressed("ui_down"):
 		AudioManager.stop_music("bass")
@@ -25,13 +24,12 @@ func _input(_event):
 		#parallel.on_stop()
 		
 	if Input.is_action_just_pressed("ui_left"):
-		#AudioManager.ABGM.layer_on("Parallel1", ["Drums"])
-		AudioManager.change_bgs("bass", "drum")
+		AudioManager.ABGM.change_loop("Theme1", 1)
 		#parallel.on_layers([0], 0.5)
 		
 	if Input.is_action_just_pressed("ui_right"):
 		#AudioManager.change_loop("Theme1", 2, true)
-		AudioManager.change_bgs("drum", "bass")
+		AudioManager.ABGM.change_loop("Theme1", 2)
 		#transition.underwater_effect(track.bus)
 		#parallel.off_layers([0], 0.5)
 		

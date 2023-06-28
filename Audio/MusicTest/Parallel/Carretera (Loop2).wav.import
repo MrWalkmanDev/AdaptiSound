@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://du2ei2ofl3q7m"
+path="res://.godot/imported/Carretera (Loop2).wav-cfe4596ff82ca7cad06493e227c9305c.sample"
+
+[deps]
+
+source_file="res://Audio/MusicTest/Parallel/Carretera (Loop2).wav"
+dest_files=["res://.godot/imported/Carretera (Loop2).wav-cfe4596ff82ca7cad06493e227c9305c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://7sagk7x5odmt"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Singleton/AudioManager.gd" id="1_st6ic"]
+
+[node name="AudioManager" type="Node"]
+script = ExtResource("1_st6ic")
+debugging = true
+
+[node name="Adaptive_BGM" type="Node" parent="."]
+
+[node name="Background_Music" type="Node" parent="."]
+
+[node name="Background_Sounds" type="Node" parent="."]

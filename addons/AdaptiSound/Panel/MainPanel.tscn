@@ -1,0 +1,169 @@
+[gd_scene load_steps=4 format=3 uid="uid://h65impxouu6i"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Panel/MainPanel.gd" id="1_fmgxu"]
+[ext_resource type="Texture2D" uid="uid://cot551fxetsxm" path="res://addons/AdaptiSound/Icons/Dock.png" id="2_iliwq"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Panel/HelpPanel.gd" id="3_x2j1u"]
+
+[node name="AudioPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fmgxu")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -576.0
+offset_right = 576.0
+offset_bottom = 647.0
+grow_horizontal = 2
+
+[node name="MainH" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+
+[node name="MainV" type="VBoxContainer" parent="Margin/MainH"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Grid" type="GridContainer" parent="Margin/MainH/MainV"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="Directories" type="VBoxContainer" parent="Margin/MainH/MainV/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Margin/MainH/MainV/Grid/Directories"]
+editor_description = "Assign Audio Directories"
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Audio Directories"
+
+[node name="GridContainer" type="GridContainer" parent="Margin/MainH/MainV/Grid/Directories"]
+layout_mode = 2
+columns = 3
+
+[node name="BGM_PATH" type="Label" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
+editor_description = "Audio Directory of Background Music
+"
+layout_mode = 2
+text = "BGM Directory"
+
+[node name="BGM" type="LineEdit" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "res://Audio/MusicTest/Music/"
+
+[node name="bgm_help" type="Button" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "?"
+
+[node name="ABGM_PATH" type="Label" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
+layout_mode = 2
+text = "ABGM Directory"
+
+[node name="ABGM" type="LineEdit" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
+layout_mode = 2
+text = "res://Audio/Scenes/"
+
+[node name="abgm_help" type="Button" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "?"
+
+[node name="BGS_PATH" type="Label" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
+layout_mode = 2
+text = "BGS Directory"
+
+[node name="BGS" type="LineEdit" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
+layout_mode = 2
+
+[node name="bgs_help" type="Button" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "?"
+
+[node name="Debbug" type="CheckButton" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Debugging"
+icon = ExtResource("2_iliwq")
+
+[node name="Extensions" type="VBoxContainer" parent="Margin/MainH/MainV/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Tittle" type="Label" parent="Margin/MainH/MainV/Grid/Extensions"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Audio Extensions"
+horizontal_alignment = 1
+
+[node name="Hbox" type="HBoxContainer" parent="Margin/MainH/MainV/Grid/Extensions"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Extensions" type="VBoxContainer" parent="Margin/MainH/MainV/Grid/Extensions/Hbox"]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="wav" type="CheckButton" parent="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions"]
+layout_mode = 2
+button_pressed = true
+text = "WAV"
+icon = ExtResource("2_iliwq")
+alignment = 2
+
+[node name="ogg" type="CheckButton" parent="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions"]
+layout_mode = 2
+button_pressed = true
+text = "OGG"
+icon = ExtResource("2_iliwq")
+alignment = 2
+
+[node name="mp3" type="CheckButton" parent="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions"]
+layout_mode = 2
+button_pressed = true
+text = "MP3"
+icon = ExtResource("2_iliwq")
+alignment = 2
+
+[node name="Button" type="Button" parent="Margin/MainH/MainV"]
+layout_mode = 2
+text = "Save"
+
+[node name="Panel" type="Panel" parent="Margin/MainH"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("3_x2j1u")
+
+[node name="Help_Label" type="Label" parent="Margin/MainH/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 314.0
+offset_top = 33.0
+offset_right = -314.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+
+[connection signal="pressed" from="Margin/MainH/MainV/Grid/Directories/GridContainer/bgm_help" to="Margin/MainH/Panel" method="_on_bgm_help_pressed"]
+[connection signal="pressed" from="Margin/MainH/MainV/Grid/Directories/GridContainer/abgm_help" to="Margin/MainH/Panel" method="_on_abgm_help_pressed"]
+[connection signal="toggled" from="Margin/MainH/MainV/Grid/Directories/GridContainer/Debbug" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/wav" to="." method="_on_wav_toggled"]
+[connection signal="toggled" from="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/ogg" to="." method="_on_ogg_toggled"]
+[connection signal="toggled" from="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/mp3" to="." method="_on_mp_3_toggled"]
+[connection signal="pressed" from="Margin/MainH/MainV/Button" to="." method="_on_button_pressed"]

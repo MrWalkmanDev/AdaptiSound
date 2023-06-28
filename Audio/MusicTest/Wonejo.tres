@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3 uid="uid://c211n4dqj113g"]
+[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://addons/AudioManager/Nodes/BaseAudioTrack.gd" id="1_oplb8"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/BaseAudioTrack.gd" id="1_oplb8"]
 
 [resource]
 script = ExtResource("1_oplb8")
-audio_file = null
+audio_file = "res://Audio/MusicTest/Wonejo_Land.ogg"
 track_name = "Wonejo"
 bpm = 160.0
 metric = 4
