@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://esv717guxiq7"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelTrack.gd" id="1_1xvp2"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelLayer.gd" id="2_k7fae"]
+[ext_resource type="AudioStream" uid="uid://df8d2pt86rnwt" path="res://Audio/MusicTest/Parallel/bass.ogg" id="3_5oj8j"]
+[ext_resource type="AudioStream" uid="uid://cpk6u7lbeprqk" path="res://Audio/MusicTest/Parallel/drum.ogg" id="4_l10w5"]
+
+[node name="Parallel1" type="Node"]
+script = ExtResource("1_1xvp2")
+
+[node name="Bass" type="Node" parent="."]
+script = ExtResource("2_k7fae")
+audio_streams = Array[AudioStream]([ExtResource("3_5oj8j")])
+listening_from_start = false
+
+[node name="Drums" type="Node" parent="."]
+script = ExtResource("2_k7fae")
+audio_streams = Array[AudioStream]([ExtResource("4_l10w5")])

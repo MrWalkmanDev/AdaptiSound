@@ -1,5 +1,7 @@
 extends Node
 
+#class_name ParallelTrack
+
 ## Here you can edit the parameters for all the tracks that derive from this main track. 
 @export_group("MainTrack Parameters")
 
@@ -67,7 +69,7 @@ func on_stop(fade_time := 0.0, can_destroy := false):
 	stop_layer(arr, fade_time)
 	
 	
-func play_layer(layer_names : Array, fade_time := 3.0):
+func play_layer(layer_names : Array, fade_time := 2.0):
 	for i in layer_names:
 		if typeof(i) == TYPE_INT:
 			if i > get_child_count() - 1:

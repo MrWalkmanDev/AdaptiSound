@@ -3,9 +3,9 @@ extends Control
 
 const SAVE_PATH := "res://addons/AdaptiSound/Panel/Data.json"
 
-@onready var line_edit_0 := $Margin/MainH/MainV/Grid/Directories/GridContainer/ABGM
-@onready var line_edit_1 := $Margin/MainH/MainV/Grid/Directories/GridContainer/BGM
-@onready var line_edit_2 := $Margin/MainH/MainV/Grid/Directories/GridContainer/BGS
+@onready var abgm := $Margin/MainH/MainV/Grid/Directories/GridContainer/ABGM
+@onready var bgm := $Margin/MainH/MainV/Grid/Directories/GridContainer/BGM
+@onready var bgs := $Margin/MainH/MainV/Grid/Directories/GridContainer/BGS
 @onready var debbug_button = $Margin/MainH/MainV/Grid/Directories/GridContainer/Debbug
 
 @onready var wav_ext = $Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/wav
@@ -21,22 +21,40 @@ var extensions = []
 func _ready():
 	if Engine.is_editor_hint():
 		data = load_json()
-		line_edit_0.text = data.ABGM
-		line_edit_1.text = data.BGM
-		line_edit_2.text = data.BGS
+		abgm.text = data.ABGM
+		bgm.text = data.BGM
+		bgs.text = data.BGS
 		debbug_button.set_pressed(data.debbug)
-		if data.extensions.has("wav"):
-			wav_ext.set_pressed(true)
-		if data.extensions.has("ogg"):
-			ogg_ext.set_pressed(true)
-		if data.extensions.has("mp3"):
-			mp3_ext.set_pressed(true)
+		
+		set_extension()
+
+func set_extension():
+	if data.extensions.has("wav"):
+		wav_ext.set_pressed(true)
+		_on_wav_toggled(true)
+	else: 
+		wav_ext.set_pressed(false)
+		_on_wav_toggled(false)
+		
+	if data.extensions.has("ogg"):
+		ogg_ext.set_pressed(true)
+		_on_ogg_toggled(true)
+	else:
+		ogg_ext.set_pressed(false)
+		_on_ogg_toggled(false)
+		
+	if data.extensions.has("mp3"):
+		mp3_ext.set_pressed(true)
+		_on_mp_3_toggled(true)
+	else:
+		mp3_ext.set_pressed(false)
+		_on_mp_3_toggled(false)
 
 func save_json() -> void:
 	var data := {
-		"ABGM": line_edit_0.text,
-		"BGM": line_edit_1.text,
-		"BGS": line_edit_2.text,
+		"ABGM": abgm.text,
+		"BGM": bgm.text,
+		"BGS": bgs.text,
 		"debbug": debbug,
 		"extensions": extensions
 	}
@@ -83,3 +101,7 @@ func _on_mp_3_toggled(button_pressed):
 	else:
 		if extensions.has("mp3"):
 			extensions.erase("mp3")
+
+
+func _on_abgm_files_pressed():
+	pass # Replace with function body.

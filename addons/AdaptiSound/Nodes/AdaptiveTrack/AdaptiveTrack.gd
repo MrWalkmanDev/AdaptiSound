@@ -1,5 +1,7 @@
 extends Node
 
+#class_name AdaptiveTrack
+
 signal beat
 signal measure
 
