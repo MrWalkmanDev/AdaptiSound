@@ -6,7 +6,8 @@ const TOOLS = preload("res://addons/AdaptiSound/Singleton/AudioTools.gd")
 const FILE_BROWSER = preload("res://addons/AdaptiSound/Singleton/FileBrowser.gd")
 
 ## Choose the extension of audio files
-var audio_extensions
+var audio_extensions : Array
+var bgs_extensions : Array
 
 ## Music directories to load. This is for Background Music (BGM)
 var music_paths
@@ -47,7 +48,7 @@ func _ready():
 	initialize_manager()
 	
 	background_music = files_browser.files_load(music_paths, audio_extensions)
-	background_sounds = files_browser.files_load(sound_paths, audio_extensions)
+	background_sounds = files_browser.files_load(sound_paths, bgs_extensions)
 	adaptive_bgm = files_browser.preload_adaptive_tracks(adaptive_music_paths)
 	
 	if background_music == {}:
@@ -116,7 +117,7 @@ func play_music(sound_name: String, volume_db := 0.0, fade_in: = 0.5,
 
 
 ## Reset current playback from begining
-func reset(fade_out := 0.0, fade_in := 0.0):
+func reset_music(fade_out := 0.0, fade_in := 0.0):
 	if current_playback != null:
 		if current_playback is AudioStreamPlayer:
 			current_playback.stop()
@@ -146,18 +147,18 @@ func stop_music(can_fade := false, fade_out := 1.5):
 
 
 ## Stop all global sounds (ABGM, BGM and BGS)
-func stop_all(type := "all", fade_time := 1.5, can_destroy := true):
+func stop_all(type := "ALL", fade_time := 1.5, can_destroy := true):
 	var types = [bgm_container, abgm_container, bgs_container]
 	
-	if type == "bgm":
+	if type == "BGM":
 		var childs = bgm_container.get_children()
 		for i in childs:
 			tools.fades(i, -50.0, fade_time, can_destroy)
-	elif type == "abgm":
+	elif type == "ABGM":
 		var childs = abgm_container.get_children()
 		for i in childs:
 			tools.fades(i, -50.0, fade_time, can_destroy)
-	elif type == "bgs":
+	elif type == "BGS":
 		var childs = bgs_container.get_children()
 		for i in childs:
 			tools.fades(i, -50.0, fade_time, can_destroy)

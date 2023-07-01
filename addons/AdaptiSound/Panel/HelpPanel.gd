@@ -68,7 +68,7 @@ func _on_bgm_files_pressed():
 
 func _on_bgs_files_pressed():
 	item_list.clear()
-	var dic = file_browser.files_load(main.bgs.text, main.extensions)
+	var dic = file_browser.files_load(main.bgs.text, main.bgs_extensions)
 	if dic != null:
 		for i in dic:
 			item_list.add_item(i, ICON)

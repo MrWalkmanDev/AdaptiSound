@@ -78,7 +78,7 @@ text = "BGM Directory"
 [node name="BGM" type="LineEdit" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "res://Audio/MusicTest/Parallel/"
+text = "res://Audio/MusicTest/Paral"
 
 [node name="bgm_files" type="Button" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
@@ -135,6 +135,15 @@ layout_mode = 2
 button_pressed = true
 text = "Debugging"
 icon = ExtResource("3_les4x")
+
+[node name="ABGS" type="CheckButton" parent="Margin/MainH/MainV/Grid/Directories/GridContainer/Debbug"]
+layout_mode = 2
+offset_left = 155.0
+offset_right = 334.0
+offset_bottom = 31.0
+text = "ABGS Support"
+icon = ExtResource("2_iliwq")
+clip_text = true
 
 [node name="Extensions" type="VBoxContainer" parent="Margin/MainH/MainV/Grid"]
 layout_mode = 2
@@ -245,6 +254,7 @@ Remember Save Changes!"
 [connection signal="pressed" from="Margin/MainH/MainV/Grid/Directories/GridContainer/bgs_files" to="Margin/MainH/Panel" method="_on_bgs_files_pressed"]
 [connection signal="pressed" from="Margin/MainH/MainV/Grid/Directories/GridContainer/bgs_help" to="Margin/MainH/Panel" method="_on_bgs_help_pressed"]
 [connection signal="toggled" from="Margin/MainH/MainV/Grid/Directories/GridContainer/Debbug" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="Margin/MainH/MainV/Grid/Directories/GridContainer/Debbug/ABGS" to="." method="_on_abgs_toggled"]
 [connection signal="toggled" from="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/wav" to="." method="_on_wav_toggled"]
 [connection signal="toggled" from="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/ogg" to="." method="_on_ogg_toggled"]
 [connection signal="toggled" from="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/mp3" to="." method="_on_mp_3_toggled"]
