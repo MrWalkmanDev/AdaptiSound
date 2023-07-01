@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3 uid="uid://cxjb58oaluthw"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/BaseAudioTrack.gd" id="1_tka58"]
 
@@ -12,4 +12,4 @@ loop = true
 keys_loop_in_beat = Array[int]([])
 keys_loop_in_measure = Array[int]([])
 keys_end_in_beat = Array[int]([])
-keys_end_in_measure = Array[int]([4])
+keys_end_in_measure = Array[int]([])

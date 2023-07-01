@@ -1,25 +1,9 @@
-extends Node
-
-#class_name ParallelTrack
-
-## Here you can edit the parameters for all the tracks that derive from this main track. 
-@export_group("MainTrack Parameters")
-
-## Volume of track, in dB. [br][b]This parameter affects all the tracks that belong to it[/b].
-@export_range(-80.0, 24.0) var volume_db : float = 0.0 : set = set_volume_db, get = get_volume_db
-
-## Pitch and tempo of the audio. [br][b]This parameter affects all the tracks that belong to it[/b].
-@export_range(0.01, 4.0) var pitch : float = 1.0 : set = set_pitch, get = get_pitch
-
-## Audio Bus of the audio. [br][b]This parameter affects all the tracks that belong to it[/b]
-@export var bus : String = "Master"
+extends AdaptiNode
 
 var layers = []
 var groups = {}
 
 func _ready():
-	#AudioManager.debug._print("DEBUG: " + str(self.name) + " in bus " + bus)
-	
 	## Parameters set in Layers
 	for i in get_children():
 		layers.append(i)
@@ -41,10 +25,6 @@ func _ready():
 	
 	
 func on_play(fade_time := 0.0, _skip_intro := false, _loop_index := 0):
-	if get_stream_playing() != null:
-		AudioManager.debug._print("DEBUG: ParallelTrack already playing")
-		return
-	
 	## Layers
 	for i in layers:
 		if i.playing_type == "Always":
@@ -108,6 +88,7 @@ func stop_layer(layer_names : Array, fade_time := 3.0):
 				var node = get_layer(i)
 				check_node(node, fade_time, false)
 
+
 func on_trigger_layer(layer_name : String, fade_time := 0.5):
 	var layer = get_layer(layer_name)
 	layer.on_play()
@@ -131,7 +112,6 @@ func on_layers(layers_names : Array, fade_in := 2.0):
 
 
 func off_layers(layers_names : Array, fade_out := 3.0):
-	
 	if layers_names == []:
 		for i in get_children():
 			check_node(i, fade_out, false, false)
@@ -154,10 +134,9 @@ func off_layers(layers_names : Array, fade_out := 3.0):
 
 func check_node(node, fade_time, fade_type, can_stop := true):
 	if node != null:
-		node.change(volume_db, fade_time, fade_type, can_stop) 
+		node.change(volume_db, fade_time, fade_type, can_stop)
 	else:
 		AudioManager.debug._print("DEBUG: Layer not found")
-
 
 
 
@@ -181,36 +160,3 @@ func get_layer(layer_name : String):
 	for i in childrens:
 		if i.name == layer_name:
 			return i
-			
-func get_stream_playing():
-	var childs = get_children()
-	for i in childs:
-		for n in i.get_children():
-			if n.playing:
-				return i
-		#if i.playing:
-		#	return i
-			
-	return null
-	
-func set_volume_db(value : float):
-	volume_db = value
-	for i in get_children():
-		for n in i.get_children():
-			n.volume_db = volume_db
-			
-		i.volume_db = volume_db
-	
-func get_volume_db():
-	return volume_db
-
-func set_pitch(value):
-	pitch = value
-	for i in get_children():
-		for n in i.get_children():
-			n.pitch = pitch
-			
-		i.pitch = pitch
-	
-func get_pitch():
-	return pitch

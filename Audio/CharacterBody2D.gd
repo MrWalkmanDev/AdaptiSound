@@ -38,8 +38,18 @@ func _input(_event):
 		#AudioManager.ABGM. ("Theme1")
 		
 
+
 func _ready():
 	pass
+	"""
+	var dic = {
+	"filename": {"name":"file"}
+	}
+	#var keys = dic.keys()
+	for i in dic:
+		var iner = dic[i]
+		if "name" in iner:
+			print(i)"""
 
 func _physics_process(delta):
 	# Add the gravity.

@@ -1,13 +1,24 @@
-[gd_scene load_steps=6 format=3 uid="uid://b7lbkj8ocf3xh"]
+[gd_scene load_steps=6 format=3 uid="uid://q1t2cl2eebva"]
 
-[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiveTrack/AdaptiveTrack.gd" id="1_r0uid"]
-[ext_resource type="Resource" path="res://Audio/MusicTest/Loop.tres" id="2_37dg6"]
-[ext_resource type="Resource" path="res://Audio/MusicTest/Wonejo.tres" id="3_d6uw3"]
-[ext_resource type="AudioStream" uid="uid://qpex7nyu1sjq" path="res://Audio/MusicTest/Intro(Manager).ogg" id="4_g5xjt"]
-[ext_resource type="Resource" path="res://Audio/MusicTest/Runners.tres" id="5_h7y3w"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiveTrack/AdaptiveTrack.gd" id="1_gpv38"]
+[ext_resource type="AudioStream" uid="uid://qpex7nyu1sjq" path="res://Audio/MusicTest/Intro(Manager).ogg" id="2_8fe7l"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/BaseAudioTrack.gd" id="3_p36wl"]
+[ext_resource type="Resource" uid="uid://cxjb58oaluthw" path="res://Audio/MusicTest/Loop.tres" id="3_v7f20"]
 
-[node name="Theme1" type="Node2D"]
-script = ExtResource("1_r0uid")
-intro_file = ExtResource("4_g5xjt")
-loop_files = Array[Resource("res://addons/AdaptiSound/Nodes/BaseAudioTrack.gd")]([ExtResource("2_37dg6"), ExtResource("3_d6uw3"), ExtResource("5_h7y3w")])
-outro_file = ExtResource("4_g5xjt")
+[sub_resource type="Resource" id="Resource_5j524"]
+script = ExtResource("3_p36wl")
+audio_file = "res://Audio/Scenes/Parallel1.tscn"
+track_name = "Parallel1"
+bpm = 120.0
+metric = 4
+loop = true
+keys_loop_in_beat = Array[int]([])
+keys_loop_in_measure = Array[int]([])
+keys_end_in_beat = Array[int]([])
+keys_end_in_measure = Array[int]([])
+
+[node name="Theme1" type="Node"]
+script = ExtResource("1_gpv38")
+intro_file = ExtResource("2_8fe7l")
+loop_files = Array[ExtResource("3_p36wl")]([ExtResource("3_v7f20"), SubResource("Resource_5j524")])
+outro_file = ExtResource("2_8fe7l")

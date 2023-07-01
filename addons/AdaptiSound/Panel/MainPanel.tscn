@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://h65impxouu6i"]
+[gd_scene load_steps=12 format=3 uid="uid://h65impxouu6i"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/Panel/MainPanel.gd" id="1_fmgxu"]
 [ext_resource type="Texture2D" uid="uid://cot551fxetsxm" path="res://addons/AdaptiSound/Icons/Dock.png" id="2_iliwq"]
@@ -6,6 +6,26 @@
 [ext_resource type="Texture2D" uid="uid://c7cyd1o881bb5" path="res://addons/AdaptiSound/Icons/Others/Debug.png" id="3_les4x"]
 [ext_resource type="Texture2D" uid="uid://2bjh6m210a3i" path="res://addons/AdaptiSound/Icons/Others/Search.png" id="3_ths4r"]
 [ext_resource type="Script" path="res://addons/AdaptiSound/Panel/HelpPanel.gd" id="3_x2j1u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tadgp"]
+bg_color = Color(0.211765, 0.486275, 0.364706, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0dc4h"]
+bg_color = Color(0.313726, 0.670588, 0.509804, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8tcbv"]
+bg_color = Color(0.192157, 0.45098, 0.337255, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nudyw"]
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.427451, 0.827451, 0.639216, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g5ae0"]
+bg_color = Color(0.152941, 0.152941, 0.152941, 1)
 
 [node name="AudioPanel" type="Control"]
 layout_mode = 3
@@ -123,7 +143,16 @@ icon = ExtResource("3_les4x")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Tittle" type="Label" parent="Margin/MainH/MainV/Grid/Extensions"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Margin/MainH/MainV/Grid/Extensions"]
+layout_mode = 2
+
+[node name="TittleBuses" type="Label" parent="Margin/MainH/MainV/Grid/Extensions/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Bus"
+
+[node name="TittleExt" type="Label" parent="Margin/MainH/MainV/Grid/Extensions/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Audio Extensions"
@@ -131,6 +160,22 @@ horizontal_alignment = 1
 
 [node name="Hbox" type="HBoxContainer" parent="Margin/MainH/MainV/Grid/Extensions"]
 layout_mode = 2
+
+[node name="Buses" type="VBoxContainer" parent="Margin/MainH/MainV/Grid/Extensions/Hbox"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="bgmBus" type="LineEdit" parent="Margin/MainH/MainV/Grid/Extensions/Hbox/Buses"]
+layout_mode = 2
+text = "Master"
+
+[node name="abgmBus" type="LineEdit" parent="Margin/MainH/MainV/Grid/Extensions/Hbox/Buses"]
+layout_mode = 2
+text = "Master"
+
+[node name="bgsBus" type="LineEdit" parent="Margin/MainH/MainV/Grid/Extensions/Hbox/Buses"]
+layout_mode = 2
+text = "Master"
 
 [node name="Extensions" type="VBoxContainer" parent="Margin/MainH/MainV/Grid/Extensions/Hbox"]
 layout_mode = 2
@@ -158,6 +203,10 @@ alignment = 2
 
 [node name="Button" type="Button" parent="Margin/MainH/MainV"]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_tadgp")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0dc4h")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8tcbv")
+theme_override_styles/focus = SubResource("StyleBoxFlat_nudyw")
 text = "Save"
 
 [node name="Panel" type="Panel" parent="Margin/MainH"]
@@ -165,7 +214,7 @@ layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("3_x2j1u")
 
-[node name="VBoxContainer" type="HBoxContainer" parent="Margin/MainH/Panel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Margin/MainH/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -173,7 +222,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ItemList" type="ItemList" parent="Margin/MainH/Panel/VBoxContainer"]
+[node name="ItemList" type="ItemList" parent="Margin/MainH/Panel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 max_columns = 3
@@ -181,11 +230,20 @@ same_column_width = true
 fixed_column_width = 270
 icon_mode = 0
 
-[node name="Help_Label" type="Label" parent="Margin/MainH/Panel/VBoxContainer"]
-custom_minimum_size = Vector2(300, 400)
+[node name="RightContaainer" type="VBoxContainer" parent="Margin/MainH/Panel/HBoxContainer"]
+layout_mode = 2
+
+[node name="Help_Label" type="Label" parent="Margin/MainH/Panel/HBoxContainer/RightContaainer"]
+custom_minimum_size = Vector2(300, 250)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Welcome to AdaptiSound"
+
+[node name="Panel" type="Panel" parent="Margin/MainH/Panel/HBoxContainer/RightContaainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_g5ae0")
 
 [connection signal="pressed" from="Margin/MainH/MainV/Grid/Directories/GridContainer/bgm_files" to="Margin/MainH/Panel" method="_on_bgm_files_pressed"]
 [connection signal="pressed" from="Margin/MainH/MainV/Grid/Directories/GridContainer/bgm_help" to="Margin/MainH/Panel" method="_on_bgm_help_pressed"]
@@ -198,4 +256,4 @@ text = "Welcome to AdaptiSound"
 [connection signal="toggled" from="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/ogg" to="." method="_on_ogg_toggled"]
 [connection signal="toggled" from="Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/mp3" to="." method="_on_mp_3_toggled"]
 [connection signal="pressed" from="Margin/MainH/MainV/Button" to="." method="_on_button_pressed"]
-[connection signal="item_selected" from="Margin/MainH/Panel/VBoxContainer/ItemList" to="Margin/MainH/Panel" method="_on_item_list_item_selected"]
+[connection signal="item_selected" from="Margin/MainH/Panel/HBoxContainer/ItemList" to="Margin/MainH/Panel" method="_on_item_list_item_selected"]

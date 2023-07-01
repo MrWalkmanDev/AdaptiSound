@@ -4,7 +4,7 @@ class_name BaseAudioTrack
 
 ## Audio File
 @export_file var audio_file
-## Name with the track will be called
+## Name with the loop will be called (Node name instance)
 @export var track_name : String
 ## Beat per Minutes.
 @export var bpm := 120.0

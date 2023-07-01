@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://df8d2pt86rnwt" path="res://Audio/MusicTest/Parallel/bass.ogg" id="3_b7hlj"]
 [ext_resource type="AudioStream" uid="uid://cpk6u7lbeprqk" path="res://Audio/MusicTest/Parallel/drum.ogg" id="4_4k5jc"]
 
-[node name="Parallel1" type="Node"]
+[node name="dsdasds" type="Node"]
 script = ExtResource("1_18irg")
 
 [node name="Bass" type="Node" parent="."]

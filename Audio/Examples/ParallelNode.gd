@@ -2,23 +2,16 @@ extends Node2D
 
 func _input(_event):
 	if Input.is_action_just_pressed("ui_up"):
-		AudioManager.ABGM.play_music("Parallel1")
-		#AudioManager.play_music("Main_Menu")
-		
-	#if Input.is_action_just_pressed("ui_left"):
-	#	AudioManager.ABGM.layer_on("Parallel1", ["Staccato"] )
+		AudioManager.play_sound("Main_Menu")
 		
 	if Input.is_action_just_pressed("ui_right"):
-		AudioManager.ABGM.layer_off("Parallel1", [] )
-		AudioManager.ABGM.layer_on("Parallel1", ["Drums"] )
-		
-		var _layer = AudioManager.get_audio_track("Parallel1", "abgm")
-			
+		AudioManager.layer_on("Parallel1", ["Bass"], 0.0)
 		
 	if Input.is_action_just_pressed("ui_down"):
-		AudioManager.ABGM.layer_off("Parallel1", [] )
-		AudioManager.ABGM.layer_on("Parallel1", ["Bass"] )
+		AudioManager.stop_music()
 		
+	if Input.is_action_just_pressed("ui_left"):
+		AudioManager.layer_off("Parallel1", ["Bass"], 0.0)
 
 func _process(_delta):
 	#if($AudioStreamPlayer.stream.get_length() - $AudioStreamPlayer.get_playback_position()) <= 0.01:

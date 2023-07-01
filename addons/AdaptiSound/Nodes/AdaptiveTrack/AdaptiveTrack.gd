@@ -1,9 +1,8 @@
-extends Node
-
-#class_name AdaptiveTrack
+extends AdaptiNode
 
 signal beat
 signal measure
+signal end_track
 
 const AUDIOPLAYER = preload("res://addons/AdaptiSound/Nodes/ParallelTrack/Audio_Stream.tscn")
 
@@ -15,19 +14,6 @@ const AUDIOPLAYER = preload("res://addons/AdaptiSound/Nodes/ParallelTrack/Audio_
 @export var loop_files : Array[BaseAudioTrack]
 ## This track is played only once when calling the [b]end_music()[/b] function.
 @export var outro_file : AudioStream
-
-## Here you can edit the parameters for all the tracks that derive from this main track. 
-@export_group("MainTrack Parameters")
-
-## Volume of track, in dB. [br][b]This parameter affects all the tracks that belong to it[/b].
-@export_range(-80.0, 24.0) var volume_db : float = 0.0 : set = set_volume_db, get = get_volume_db
-
-## Pitch and tempo of the audio. [br][b]This parameter affects all the tracks that belong to it[/b].
-@export_range(0.01, 4.0) var pitch : float = 1.0 : set = set_pitch, get = get_pitch
-
-## Audio Bus of the audio. [br][b]This parameter affects all the tracks that belong to it[/b]
-@export var bus : String = "Master"
-
 
 var current_playback #: AudioStreamPlayer
 
@@ -56,10 +42,9 @@ var fade_out_loop = 1.5
 var fade_in_loop = 0.5
 
 func _ready():
-	#AudioManager.debug._print("DEBUG: " + str(self.name) + " in bus " + bus)
 	intro_player = AUDIOPLAYER.instantiate()
 	intro_player.set_bus(bus)
-	intro_player.can_loop = false
+	intro_player.loop = false
 	intro_player.stream = intro_file
 	intro_player.volume_db = volume_db
 	intro_player.name = "Intro"
@@ -68,12 +53,12 @@ func _ready():
 	
 	outro_player = AUDIOPLAYER.instantiate()
 	outro_player.set_bus(bus)
-	outro_player.can_loop = false
+	outro_player.loop = false
 	outro_player.stream = outro_file
 	outro_player.volume_db = -50.0 # Para la primera vez que se reproduce Outro (with Fade in)
 	outro_player.name = "Outro"
 	add_child(outro_player)
-	outro_player.connect("finished", on_stop.bind(0.0, false))
+	outro_player.connect("finished", on_stop.bind(0.0))
 	
 	current_playback = null
 	
@@ -103,7 +88,7 @@ func _ready():
 			# For AudioStream Loop
 			var index = loops.keys().find(n)
 			var audio_stream = AUDIOPLAYER.instantiate()
-			audio_stream.can_loop = loop_files[index].loop ## Define si es loop o no
+			audio_stream.loop = loop_files[index].loop ## Define si es loop o no
 			audio_stream.set_bus(bus)
 			audio_stream.volume_db = -50.0 # Es para que la primera vez que ejecuta change_loop
 			audio_stream.name = n
@@ -123,10 +108,14 @@ func _ready():
 ######################
 
 func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
-	## Check if track already playing
-	var audio_on_playing = get_stream_playing()
-	if audio_on_playing != null:
+	if skip_intro:
+		on_play_loop(fade_in, loop_index)
 		return
+	## Check if track already playing
+	#var audio_on_playing = get_stream_playing()
+	#if audio_on_playing != null:
+	#	AudioManager.debug._print("DEBUG: Track already playing")
+	#	return
 	
 	## Check if index is correct
 	if loop_index > loops_audio_streams.size() - 1:
@@ -138,11 +127,13 @@ func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
 	if intro_file != null:
 		if not intro_player.is_connected("finished", intro_finished):
 			intro_player.connect("finished", intro_finished)
-		
+			
 		intro_player.volume_db = volume_db
 		loops_audio_streams[loop_index].volume_db = volume_db ## Need set volume for reset Play
 		measures = 1 ## Need this for reset or stop sin destroy
-		intro_player.on_fade_in(volume_db, fade_in)
+		if fade_in != 0.0:
+			intro_player.volume_db = -50.0
+			intro_player.on_fade_in(volume_db, fade_in)
 		intro_player.play()
 		current_playback = intro_player
 	else:
@@ -152,9 +143,10 @@ func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
 
 func on_play_loop(fade_time := 0.0, loop_index := 0):
 	## Check if track already playing
-	var audio_on_playing = get_stream_playing()
-	if audio_on_playing != null:
-		return
+	#var audio_on_playing = get_stream_playing()
+	#if audio_on_playing != null:
+	#	AudioManager.debug._print("DEBUG: Track already playing")
+	#	return
 	
 	## Check if index is correct
 	if loop_index > loops_audio_streams.size() - 1:
@@ -163,6 +155,8 @@ func on_play_loop(fade_time := 0.0, loop_index := 0):
 	
 	loops_audio_streams[loop_index].volume_db = volume_db ## Need this for reset play
 	sec_per_beat = 60.0 / loop_files[loop_index].bpm
+	if fade_time != 0.0:
+		loops_audio_streams[loop_index].volume_db = -50.0
 	loops_audio_streams[loop_index].on_fade_in(volume_db, fade_time)
 	loops_audio_streams[loop_index].play()
 	AudioManager.debug._print("DEBUG: Skip intro")
@@ -171,10 +165,10 @@ func on_play_loop(fade_time := 0.0, loop_index := 0):
 	reset_beat_parameters()
 
 ## No disponible aún
-func on_reset():
+"""func on_reset():
 	for i in get_children():
 		i.stop()
-	on_play()
+	on_play()"""
 
 func change_loop(index, fade_in := 0.5, fade_out := 1.5):
 	## Check if index is correct
@@ -224,7 +218,7 @@ func change_loop(index, fade_in := 0.5, fade_out := 1.5):
 
 
 
-func on_outro(fade_out := 1.5, fade_in := 0.5, can_destroy := false):
+func on_outro(fade_out := 1.5, fade_in := 0.5):
 	## Check if current playback is a loop
 	if loops_audio_streams.has(current_playback) == false:
 		can_end_track = false
@@ -244,7 +238,7 @@ func on_outro(fade_out := 1.5, fade_in := 0.5, can_destroy := false):
 			or loop_files[current_loop_index].keys_end_in_measure != []:
 			
 			if not outro_player.is_connected("finished", on_stop):
-				outro_player.connect("finished", on_stop.bind(0.0, false))
+				outro_player.connect("finished", on_stop.bind(0.0))
 				
 			can_end_track = true
 			AudioManager.debug._print("DEBUG: Outro prepare to change")
@@ -252,7 +246,7 @@ func on_outro(fade_out := 1.5, fade_in := 0.5, can_destroy := false):
 		else:
 			## Inmediate change to Outro
 			if not outro_player.is_connected("finished", on_stop):
-				outro_player.connect("finished", on_stop.bind(0.0, false))
+				outro_player.connect("finished", on_stop.bind(0.0))
 				
 			current_playback.on_fade_out(fade_out)
 			outro_player.on_fade_in(volume_db, fade_in)
@@ -261,36 +255,31 @@ func on_outro(fade_out := 1.5, fade_in := 0.5, can_destroy := false):
 			AudioManager.debug._print("DEBUG: Go to the outro")
 	else:
 		## No outro file
-		on_stop(fade_out, can_destroy)
+		on_stop(fade_out)
 
 
-func on_stop(fade_out := 0.0, can_destroy := false):
+func on_stop(fade_out := 0.0):
 	if intro_player.is_connected("finished", intro_finished):
 		intro_player.disconnect("finished", intro_finished)
 	if outro_player.is_connected("finished", on_stop):
 		outro_player.disconnect("finished", on_stop)
 	
-	if can_destroy:
-		if fade_out != 0.0:
-			current_playback.on_fade_out(fade_out)
-			await get_tree().create_timer(fade_out).timeout
-			destroy_track()
-		else:
-			destroy_track()
+	if fade_out != 0.0:
+		for i in get_children():
+			i.on_fade_out(fade_out)
 	else:
-		if fade_out != 0.0:
-			for i in get_children():
-				i.on_fade_out(fade_out)
-		else:
-			for i in get_children():
-				if i is AudioStreamPlayer:
-					i.stop()
-				else:
-					i.on_stop()
+		for i in get_children():
+			if i is AudioStreamPlayer:
+				if i.tween:
+					i.tween.kill()
+				i.stop()
+				
+			## ParallelTrack or SecuenceTrack
+			else:
+				i.on_stop()
 	
-	AudioManager.debug._print("DEBUG: " + self.name + " end")
 	current_playback = null
-
+	emit_signal("end_track")
 
 
 	#############
@@ -298,7 +287,11 @@ func on_stop(fade_out := 0.0, can_destroy := false):
 	#############
 	
 func intro_finished():
-	loops_audio_streams[first_loop_playing].play()
+	## Check if is another AdaptiveNode
+	if loops_audio_streams[first_loop_playing] is AudioStreamPlayer:
+		loops_audio_streams[first_loop_playing].play()
+	else:
+		loops_audio_streams[first_loop_playing].on_play()
 	current_playback = loops_audio_streams[first_loop_playing]
 	reset_beat_parameters()
 	
@@ -425,15 +418,9 @@ func change_track(from_track, to_track, fade_out = fade_out_loop, fade_in = fade
 		to_track.play()
 	
 	current_playback = to_track
-	
-func destroy_track():
-	for i in get_children():
-		i.stop()
-		
-	queue_free()
-	
-	
-	
+
+
+
 	#############################
 	## FOR PARALLELTRACKS ADDS ##
 	#############################
@@ -453,36 +440,3 @@ func play_layer(layer_names, fade_time):
 func stop_layer(layer_names, fade_time):
 	if not current_playback is AudioStreamPlayer and current_playback != null:
 		current_playback.stop_layer(layer_names, fade_time)
-
-
-
-	#########################
-	## SETTERS AND GETTERS ##
-	#########################
-	
-func get_stream_playing():  ## Esta funcion solo se usa para comprobar si hay pistas reproduciendose.
-	var childs = get_children() ## Se usa solo para el inicio, play and play_loop
-	for i in childs:			## Podria ser reemplazada por el verificador de current playback
-		if i is AudioStreamPlayer:
-			if i.playing:
-				return i
-		else:
-			return i.get_stream_playing()
-			
-	return null
-
-func set_volume_db(value : float):
-	volume_db = value
-	for i in get_children():
-		i.volume_db = volume_db
-	
-func get_volume_db():
-	return volume_db
-	
-func set_pitch(value):
-	pitch = value
-	for i in get_children():
-		i.pitch = pitch
-
-func get_pitch():
-	return pitch

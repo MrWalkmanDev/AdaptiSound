@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://xaxf4pavrkvj" path="res://icon.svg" id="1_75h2o"]
 [ext_resource type="Script" path="res://Audio/CharacterBody2D.gd" id="2_1js1w"]
-[ext_resource type="Resource" path="res://Audio/MusicTest/Loop.tres" id="3_2apix"]
+[ext_resource type="Resource" uid="uid://cxjb58oaluthw" path="res://Audio/MusicTest/Loop.tres" id="3_2apix"]
 [ext_resource type="Resource" path="res://Audio/MusicTest/Wonejo.tres" id="4_gkbkr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_s2fm6"]

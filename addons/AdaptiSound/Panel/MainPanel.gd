@@ -8,6 +8,10 @@ const SAVE_PATH := "res://addons/AdaptiSound/Panel/Data.json"
 @onready var bgs := $Margin/MainH/MainV/Grid/Directories/GridContainer/BGS
 @onready var debbug_button = $Margin/MainH/MainV/Grid/Directories/GridContainer/Debbug
 
+@onready var bgm_bus = $Margin/MainH/MainV/Grid/Extensions/Hbox/Buses/bgmBus
+@onready var abgm_bus = $Margin/MainH/MainV/Grid/Extensions/Hbox/Buses/abgmBus
+@onready var bgs_bus = $Margin/MainH/MainV/Grid/Extensions/Hbox/Buses/bgsBus
+
 @onready var wav_ext = $Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/wav
 @onready var ogg_ext = $Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/ogg
 @onready var mp3_ext = $Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/mp3
@@ -25,6 +29,11 @@ func _ready():
 		bgm.text = data.BGM
 		bgs.text = data.BGS
 		debbug_button.set_pressed(data.debbug)
+		debbug = data.debbug
+		
+		bgm_bus.text = data.bgm_bus
+		abgm_bus.text = data.abgm_bus
+		bgs_bus.text = data.bgs_bus
 		
 		set_extension()
 
@@ -56,7 +65,10 @@ func save_json() -> void:
 		"BGM": bgm.text,
 		"BGS": bgs.text,
 		"debbug": debbug,
-		"extensions": extensions
+		"extensions": extensions,
+		"abgm_bus": abgm_bus.text,
+		"bgm_bus": bgm_bus.text,
+		"bgs_bus": bgs_bus.text
 	}
 	var json_data := JSON.stringify(data)
 	var file_access := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -101,7 +113,3 @@ func _on_mp_3_toggled(button_pressed):
 	else:
 		if extensions.has("mp3"):
 			extensions.erase("mp3")
-
-
-func _on_abgm_files_pressed():
-	pass # Replace with function body.

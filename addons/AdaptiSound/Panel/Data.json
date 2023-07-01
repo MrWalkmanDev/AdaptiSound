@@ -1,1 +1,1 @@
-{"ABGM":"res://Audio/Scenes/","BGM":"res://Audio/","BGS":"res://Audio/MusicTest/Music/","debbug":true,"extensions":["ogg","wav"]}
+{"ABGM":"res://Audio/Scenes/","BGM":"res://Audio/MusicTest/Parallel/","BGS":"res://Audio/MusicTest/Music/","abgm_bus":"Master","bgm_bus":"Master","bgs_bus":"Master","debbug":true,"extensions":["wav","ogg"]}
