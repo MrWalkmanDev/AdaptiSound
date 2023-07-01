@@ -91,6 +91,10 @@ func play_music(sound_name: String, volume_db := 0.0, fade_in: = 0.5,
 	if track_data == null:
 		debug._print("DEBUG: Track name not found")
 		return
+		
+	if track_data.type == "BGS":
+		debug._print("DEBUG: Track is BGS, use play_sound func")
+		return
 	
 	## Add Track
 	var audio_stream = tools.add_track(sound_name, track_data)

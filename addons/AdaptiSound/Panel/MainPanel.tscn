@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://h65impxouu6i"]
+[gd_scene load_steps=11 format=3 uid="uid://h65impxouu6i"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/Panel/MainPanel.gd" id="1_fmgxu"]
 [ext_resource type="Texture2D" uid="uid://cot551fxetsxm" path="res://addons/AdaptiSound/Icons/Dock.png" id="2_iliwq"]
@@ -23,9 +23,6 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.427451, 0.827451, 0.639216, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g5ae0"]
-bg_color = Color(0.152941, 0.152941, 0.152941, 1)
 
 [node name="AudioPanel" type="Control"]
 layout_mode = 3
@@ -81,7 +78,7 @@ text = "BGM Directory"
 [node name="BGM" type="LineEdit" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "res://Audio/"
+text = "res://Audio/MusicTest/Parallel/"
 
 [node name="bgm_files" type="Button" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
@@ -237,13 +234,9 @@ layout_mode = 2
 custom_minimum_size = Vector2(300, 250)
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Welcome to AdaptiSound"
-
-[node name="Panel" type="Panel" parent="Margin/MainH/Panel/HBoxContainer/RightContaainer"]
-visible = false
-layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_g5ae0")
+text = "Welcome to AdaptiSound 
+Remember Save Changes!"
 
 [connection signal="pressed" from="Margin/MainH/MainV/Grid/Directories/GridContainer/bgm_files" to="Margin/MainH/Panel" method="_on_bgm_files_pressed"]
 [connection signal="pressed" from="Margin/MainH/MainV/Grid/Directories/GridContainer/bgm_help" to="Margin/MainH/Panel" method="_on_bgm_help_pressed"]

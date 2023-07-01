@@ -2,7 +2,7 @@ extends Node2D
 
 func _input(_event):
 	if Input.is_action_just_pressed("ui_up"):
-		AudioManager.play_sound("Main_Menu")
+		AudioManager.play_music("Main_Menu")
 		
 	if Input.is_action_just_pressed("ui_right"):
 		AudioManager.layer_on("Parallel1", ["Bass"], 0.0)

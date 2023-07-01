@@ -19,7 +19,7 @@ func _input(_event):
 		AudioManager.ABGM.play_music("Theme1")
 		
 	if Input.is_action_just_pressed("ui_down"):
-		AudioManager.stop_music("bass")
+		AudioManager.stop_music()
 		#AudioManager.play_music("Parallel1")
 		#parallel.on_stop()
 		
