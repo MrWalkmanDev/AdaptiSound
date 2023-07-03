@@ -135,8 +135,8 @@ This method stops the current playback.
 ![layer_off](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/4465b310-6636-47a8-b700-504233a09644)
 
 - `track_name:` argument type `String`, name of ParallelTrack on which to stop listening to a layer
-- `layer_names:` type `Array`, names, groups, or indexes of the layers to be heard.
-- `fade_time:` time of fade in. `2.0 default`
+- `layer_names:` type `Array`, names, groups, or indices of the layers to be unheard.
+- `fade_time:` time of fade in. `3.0 default`
 
 
 ### `stop_all` 
@@ -145,9 +145,9 @@ This method stops the current playback.
 ![stop_all](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/c509e425-9ec9-4f45-a455-cbe914b34747)
 
 This method stops all currently playing BGM/ABGM and BGS tracks, and removes them from the tree.
-- `type:` argument type `String`, set a specific category you want to stop. *all default*
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. *1.5 default*
-- `can_destroy:` if true, all tracks removes from the tree. *true default*
+- `type:` argument type `String`, set a specific category you want to stop. `"all" default`
+- `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
+- `can_destroy:` if true, all tracks removes from the tree. `true default`
 
 
 ### `play_sound`
@@ -162,11 +162,40 @@ This method will play from the beginning the audio with the name assigned in *so
 *BGS playback options not yet available.*
 
 
-### AdaptiNodes
+## AdaptiNodes
 
-**ParallelTrack**
+Para agregar música adaptativa a nuestro proyecto podremos usar los AdaptiNodes. El objetivo de estos nodos es crear un solo track que contenga varias pistas de audio y una estructura determinada para reproducirse.
 
-**AdaptiveTrack**
+### ParallelTrack & ParallelLayer
+
+La funcion principal de `ParallelTrack` es reproducir varias pistas al mismo tiempo, y con los metodos llamados desde `AudioManager` controlar las diferentes capas.
+Para empezar a agregar una capa deberás agregar un `ParallelLayer` al nodo principal, como se ve en la imagen de a continuación. 
+
+![ParallelTrack](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/7cf0b5f7-f4e0-4b7b-9427-1f2d7ffa7fc0)
+
+Puedes renombrar las capas para que posteriormente sea más sencillo manejarlas. Cada ParallelLayer puede contener varias pistas, y todas las pistas se reproducirán juntas cuando la capa a la que perteneces se active.
+Por ejemplo podemos tener la siguiente estructura:
+(ParallelLayer)Base: contiene pistas de drums y basses
+(ParallelLayer)Top: contiene pistas melódicas
+
+![ParallelTrack_structure](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/837fca0f-72ba-4ded-9f94-5336a63abf2e)
+
+`ParallelLayer` tiene las siguientes propiedades:
+
+- `playing_type:` `Always` se reproducira al llamar a `play_music`, y siempre estara activada al menos que se detenga con `stop_music`, si es `Trigger` solo se activara al llamar una funcion especifica. `play_layer`
+Nota: `Always` se reproduce desde el inicio, pero no necesariamente se estará escuchando. para está la propiedad `layer_on`
+
+- `audio_stream:` aqui agregas las pistas de audio que se activaran con esta capa
+- `layer_on:` si es verdadero, entonces la capa se escuchara desde el comienzo, al ser llamada por `play_music`.
+- `loop:` si es verdadero, la capa se reproducira en bucle.
+- `Groups:` puedes asignar grupos personalizados a cada capa, y despues llamarlos con la funcion `layer_on` o `layer_off`.
+
+![ParallelLayer](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/06e46a1b-7f7f-4ec8-b3fe-09de0661f74d)
+
+
+
+
+### AdaptiveTrack
 
 
 ### 📃Credits
