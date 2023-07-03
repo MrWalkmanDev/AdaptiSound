@@ -70,11 +70,11 @@ This tool is designed with the objective of implementing global background music
 This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
 - `sound_name:` with this argument type `String`, `AudioManager` will look for the preloaded sounds and play audio with this name.
-- `volume_db:` argument type `Float`, set volume in dB of the track when played. *0.0 default*
-- `fade_in:` argument type `Float`, set the fade time when the track is played. *0.5 default*
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. *1.5 default*
-- `skip_intro:` **only for AdaptiveTrack**, `Bool` if true, play the loop directly. *false default*
-- `loop_index:` **only for AdaptiveTrack**, `Int` sets the index of the loop to be played after the intro. *0 default*
+- `volume_db:` argument type `Float`, set volume in dB of the track when played. `0.0 default`
+- `fade_in:` argument type `Float`, set the fade time when the track is played. `0.5 default`
+- `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
+- `skip_intro:` **only for AdaptiveTrack**, `Bool` if true, play the loop directly. `false default`
+- `loop_index:` **only for AdaptiveTrack**, `Int` sets the index of the loop to be played after the intro. `0 default`
 
 
 ### `reset_music` 
@@ -83,8 +83,8 @@ This method will play from the beginning the audio with the name assigned in *so
 ![reset_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/4061983a-3a92-42d2-8f0e-76ce33332c9d)
 
 This method returns the currently playing track to the beginning.
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. *0.0 default*
-- `fade_in:` argument type `Float`, set the fade time when the track is played. *0.0 default*
+- `fade_out:` argument type `Float`, set the fade time when the current playback out. `0.0 default`
+- `fade_in:` argument type `Float`, set the fade time when the track is played. `0.0 default`
 
 
 ### `stop_music` 
@@ -93,8 +93,8 @@ This method returns the currently playing track to the beginning.
 ![stop_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/b3fd1554-36d5-4dca-9399-cb5d6a2ccafd)
 
 This method stops the current playback.
-- `can_fade:` if true, apply fade_out on current playback track. *false default*
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. *1.5 default*
+- `can_fade:` if true, apply fade_out on current playback track. `false default`
+- `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
 
 
 
@@ -103,7 +103,11 @@ This method stops the current playback.
 
 ![change_loop](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/3ce8a847-c3f4-46af-8271-a4350645a381)
 
-
+- `sound_name:` argument type `String`, name of the AdaptiveTrack on which the playing loop will be changed.
+- `loop_by_index:` loop index to play.
+- `can_fade:` if true, tracks will change with fades. `false default`
+- `fade_in:` time of fade in. `0.5 default`
+- `fade_out:` time of fade out. `1.5 default`
 
 ### `to_outro` 
 <sub>Only for ABGM</sub>
@@ -121,17 +125,6 @@ This method stops the current playback.
 ![layer_off](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/4465b310-6636-47a8-b700-504233a09644)
 
 
-### `play_sound` 
-<sub>Only for BGS</sub>
-
-![play_sound](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/931b7595-c39a-4e53-bacf-f2a60ee03eb1)
-
-This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
-
-*Same as play_music*
-
-
-
 ### `stop_all` 
 <sub>For All</sub>
 
@@ -143,6 +136,16 @@ This method stops all currently playing BGM/ABGM and BGS tracks, and removes the
 - `can_destroy:` if true, all tracks removes from the tree. *true default*
 
 
+### `play_sound`
+<sub>Only for BGS</sub>
+
+![play_sound](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/931b7595-c39a-4e53-bacf-f2a60ee03eb1)
+
+This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
+
+*Same as play_music*
+
+*BGS playback options not yet available.*
 
 
 ### AdaptiNodes
