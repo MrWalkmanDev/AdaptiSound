@@ -103,9 +103,18 @@ This method stops the current playback.
 
 ![change_loop](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/3ce8a847-c3f4-46af-8271-a4350645a381)
 
+### `to_outro` 
+<sub>Only for ABGM</sub>
+
 ![to_outro](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/d588bcf8-6a7f-4f38-a364-07b92cc39dc9)
 
+### `layer_on` 
+<sub>Only for ABGM</sub>
+
 ![layer_on](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/c9bfa806-ba06-4eb1-8aad-17d247823868)
+
+### `layer_off` 
+<sub>Only for ABGM</sub>
 
 ![layer_off](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/4465b310-6636-47a8-b700-504233a09644)
 
