@@ -14,14 +14,34 @@ If you want to know more about installing plugins you can read the [Godot docs p
 
 ## 🎛Documentation
 ### Main Panel
+
+![MainPanel](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/e9348ba6-5fb8-4d33-b96f-9adb4f76a1d8)
+
 El `Main Panel` te ayudará a organizar los archivos de audio en tu proyecto.
 El objetivo es separar la música en 3 categorías diferentes:
 - `BGM` (Background Music)
 - `BGS` (Background Sounds)
 - `ABGM` (Adaptive Background Music)
 
-Deberás asignar un directorio para cada categoría, el singleton `AudioManager` se encargará de cargar los archivos para su posterior uso en el juego.
-En `Main Panel` podrás visualizar el contenido de los directorios, elegir un bus de audio diferente para cada categoría, y elegir la extension de los archivos que deseas cargar.
+#### **Audio Directories**
+
+![Directories](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/43df5d91-49a7-4f7c-ad4b-018936f2d3ab)
+
+Deberás asignar un directorio para cada categoría, `Main Panel` buscará en todas las subcarpetas archivos de audio con las extensiones seleccionadas en **Audio Extensions**.
+Con el botón *buscar* podrás visualizar los archivos encontrados en los directorios.
+
+#### **Audio Bus**
+
+![Bus](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/85044888-b568-4134-9d89-39cfede581b7)
+
+Aquí podrás asignar un *BUS* de audio para cada categoría. Esto ayudará al posterior manejo del volumen de audio dentro del juego.
+
+#### **Debug and ABGS Support**
+
+![Debugging](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/138b7e7d-3bd2-47e5-b860-3a06a794b796)
+
+- Con `Debugging` podrás visualizar el output panel el funcionamiento del plugin.
+- `ABGS Support` te permitirá agregar escenas con los nodos AdaptiveTrack o ParallelTrack en la categoría de BGS (Sólo si este directorio es diferente a ABGM)
 
 
 ### AudioManager Singleton
