@@ -30,6 +30,8 @@ El objetivo es separar la música en 3 categorías diferentes:
 Deberás asignar un directorio para cada categoría, `Main Panel` buscará en todas las subcarpetas archivos de audio con las extensiones seleccionadas en **Audio Extensions**.
 Con el botón *buscar* podrás visualizar los archivos encontrados en los directorios.
 
+*`Nota`: ABGM buscará sólo archivos .tscn, ya que usará sólo las escenas creadas con AdaptiveTrack, o ParallelTrack*
+
 #### **Audio Bus**
 
 ![Bus](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/85044888-b568-4134-9d89-39cfede581b7)
