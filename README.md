@@ -97,13 +97,12 @@ This method stops the current playback.
 - `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
 
 
-
 ### `change_loop` 
 <sub>Only for ABGM</sub>
 
 ![change_loop](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/3ce8a847-c3f4-46af-8271-a4350645a381)
 
-- `sound_name:` argument type `String`, name of the AdaptiveTrack on which the playing loop will be changed.
+- `sound_name:` argument type `String`, name of the AdaptiveTrack on which the playing `Loop` will be changed.
 - `loop_by_index:` loop index to play.
 - `can_fade:` if true, tracks will change with fades. `false default`
 - `fade_in:` time of fade in. `0.5 default`
@@ -114,15 +113,30 @@ This method stops the current playback.
 
 ![to_outro](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/d588bcf8-6a7f-4f38-a364-07b92cc39dc9)
 
+- `sound_name:` argument type `String`, name of the AdaptiveTrack in which to switch to the `Outro`
+- `can_fade:` if true, tracks will change with fades. `false default`
+- `fade_out:` time of fade out. `1.5 default`
+- `fade_in:` time of fade in. `0.5 default`
+- `can_destroy:` if true, when track stops it will be removed from the tree. `false default`
+
+
 ### `layer_on` 
 <sub>Only for ABGM</sub>
 
 ![layer_on](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/c9bfa806-ba06-4eb1-8aad-17d247823868)
 
+- `track_name:` argument type `String`, name of ParallelTrack on which a layer will be played.
+- `layer_names:` type `Array`, names, groups, or indexes of the layers to be heard.
+- `fade_time:` time of fade in. `2.0 default`
+
 ### `layer_off` 
 <sub>Only for ABGM</sub>
 
 ![layer_off](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/4465b310-6636-47a8-b700-504233a09644)
+
+- `track_name:` argument type `String`, name of ParallelTrack on which to stop listening to a layer
+- `layer_names:` type `Array`, names, groups, or indexes of the layers to be heard.
+- `fade_time:` time of fade in. `2.0 default`
 
 
 ### `stop_all` 
