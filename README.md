@@ -5,7 +5,7 @@ AdaptiSound will help you implement music in your videogame. Explore the world o
 Your creativity is the limit!
 
 
-## 🎵 AdaptiSound v0.1 ![](https://camo.githubusercontent.com/d8177663f486ebdd812419dbf9fe4f8e750c01f2026590e5994ee31bbf7a8123/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f476f646f742d76342e302d253233343738636266)
+## 🎵 AdaptiSound Alpha v0.1 ![](https://camo.githubusercontent.com/d8177663f486ebdd812419dbf9fe4f8e750c01f2026590e5994ee31bbf7a8123/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f476f646f742d76342e302d253233343738636266)
 ### ⚙ Installation
 To Install AdaptiSound you must download the ZIP file, once downloaded move the `/addons` in the root of your project. Once the project is open you must activate the plugin in the project settings. If you see errors in the output panel, you might need to reboot the editor after enabling AdaptiSound for the first time.
 
@@ -13,6 +13,7 @@ If you want to know more about installing plugins you can read the [Godot docs p
 
 
 ## 🎛Documentation
+
 ### Main Panel
 
 ![MainPanel](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/e9348ba6-5fb8-4d33-b96f-9adb4f76a1d8)
@@ -47,14 +48,23 @@ Here you can assign an audio *BUS* for each category. This will help with later 
 
 
 ### AudioManager Singleton
+
+This tool is designed with the objective of implementing global background music and/or sounds. `AudioManager` will only play a single `BGM` or `ABGM` track, and in parallel one of `BGS`.
+
+- The `current_playback` variable stores the only currently playing BGM or ABGM.
+- The `current_bgs_playback` variable stores the only current playback of the BGS.
+
 ![AudioManager](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/8bdfc8b4-9ede-4844-9335-7db9dfebbd91)
 
 `AudioManager` will automatically preload audio files for when `playback methods` are called.
 
+*Only add_track method and play_music method add an instance to the `AudioManager` tree in the container with its category.*
+
 **Playback Methods**
 
-![play_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/d97fedf0-1d24-4194-8f92-d716bc403764)
+*ONLY FOR BGM & ABGM*
 
+![play_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/d97fedf0-1d24-4194-8f92-d716bc403764)
 
 This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
@@ -75,9 +85,39 @@ This method returns the currently playing track to the beginning.
 
 ![stop_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/b3fd1554-36d5-4dca-9399-cb5d6a2ccafd)
 
+This method stops the current playback.
+- `can_fade:` if true, apply fade_out on current playback track. *false default*
+- `fade_out:` argument type `Float`, set the fade time when the current playback out. *1.5 default*
 
+*ONLY FOR ABGM*
+
+![change_loop](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/3ce8a847-c3f4-46af-8271-a4350645a381)
+
+![to_outro](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/d588bcf8-6a7f-4f38-a364-07b92cc39dc9)
+
+![layer_on](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/c9bfa806-ba06-4eb1-8aad-17d247823868)
+
+![layer_off](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/4465b310-6636-47a8-b700-504233a09644)
+
+
+*ONLY FOR BGS*
+
+![play_sound](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/931b7595-c39a-4e53-bacf-f2a60ee03eb1)
+
+This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
+
+*Same as play_music*
+
+
+
+*FOR ALL*
 
 ![stop_all](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/c509e425-9ec9-4f45-a455-cbe914b34747)
+
+This method stops all currently playing BGM/ABGM and BGS tracks, and removes them from the tree.
+- `type:` argument type `String`, set a specific category you want to stop. *all default*
+- `fade_out:` argument type `Float`, set the fade time when the current playback out. *1.5 default*
+- `can_destroy:` if true, all tracks removes from the tree. *true default*
 
 
 
