@@ -11,7 +11,7 @@ script = ExtResource("1_18irg")
 [node name="Bass" type="Node" parent="."]
 script = ExtResource("2_1t4xm")
 audio_streams = Array[AudioStream]([ExtResource("3_b7hlj")])
-listening_from_start = false
+layer_on = false
 
 [node name="Drums" type="Node" parent="."]
 script = ExtResource("2_1t4xm")

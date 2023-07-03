@@ -4,7 +4,7 @@ signal audio_finished(node)
 
 var loop : bool = true : set = set_loop, get = get_loop
 var destroy : bool = false : set = set_destroy, get = get_destroy
-var mute = false
+#var mute = false
 
 var tween
 var can_change = true
@@ -19,8 +19,8 @@ func _process(delta):
 			can_change = false
 			to_loop()
 			
-	if mute:
-		volume_db = -50.0
+	#if mute:
+	#	volume_db = -50.0
 
 func to_loop():
 	#print("Loop Signal" + self.name)
@@ -33,12 +33,14 @@ func to_loop():
 		can_change = true
 
 func on_fade_in(volume, fade := 0.5):
+	#print(self.name + "in")
 	if tween:
 		tween.kill()
 	tween = create_tween().set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "volume_db", volume, fade)
 
 func on_fade_out(fade := 1.5, can_stop := true):
+	#print(self.name + "out")
 	if tween:
 		tween.kill()
 	tween = create_tween().set_ease(Tween.EASE_IN)
@@ -85,5 +87,5 @@ func set_destroy(value):
 func get_destroy():
 	return destroy
 
-func set_mute(value : bool):
-	mute = value
+#func set_mute(value : bool):
+	#mute = value

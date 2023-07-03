@@ -11,7 +11,7 @@ const AUDIO = preload("res://addons/AdaptiSound/Nodes/ParallelTrack/Audio_Stream
 @export var audio_streams : Array[AudioStream]
 
 ## If false, it will not be heard when calling [b]on_play()[/b]
-@export var listening_from_start = true
+@export var layer_on = true
 
 ## Choose if the layer is a loop
 @export var loop = true

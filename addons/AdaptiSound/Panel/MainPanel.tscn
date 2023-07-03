@@ -78,7 +78,7 @@ text = "BGM Directory"
 [node name="BGM" type="LineEdit" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "res://Audio/MusicTest/Paral"
+text = "res://Audio/"
 
 [node name="bgm_files" type="Button" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
@@ -98,7 +98,7 @@ text = "ABGM Directory"
 
 [node name="ABGM" type="LineEdit" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
-text = "res://Audio/Scenes/"
+text = "res://Audio/"
 
 [node name="abgm_files" type="Button" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
@@ -117,7 +117,6 @@ text = "BGS Directory"
 
 [node name="BGS" type="LineEdit" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
-text = "res://Audio/MusicTest/Music/"
 
 [node name="bgs_files" type="Button" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2

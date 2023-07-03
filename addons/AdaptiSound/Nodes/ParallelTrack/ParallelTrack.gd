@@ -28,7 +28,7 @@ func on_play(fade_time := 0.0, _skip_intro := false, _loop_index := 0):
 	## Layers
 	for i in layers:
 		if i.playing_type == "Always":
-			if i.listening_from_start:
+			if i.layer_on:
 				i.volume_db = volume_db
 				
 				## AudioStream in Layer
@@ -154,6 +154,28 @@ func on_fade_out(fade_out):
 	#######################
 	# Getters and Setters #
 	#######################
+	
+"""func set_layer_on(layer_names : Array):
+	for i in get_children():
+		if layer_names == []:
+			i.layer_on = true
+		else:
+			for n in layer_names:
+				if i.name == n:
+					i.layer_on = true
+				
+	return self
+			
+func set_layer_off(layer_names : Array):
+	for i in get_children():
+		for n in layer_names:
+			if layer_names == []:
+				i.layer_on = false
+			else:
+				if i.name == n:
+					i.layer_on = false
+				
+	return self"""
 	
 func get_layer(layer_name : String):
 	var childrens = get_children()

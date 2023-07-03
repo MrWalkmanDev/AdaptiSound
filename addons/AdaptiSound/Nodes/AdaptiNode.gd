@@ -16,8 +16,11 @@ var pitch_scale : float = 1.0 : set = set_pitch_scale, get = get_pitch_scale
 ## Audio Bus of the audio. [br][b]This parameter affects all the tracks that belong to it[/b]
 var bus : String = "Master" : set = set_bus, get = get_bus
 
-## if true, the track when stopped will be destroyed
+## If true, the track when stopped will be destroyed
 var destroy : bool = false
+
+##  If true, the track when stopped will start other track
+var secuence = {}
 
 func _process(delta):
 	if destroy:
@@ -47,16 +50,25 @@ func set_pitch_scale(value):
 func get_pitch_scale():
 	return pitch_scale
 	
+	
+	## Audio Bus ##
+	
 func set_bus(value : String):
-	bus = value
-	for i in get_children():
-		i.bus = value
-		
+	var buses = AudioServer.bus_count
+	var buses_arr = []
+	for i in buses:
+		var bus_name = AudioServer.get_bus_name(i)
+		buses_arr.append(bus_name)
+
+	if buses_arr.has(value):
+		bus = value
+		for i in get_children():
+			i.bus = value
+			
 	return self
 
 func get_bus():
 	return bus
-
 
 func set_destroy(value: bool):
 	destroy = value

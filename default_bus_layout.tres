@@ -23,4 +23,4 @@ bus/2/bypass_fx = false
 bus/2/volume_db = 0.0
 bus/2/send = &"Master"
 bus/2/effect/0/effect = SubResource("AudioEffectDelay_uglc5")
-bus/2/effect/0/enabled = true
+bus/2/effect/0/enabled = false

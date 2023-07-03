@@ -44,6 +44,10 @@ var abgm_bus : String
 var bgm_bus : String
 var bgs_bus : String
 
+#var current_bus : int = 0
+#var bus_volume_db : float = 0.0
+#var tween_bus
+
 func _ready():
 	initialize_manager()
 	
@@ -66,6 +70,7 @@ func initialize_manager():
 	sound_paths = data.BGS
 	debugging = data.debbug
 	audio_extensions = data.extensions
+	bgs_extensions = data.bgs_extensions
 	
 	abgm_bus = data.abgm_bus
 	bgm_bus = data.bgm_bus
@@ -109,7 +114,7 @@ func play_music(sound_name: String, volume_db := 0.0, fade_in: = 0.5,
 		tools.check_fade(current_playback, fade_out, false)
 	
 	## Play New Track
-	audio_stream.volume_db = volume_db
+	audio_stream.volume_db = volume_db ## Sube el volumen a todas las pistas
 	tools.check_fade(audio_stream, fade_in, true, volume_db, skip_intro, loop_index)
 	current_playback = audio_stream
 	
@@ -134,15 +139,16 @@ func reset_music(fade_out := 0.0, fade_in := 0.0):
 
 ## Stop current playback
 func stop_music(can_fade := false, fade_out := 1.5):
+	var track
 	if can_fade == false:
 		fade_out = 0.0
 		
 	if current_playback != null:
+		track = current_playback
 		tools.check_fade(current_playback, fade_out, false)
 	
-	var track = current_playback
-	current_playback = null
 	
+	current_playback = null ## Problemas con el Fade out
 	return track
 
 
@@ -184,6 +190,7 @@ func change_loop(sound_name, loop_by_index, can_fade := false,
 		
 func to_outro(sound_name : String, can_fade := false, fade_out := 1.5,
 	fade_in := 0.5, can_destroy := false):
+		#current_playback = null
 		return ABGM.to_outro(sound_name, can_fade, fade_out, fade_in)
 
 
@@ -275,6 +282,9 @@ func get_track_data(sound_name : String):
 ## Get track for any purpose
 func get_audio_track(sound_name : String):
 	var data = get_track_data(sound_name)
+	if data == null:
+		debug._print("DEBUG: Track not found")
+		return
 	var type = data["type"]
 	
 	if type == "BGM":
@@ -291,3 +301,59 @@ func get_audio_track(sound_name : String):
 		for i in bgs_container.get_children():
 			if i.name == sound_name:
 				return i
+
+
+## Audio Buses
+
+func add_bus(bus_name : String):
+	if AudioServer.get_bus_index(bus_name) != -1:
+		debug._print("DEBUG: Bus " + bus_name + " already exist")
+		return
+	
+	var bus_count = AudioServer.get_bus_count()
+	AudioServer.add_bus(bus_count)
+	AudioServer.set_bus_name(bus_count, bus_name)
+
+func get_track_bus_name(sound_name := "current_music"):
+	var track
+	if sound_name == "current_music":
+		track = current_playback
+	else:
+		track = get_audio_track(sound_name)
+		
+	if track == null:
+		return
+		
+	return track.bus
+	
+func get_track_bus_index(sound_name := "current_music"):
+	var track
+	if sound_name == "current_music":
+		track = current_playback
+	else:
+		track = get_audio_track(sound_name)
+		
+	if track == null:
+		return
+		
+	var index = AudioServer.get_bus_index(track.bus)
+	return index
+	
+func get_track_bus_volume_db(sound_name := "current_music"):
+	var idx
+	var vol
+	if sound_name == "current_music":
+		if current_playback == null:
+			debug._print("DEBUG: Cant get bus volume of null")
+			return
+		idx = AudioServer.get_bus_index(current_playback.bus)
+	else:
+		idx = get_track_bus_index(sound_name)
+		if idx == null:
+			idx = AudioServer.get_bus_index(sound_name)
+	
+	vol = AudioServer.get_bus_volume_db(idx)
+	return vol
+
+func set_bus_volume_db(value : float, bus_index := 0):
+	AudioServer.set_bus_volume_db(bus_index, value)

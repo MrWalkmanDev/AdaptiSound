@@ -1,22 +1,32 @@
 extends Node2D
 
+func _process(_delta):
+	#print(AudioManager.current_playback)
+	pass
+
 func _input(_event):
 	if Input.is_action_just_pressed("ui_up"):
 		AudioManager.play_music("Parallel1")
+		#AudioManager.play_sound("Main_Menu").set_bus("xd")
 		
 	if Input.is_action_just_pressed("ui_right"):
-		#AudioManager.layer_on("Parallel1", ["Bass"], 0.0)
-		AudioManager.layer_on("Parallel1", ["Bass"])
+		AudioManager.play_music("Theme1")
 		
 	if Input.is_action_just_pressed("ui_down"):
-		AudioManager.play_layer("Parallel1", ["Bass"])
+		var track = AudioManager.get_audio_track("Theme1")
+		track.connect("end_track", start_music)
+		AudioManager.to_outro("Theme1").set_secuence("Parallel1")
+		#AudioManager.stop_music(true)
+		#AudioManager.play_music("Parallel1")
+		#AudioManager.layer_on("Parallel1", ["Bass"])
+		#AudioManager.to_outro("Theme1")#.set_secuence("Parallel1")
+		#AudioManager.get_audio_track("Theme1").connect("end_track", start_music)
 		
 	if Input.is_action_just_pressed("ui_left"):
-		#AudioManager.layer_off("Parallel1", ["Bass"], 0.0)
-		AudioManager.stop_layer("Parallel1", ["Bass"])
+		AudioManager.play_music("Theme1")
 
-func _process(_delta):
-	#if($AudioStreamPlayer.stream.get_length() - $AudioStreamPlayer.get_playback_position()) <= 0.01:
-	#	print("cambio de pista musical")
-	#	$AudioStreamPlayer.play()
-	pass
+func start_music():
+	if AudioManager.get_audio_track("Theme1").is_connected("end_track", start_music):
+		AudioManager.get_audio_track("Theme1").disconnect("end_track", start_music)
+	AudioManager.play_music("Parallel1")
+	AudioManager.layer_on("Parallel1", ["Bass"])

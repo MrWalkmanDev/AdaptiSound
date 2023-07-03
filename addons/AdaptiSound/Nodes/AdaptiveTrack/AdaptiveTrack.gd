@@ -58,7 +58,7 @@ func _ready():
 	outro_player.volume_db = -50.0 # Para la primera vez que se reproduce Outro (with Fade in)
 	outro_player.name = "Outro"
 	add_child(outro_player)
-	outro_player.connect("finished", on_stop.bind(0.0))
+	#outro_player.connect("finished", on_stop.bind(0.0))
 	
 	current_playback = null
 	
@@ -108,6 +108,19 @@ func _ready():
 ######################
 
 func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
+	#can_end_track = false
+	#if outro_player.is_connected("finished", on_stop):
+	#	outro_player.disconnect("finished", on_stop)
+	## Mutea todas las pistas por si hay alguna con cola.
+	for i in get_children():
+		if i != intro_player:
+			if i is AudioStreamPlayer:
+				i.on_fade_out(1.5)
+			else:
+				i.on_stop(1.5)
+				
+				
+				
 	if skip_intro:
 		on_play_loop(fade_in, loop_index)
 		return
@@ -129,11 +142,11 @@ func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
 			intro_player.connect("finished", intro_finished)
 			
 		intro_player.volume_db = volume_db
-		loops_audio_streams[loop_index].volume_db = volume_db ## Need set volume for reset Play
 		measures = 1 ## Need this for reset or stop sin destroy
 		if fade_in != 0.0:
 			intro_player.volume_db = -50.0
 			intro_player.on_fade_in(volume_db, fade_in)
+			
 		intro_player.play()
 		current_playback = intro_player
 	else:
@@ -142,6 +155,14 @@ func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
 
 
 func on_play_loop(fade_time := 0.0, loop_index := 0):
+	for i in get_children():
+		if i != loops_audio_streams[loop_index]:
+			if i is AudioStreamPlayer:
+				i.on_fade_out(1.5)
+			else:
+				i.on_stop(1.5)
+				
+	
 	## Check if track already playing
 	#var audio_on_playing = get_stream_playing()
 	#if audio_on_playing != null:
@@ -179,6 +200,7 @@ func change_loop(index, fade_in := 0.5, fade_out := 1.5):
 	## Verify if target loop is same loop
 	if current_playback == loops_audio_streams[index]:
 		can_change_track = false
+		can_end_track = false
 		AudioManager.debug._print("DEBUG: Loop continue")
 		return
 		
@@ -248,10 +270,12 @@ func on_outro(fade_out := 1.5, fade_in := 0.5):
 			if not outro_player.is_connected("finished", on_stop):
 				outro_player.connect("finished", on_stop.bind(0.0))
 				
-			current_playback.on_fade_out(fade_out)
-			outro_player.on_fade_in(volume_db, fade_in)
-			outro_player.play()
-			current_playback = outro_player
+			change_outro(fade_out, fade_in)
+				
+			#current_playback.on_fade_out(fade_out)
+			#outro_player.on_fade_in(volume_db, fade_in)
+			#outro_player.play()
+			#current_playback = outro_player
 			AudioManager.debug._print("DEBUG: Go to the outro")
 	else:
 		## No outro file
@@ -277,9 +301,15 @@ func on_stop(fade_out := 0.0):
 			## ParallelTrack or SecuenceTrack
 			else:
 				i.on_stop()
+				
+	emit_signal("end_track")
 	
 	current_playback = null
-	emit_signal("end_track")
+	
+	## Para por si no hay otras pistas reproduciendose
+	if AudioManager.current_playback == self:
+		AudioManager.current_playback = null
+
 
 
 	#############
@@ -290,7 +320,9 @@ func intro_finished():
 	## Check if is another AdaptiveNode
 	if loops_audio_streams[first_loop_playing] is AudioStreamPlayer:
 		loops_audio_streams[first_loop_playing].play()
+		loops_audio_streams[first_loop_playing].volume_db = volume_db ## Need set volume for reset play
 	else:
+		loops_audio_streams[first_loop_playing].volume_db = volume_db
 		loops_audio_streams[first_loop_playing].on_play()
 	current_playback = loops_audio_streams[first_loop_playing]
 	reset_beat_parameters()
@@ -326,8 +358,24 @@ func reset_beat_parameters():
 	song_position_in_beats = 0
 	sec_per_beat = 60.0 / loop_files[current_loop_index].bpm
 	
+# Set Secuence
+func set_secuence(sound_name: String):
+	secuence.name = sound_name
+	var track = AudioManager.add_track(sound_name)
+	return track
+	
 ## Measure and Beat Count
-func _physics_process(delta):
+func _process(delta):
+	if secuence != {}:
+		if get_stream_playing() == null:
+			AudioManager.play_music(secuence.name)
+			secuence.clear()
+			print("Secuence!")
+			#emit_signal("end_track")
+			
+			
+	
+	## Beat Count ##
 	if loop_files != []:
 		if current_playback is AudioStreamPlayer:## Para combinar Parallel track
 			var current_loop_index = loops_audio_streams.find(current_playback)
@@ -401,6 +449,7 @@ func change_outro(fade_out, fade_in):
 	outro_player.on_fade_in(volume_db, fade_in)
 	outro_player.play()
 	current_playback = outro_player
+	
 	
 func change_track(from_track, to_track, fade_out = fade_out_loop, fade_in = fade_in_loop):
 	var loop_index = loops_audio_streams.find(to_track)
