@@ -12,9 +12,18 @@ To Install AdaptiSound you must download the ZIP file, once downloaded move the 
 If you want to know more about installing plugins you can read the [Godot docs page](https://docs.godotengine.org/en/stable/tutorials/plugins/editor/installing_plugins.html)
 
 
-## 🎛Features
-- Main Panel
-- AudioManager Singleton
+## 🎛Documentation
+### Main Panel
+El `Main Panel` te ayudará a organizar los archivos de audio en tu proyecto.
+El objetivo es separar la música en 3 categorías diferentes:
+- `BGM` (Background Music)
+- `BGS` (Background Sounds)
+- `ABGM` (Adaptive Background Music)
+Deberás asignar un directorio para cada categoría, el singleton `AudioManager` se encargará de cargar los archivos para su posterior uso en el juego.
+En `Main Panel` podrás visualizar el contenido de los directorios, elegir un bus de audio diferente para cada categoría, y elegir la extension de los archivos que deseas cargar.
+
+
+### AudioManager Singleton
 - AdaptiveTrack Node
 - ParallelTrack Node
 
