@@ -12,4 +12,14 @@ To Install AdaptiSound you must download the ZIP file, once downloaded move the 
 If you want to know more about installing plugins you can read the [Godot docs page](https://docs.godotengine.org/en/stable/tutorials/plugins/editor/installing_plugins.html)
 
 
-## Features
+## 🎛Features
+- Main Panel
+- AudioManager Singleton
+- AdaptiveTrack Node
+- ParallelTrack Node
+
+
+### Made by 
+Isaías Arrué R. `(Mr. Walkman)`
+
+[MIT License](https://github.com/MrWalkmanDev/AdaptiSound/blob/main/LICENSE)
