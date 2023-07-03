@@ -103,6 +103,8 @@ This method stops the current playback.
 
 ![change_loop](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/3ce8a847-c3f4-46af-8271-a4350645a381)
 
+
+
 ### `to_outro` 
 <sub>Only for ABGM</sub>
 
