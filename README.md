@@ -19,6 +19,7 @@ El objetivo es separar la música en 3 categorías diferentes:
 - `BGM` (Background Music)
 - `BGS` (Background Sounds)
 - `ABGM` (Adaptive Background Music)
+
 Deberás asignar un directorio para cada categoría, el singleton `AudioManager` se encargará de cargar los archivos para su posterior uso en el juego.
 En `Main Panel` podrás visualizar el contenido de los directorios, elegir un bus de audio diferente para cada categoría, y elegir la extension de los archivos que deseas cargar.
 
