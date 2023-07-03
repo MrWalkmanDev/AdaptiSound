@@ -1,5 +1,5 @@
 # AdaptiSound
-Complete BGM Manager for Godot 4.0
+Complete Background Audio Manager for Godot 4.0
 
 AdaptiSound will help you implement music in your videogame. Explore the world of interactive and adaptive music with the different tools that this plugin gives you.
 Your creativity is the limit!
@@ -17,8 +17,8 @@ If you want to know more about installing plugins you can read the [Godot docs p
 
 ![MainPanel](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/e9348ba6-5fb8-4d33-b96f-9adb4f76a1d8)
 
-El `Main Panel` te ayudará a organizar los archivos de audio en tu proyecto.
-El objetivo es separar la música en 3 categorías diferentes:
+The `Main Panel` will help you organize the audio files in your project.
+You can separate the music into 3 different categories:
 - `BGM` (Background Music)
 - `ABGM` (Adaptive Background Music)
 - `BGS` (Background Sounds)
@@ -27,37 +27,59 @@ El objetivo es separar la música en 3 categorías diferentes:
 
 ![Directories](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/43df5d91-49a7-4f7c-ad4b-018936f2d3ab)
 
-Deberás asignar un directorio para cada categoría, `Main Panel` buscará en todas las subcarpetas archivos de audio con las extensiones seleccionadas en **Audio Extensions**.
-Con el botón *buscar* podrás visualizar los archivos encontrados en los directorios.
+You will have to assign a directory for each category, `Main Panel` will look in all the subfolders for audio files with the extensions selected in **Audio Extensions**.
+With the *search* button you can view the files found in the directories.
 
-*`Nota`: ABGM buscará sólo archivos .tscn, ya que usará sólo las escenas creadas con AdaptiveTrack, o ParallelTrack*
+*`Note`: ABGM will search only .tscn files, as it will use only the scenes created with AdaptiveTrack, or ParallelTrack*
 
 #### **Audio Bus**
 
 ![Bus](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/85044888-b568-4134-9d89-39cfede581b7)
 
-Aquí podrás asignar un *BUS* de audio para cada categoría. Esto ayudará al posterior manejo del volumen de audio dentro del juego.
+Here you can assign an audio *BUS* for each category. This will help with later in-game audio volume management.
 
 #### **Debug and ABGS Support**
 
 ![Debugging](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/138b7e7d-3bd2-47e5-b860-3a06a794b796)
 
-- `Debugging`: Podrás visualizar el output panel el funcionamiento del plugin.
-- `ABGS Support`: Te permitirá agregar escenas con los nodos AdaptiveTrack o ParallelTrack en la categoría de BGS (Sólo si este directorio es diferente a ABGM)
+- `Debugging`: You will be able to see the plugin's operation in the output panel.
+- `ABGS Support`: It will allow you to add scenes with AdaptiveTrack or ParallelTrack nodes in the BGS category.
 
 
 ### AudioManager Singleton
 ![AudioManager](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/8bdfc8b4-9ede-4844-9335-7db9dfebbd91)
 
-`AudioManager` precargará automáticamente los archivos de audio para cuando las `opciones de reproduccion` sean llamadas.
+`AudioManager` will automatically preload audio files for when `playback methods` are called.
 
 **Playback Methods**
 
-**play_music(`sound_name: String`, `volume_db : Float`= 0.0, `fade_in : Float`= 0.5, `fade_out: Float`= 1.5, `skip_intro : Bool`= false, `loop_index : Int`= 0)**
+![play_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/d97fedf0-1d24-4194-8f92-d716bc403764)
 
-Este método reproducirá desde el inicio el audio con el nombre asignado en *sound_name*. Si ya existe un audio reproduciéndose éste lo reemplazará, almenos que sea el mismo, en ese caso, continuará la reproducción actual.
 
-- *sound_name:* con este argumento `AudioManager` buscara los sonido precargados y reproducira el que tenga este nombre
+This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
+
+- `sound_name:` with this argument type `String`, `AudioManager` will look for the preloaded sounds and play audio with this name.
+- `volume_db:` argument type `Float`, set volume in dB of the track when played. *0.0 default*
+- `fade_in:` argument type `Float`, set the fade time when the track is played. *0.5 default*
+- `fade_out:` argument type `Float`, set the fade time when the current playback out. *1.5 default*
+- `skip_intro:` **only for AdaptiveTrack**, `Bool` if true, play the loop directly. *false default*
+- `loop_index:` **only for AdaptiveTrack**, `Int` sets the index of the loop to be played after the intro. *0 default*
+
+
+![reset_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/4061983a-3a92-42d2-8f0e-76ce33332c9d)
+
+This method returns the currently playing track to the beginning.
+- `fade_out:` argument type `Float`, set the fade time when the current playback out. *0.0 default*
+- `fade_in:` argument type `Float`, set the fade time when the track is played. *0.0 default*
+
+
+![stop_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/b3fd1554-36d5-4dca-9399-cb5d6a2ccafd)
+
+
+
+![stop_all](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/c509e425-9ec9-4f45-a455-cbe914b34747)
+
+
 
 
 ### AdaptiNodes
