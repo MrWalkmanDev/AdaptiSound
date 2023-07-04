@@ -227,11 +227,11 @@ Loops are resources of `BaseAudioTrack` class, you can create a new one as seen 
 
 The loops have a beat and bar counting system. The following properties make use of this feature.
 
-- `keys_loop_in_beat:` in this property you can assign keys on specific beats, when the `change_loop` method is called the track will be changed **only when the track goes through one of these keys(beats)**.
-- `keys_loop_in_measure:` in this property you can assign keys to specific measures, when the `change_loop` method is called the track will be changed **only when the track enters one of these keys(measures)**.
+- `keys_loop_in_beat:` in this property you can assign keys on specific beats, when the `change_loop` method is called the track will be changed ***only when the track goes through one of these keys(beats)***.
+- `keys_loop_in_measure:` in this property you can assign keys to specific measures, when the `change_loop` method is called the track will be changed ***only when the track enters one of these keys(measures)***.
 
-- `keys_end_in_beat:` in this property you can assign keys to specific beats, when the `to_outro` method is called the track will be changed **only when the track goes through one of these keys(beats)**.
-- `keys_end_in_measure:` in this property you can assign keys to specific measures, when the `to_outro` method is called the track will be changed **only when the track enters one of these keys(measures)**.
+- `keys_end_in_beat:` in this property you can assign keys to specific beats, when the `to_outro` method is called the track will be changed ***only when the track goes through one of these keys(beats)***.
+- `keys_end_in_measure:` in this property you can assign keys to specific measures, when the `to_outro` method is called the track will be changed ***only when the track enters one of these keys(measures)***.
 
 If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
 
