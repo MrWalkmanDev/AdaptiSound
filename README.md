@@ -215,6 +215,7 @@ The main function of `AdaptiveTrack` is to reproduce the following structure:
 
 AdaptiveTrack properties
 - `intro_file:` here you must add the audio file that will be played as `Intro`. you can leave it empty and playback will start directly with the first loop.
+- `outro_file:`  here you need to add the audio file to be played as `Outro`. You can leave it empty and the playback will stop when calling `to_outro` method.
 - `loops_files:` To add a loop you will need to follow some additional steps:
 ![loopfile](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/7ee21ab8-4f66-49d2-89b2-9f57d26791e6)
 
@@ -234,8 +235,6 @@ The loops have a beat and bar counting system. The following properties make use
 - `keys_end_in_measure:` in this property you can assign keys to specific measures, when the `to_outro` method is called the track will be changed ***only when the track enters one of these keys(measures)***.
 
 If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
-
-- `outro_file:`  here you need to add the audio file to be played as `Outro`. You can leave it empty and the playback will stop when calling `to_outro` method.
 
 ### 📃Credits
 - Made by [Isaías Arrué R.](https://github.com/MrWalkmanDev) ( [Mr. Walkman](https://mr-walkman.itch.io) )
