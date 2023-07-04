@@ -217,6 +217,7 @@ AdaptiveTrack properties
 - `intro_file:` here you must add the audio file that will be played as `Intro`. you can leave it empty and playback will start directly with the first loop.
 - `loops_files:` To add a loop you will need to follow some additional steps:
 ![loopfile](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/7ee21ab8-4f66-49d2-89b2-9f57d26791e6)
+
 Loops are resources of `BaseAudioTrack` class, you can create a new one as seen in the image above.
 
 - `audio_file:` here you must add the audio file that will be played in a loop
