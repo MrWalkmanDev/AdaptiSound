@@ -46,6 +46,10 @@ Here you can assign an audio *BUS* for each category. This will help with later 
 - `Debugging`: You will be able to see the plugin's operation in the output panel.
 - `ABGS Support`: It will allow you to add scenes with AdaptiveTrack or ParallelTrack nodes in the BGS category.
 
+## **Save Button** 
+you must use this button to save any changes you make in the main panel.
+![save](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/267442ed-13d8-4287-9e44-eb71411edfd7)
+
 
 ## AudioManager Singleton
 
