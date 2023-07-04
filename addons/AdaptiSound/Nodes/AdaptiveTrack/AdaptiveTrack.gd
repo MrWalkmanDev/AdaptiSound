@@ -1,6 +1,6 @@
 extends AdaptiNode
 
-signal beat
+#signal beat
 signal measure
 signal end_track
 
@@ -20,7 +20,6 @@ var current_playback #: AudioStreamPlayer
 var intro_player
 var outro_player
 
-var measures := 1
 var can_change_track = false
 var can_end_track = false
 
@@ -30,8 +29,15 @@ var song_position_in_beats = 1
 var sec_per_beat : float = 0.0
 var last_reported_beat = 0
 var beats_before_start = 0
-var beat_measure_count = 2
 
+var can_beat = false
+var can_first_beat = true
+var _beat = 0
+var beat_measure_count = 1
+var measures = 1
+
+
+# Loop Variables
 var first_loop_playing : int = 0
 var loop_target : int = 0
 var loops = {}
@@ -96,11 +102,6 @@ func _ready():
 			add_child(audio_stream)
 		
 			loops_audio_streams.append(get_node(audio_stream.get_path()))
-		
-	for i in loops_audio_streams:
-		if i is AudioStreamPlayer: ### ParallelTrack
-			i.connect("audio_finished", can_loop)
-
 
 
 ######################
@@ -108,10 +109,6 @@ func _ready():
 ######################
 
 func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
-	#can_end_track = false
-	#if outro_player.is_connected("finished", on_stop):
-	#	outro_player.disconnect("finished", on_stop)
-	## Mutea todas las pistas por si hay alguna con cola.
 	for i in get_children():
 		if i != intro_player:
 			if i is AudioStreamPlayer:
@@ -120,15 +117,9 @@ func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
 				i.on_stop(1.5)
 				
 				
-				
 	if skip_intro:
 		on_play_loop(fade_in, loop_index)
 		return
-	## Check if track already playing
-	#var audio_on_playing = get_stream_playing()
-	#if audio_on_playing != null:
-	#	AudioManager.debug._print("DEBUG: Track already playing")
-	#	return
 	
 	## Check if index is correct
 	if loop_index > loops_audio_streams.size() - 1:
@@ -142,7 +133,8 @@ func on_play(fade_in := 0.0, skip_intro := false, loop_index := 0):
 			intro_player.connect("finished", intro_finished)
 			
 		intro_player.volume_db = volume_db
-		measures = 1 ## Need this for reset or stop sin destroy
+		measures = 1  ## Need this for reset or stop sin destroy
+		#reset_beat_parameters()
 		if fade_in != 0.0:
 			intro_player.volume_db = -50.0
 			intro_player.on_fade_in(volume_db, fade_in)
@@ -161,13 +153,6 @@ func on_play_loop(fade_time := 0.0, loop_index := 0):
 				i.on_fade_out(1.5)
 			else:
 				i.on_stop(1.5)
-				
-	
-	## Check if track already playing
-	#var audio_on_playing = get_stream_playing()
-	#if audio_on_playing != null:
-	#	AudioManager.debug._print("DEBUG: Track already playing")
-	#	return
 	
 	## Check if index is correct
 	if loop_index > loops_audio_streams.size() - 1:
@@ -176,20 +161,19 @@ func on_play_loop(fade_time := 0.0, loop_index := 0):
 	
 	loops_audio_streams[loop_index].volume_db = volume_db ## Need this for reset play
 	sec_per_beat = 60.0 / loop_files[loop_index].bpm
-	if fade_time != 0.0:
-		loops_audio_streams[loop_index].volume_db = -50.0
-	loops_audio_streams[loop_index].on_fade_in(volume_db, fade_time)
-	loops_audio_streams[loop_index].play()
+	if loops_audio_streams[loop_index] is AudioStreamPlayer:
+		if fade_time != 0.0:
+			loops_audio_streams[loop_index].volume_db = -50.0
+		loops_audio_streams[loop_index].on_fade_in(volume_db, fade_time)
+		loops_audio_streams[loop_index].play()
+	else:
+		loops_audio_streams[loop_index].on_fade_in(volume_db, fade_time)
+		#loops_audio_streams[loop_index].on_play()
 	AudioManager.debug._print("DEBUG: Skip intro")
 	
 	current_playback = loops_audio_streams[loop_index]
 	reset_beat_parameters()
 
-## No disponible aún
-"""func on_reset():
-	for i in get_children():
-		i.stop()
-	on_play()"""
 
 func change_loop(index, fade_in := 0.5, fade_out := 1.5):
 	## Check if index is correct
@@ -215,8 +199,7 @@ func change_loop(index, fade_in := 0.5, fade_out := 1.5):
 	
 	if current_loop_index != -1:
 		## Check if Loop has keys
-		if loop_files[current_loop_index].keys_loop_in_beat != [] \
-			or loop_files[current_loop_index].keys_loop_in_measure != []:
+		if loop_files[current_loop_index].keys_loop_in_measure != []:
 			
 			loop_target = index
 			can_change_track = true
@@ -224,7 +207,8 @@ func change_loop(index, fade_in := 0.5, fade_out := 1.5):
 				
 		else:
 			## Inmediate Change Loop
-			beat_measure_count = 2 ## only inmediate
+			beat_measure_count = 1 ## only inmediate
+			_beat = 0 # puede que no sea necesario
 			loop_target = index
 			change_track(current_playback, loops_audio_streams[index], fade_out, fade_in)
 			AudioManager.debug._print("DEBUG: Change Loop")
@@ -234,7 +218,7 @@ func change_loop(index, fade_in := 0.5, fade_out := 1.5):
 		if outro_player.is_connected("finished", on_stop):
 			outro_player.disconnect("finished", on_stop)
 			
-		beat_measure_count = 2 ## only inmediate
+		beat_measure_count = 1 ## only inmediate
 		change_track(outro_player, loops_audio_streams[index], fade_out, fade_in)
 		AudioManager.debug._print("DEBUG: Outro to loop")
 
@@ -256,8 +240,7 @@ func on_outro(fade_out := 1.5, fade_in := 0.5):
 	var current_loop_index = loops_audio_streams.find(current_playback)
 	
 	if outro_file != null:
-		if loop_files[current_loop_index].keys_end_in_beat != [] \
-			or loop_files[current_loop_index].keys_end_in_measure != []:
+		if loop_files[current_loop_index].keys_end_in_measure != []:
 			
 			if not outro_player.is_connected("finished", on_stop):
 				outro_player.connect("finished", on_stop.bind(0.0))
@@ -271,11 +254,6 @@ func on_outro(fade_out := 1.5, fade_in := 0.5):
 				outro_player.connect("finished", on_stop.bind(0.0))
 				
 			change_outro(fade_out, fade_in)
-				
-			#current_playback.on_fade_out(fade_out)
-			#outro_player.on_fade_in(volume_db, fade_in)
-			#outro_player.play()
-			#current_playback = outro_player
 			AudioManager.debug._print("DEBUG: Go to the outro")
 	else:
 		## No outro file
@@ -306,7 +284,7 @@ func on_stop(fade_out := 0.0):
 	
 	current_playback = null
 	
-	## Para por si no hay otras pistas reproduciendose
+	## Por si no hay otras pistas reproduciendose
 	if AudioManager.current_playback == self:
 		AudioManager.current_playback = null
 
@@ -327,35 +305,14 @@ func intro_finished():
 	current_playback = loops_audio_streams[first_loop_playing]
 	reset_beat_parameters()
 	
-func can_loop(node):
-	## Check if signal coming from loop
-	if loops_audio_streams.has(current_playback):
-		
-		measures = 1
-		
-		## Update Current Playback
-		var key_measure = change_measure_tracks()
-		var key_beat = change_beat_tracks()
-		if key_measure != null or key_beat != null:
-			beat_measure_count = 2 ## Solo para el cambio en el primer tiempo
-			return 
-		
-		var current_loop_index = loops_audio_streams.find(current_playback)
-		if loop_files[current_loop_index].loop:
-			print(str(measures) + "(Loop)")
-			beat_measure_count = 2
-			last_reported_beat = 0
-			song_position_in_beats = 0
-			sec_per_beat = 60.0 / loop_files[current_loop_index].bpm
-			
-		else:
-			on_stop()
-			
+
 func reset_beat_parameters():
 	var current_loop_index = loops_audio_streams.find(current_playback)
-	beat_measure_count = 2
+	measures = 1 ## Antes no estaba
+	beat_measure_count = 1
 	last_reported_beat = 0
 	song_position_in_beats = 0
+	_beat = 0
 	sec_per_beat = 60.0 / loop_files[current_loop_index].bpm
 	
 # Set Secuence
@@ -365,7 +322,8 @@ func set_secuence(sound_name: String):
 	return track
 	
 ## Measure and Beat Count
-func _process(delta):
+func _physics_process(delta):
+	## Set Secuence
 	if secuence != {}:
 		if get_stream_playing() == null:
 			AudioManager.play_music(secuence.name)
@@ -373,38 +331,56 @@ func _process(delta):
 			print("Secuence!")
 			#emit_signal("end_track")
 			
-			
 	
 	## Beat Count ##
 	if loop_files != []:
 		if current_playback is AudioStreamPlayer:## Para combinar Parallel track
-			var current_loop_index = loops_audio_streams.find(current_playback)
-			if current_loop_index != -1:
-				if loops_audio_streams[current_loop_index].playing:
-					song_position = loops_audio_streams[current_loop_index].get_playback_position()\
+			if loops_audio_streams.has(current_playback):
+				var current_loop_index = loops_audio_streams.find(current_playback)
+			#if current_loop_index != -1:
+				#if loops_audio_streams[current_loop_index].playing:
+				if current_playback.playing:
+					#song_position = loops_audio_streams[current_loop_index].get_playback_position()\
+					#+ AudioServer.get_time_since_last_mix()
+					song_position = current_playback.get_playback_position()\
 					+ AudioServer.get_time_since_last_mix()
 					
 					song_position -= AudioServer.get_output_latency()
 					song_position_in_beats = int(floor(song_position / sec_per_beat)) + beats_before_start
+					
+					#var total_song_position_in_beat = int(floor(current_playback.stream.get_length() / sec_per_beat))
 					_report_beat(current_loop_index)
 
 func _report_beat(current_loop_index):
-	if last_reported_beat < song_position_in_beats:
+	## First Beat (Loop)
+	if song_position_in_beats <= 0 \
+	and last_reported_beat == loop_files[current_loop_index].total_beat_count - 1 \
+	and can_first_beat:
+		can_first_beat = false
+		_beat = 0
+		beat_measure_count = 1
+		measures = 1
+		AudioManager.debug._print("DEBUG: Measure count: " + str(measures) + "Loop")
+		change_measure_tracks()
+	if _beat < song_position_in_beats:
+		can_beat = true
+	
+	## Beat Report
+	if can_beat:
+		can_beat = false
+		_beat += 1
+		beat_measure_count += 1
 		if beat_measure_count > loop_files[current_loop_index].metric:
 			measures += 1
 			beat_measure_count = 1
-			print(measures)
-			emit_signal("measure", measures)
+			can_first_beat = true
 			change_measure_tracks()
-			
-		#print(beat_measure_count)
-		emit_signal("beat", song_position_in_beats)
+			emit_signal("measure")
+			AudioManager.debug._print("DEBUG: Measure count: " + str(measures))
 		
 		last_reported_beat = song_position_in_beats
-		beat_measure_count += 1
-		
-		change_beat_tracks()
-		
+
+
 func change_measure_tracks():
 	var current_loop_index = loops_audio_streams.find(current_playback)
 	## Change Loops by Keys ##
@@ -419,22 +395,8 @@ func change_measure_tracks():
 		can_end_track = false
 		change_outro(fade_out_loop, fade_in_loop)
 		return true
-		
-func change_beat_tracks():
-	var current_loop_index = loops_audio_streams.find(current_playback)
-	## Change Loops by Keys ##
-	if loop_files[current_loop_index].keys_loop_in_beat.has(song_position_in_beats + 1) \
-	and can_change_track:
-		change_track(current_playback, loops_audio_streams[loop_target])
-		return true
-		
-	## Change to End by Keys ##
-	if loop_files[current_loop_index].keys_end_in_beat.has(song_position_in_beats + 1) \
-		and can_end_track:
-		can_end_track = false
-		change_outro(fade_out_loop, fade_in_loop)
-		return true
-		
+
+
 func change_outro(fade_out, fade_in):
 	outro_player.volume_db = volume_db
 	
@@ -457,6 +419,7 @@ func change_track(from_track, to_track, fade_out = fade_out_loop, fade_in = fade
 	measures = 1
 	last_reported_beat = 0
 	song_position_in_beats = 0
+	_beat = 0
 	sec_per_beat = 60.0 / loop_files[loop_index].bpm
 	
 	

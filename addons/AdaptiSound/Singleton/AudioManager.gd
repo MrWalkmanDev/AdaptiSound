@@ -123,18 +123,21 @@ func play_music(sound_name: String, volume_db := 0.0, fade_in: = 0.5,
 
 ## Reset current playback from begining
 func reset_music(fade_out := 0.0, fade_in := 0.0):
+	var track
 	if current_playback != null:
+		track = current_playback
 		if current_playback is AudioStreamPlayer:
 			current_playback.stop()
 			#current_playback.play()
 		else:
 			current_playback.on_stop()
 			#current_playback.on_play()
-		tools.check_fade(current_playback, fade_in, true)
+		tools.check_fade(track, fade_in, true)
 	else:
 		debug._print("DEBUG: There is no playback in progress")
 	
-	return current_playback
+	current_playback = track
+	return track
 
 
 ## Stop current playback
@@ -214,8 +217,8 @@ func stop_layer(track_name: String, layer_names: Array, can_fade := false, fade_
 ##########################
 
 ## Play BGS track or change for another one
-func play_sound(sound_name : String, volume_db := 0.0, loop := true,
-	fade_in := 0.5, fade_out := 1.5):
+func play_sound(sound_name: String, volume_db := 0.0, fade_in: = 0.5,
+	fade_out:= 1.5, skip_intro := false, loop_index := 0):
 	
 	## Get data of track
 	var track_data = get_track_data(sound_name)

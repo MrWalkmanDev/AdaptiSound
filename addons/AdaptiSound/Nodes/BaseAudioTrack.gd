@@ -12,14 +12,16 @@ class_name BaseAudioTrack
 @export var metric := 4
 ## If track is loopeable or not.
 @export var loop = true
+## Total beats of the track, this variable is needed for the loop.
+@export var total_beat_count : int
 
 @export_category("Loop Keys Values")
-## Points where the loop can transition to another Loop. Use Beats Count
-@export var keys_loop_in_beat : Array[int]
+# Points where the loop can transition to another Loop. Use Beats Count
+#@export var keys_loop_in_beat : Array[int]
 ## Points where the loop can transition to another Loop. Use Measure Count
 @export var keys_loop_in_measure : Array[int]
 
-## Points where the loop can transition to Outro. Use Beats Count
-@export var keys_end_in_beat : Array[int]
+# Points where the loop can transition to Outro. Use Beats Count
+#@export var keys_end_in_beat : Array[int]
 ## Points where the loop can transition to Outro. Use Measure Count
 @export var keys_end_in_measure : Array[int]

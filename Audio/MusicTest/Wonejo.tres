@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3 uid="uid://b5s4nhkdryagq"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/BaseAudioTrack.gd" id="1_oplb8"]
 
@@ -9,7 +9,6 @@ track_name = "Wonejo"
 bpm = 160.0
 metric = 4
 loop = true
-keys_loop_in_beat = Array[int]([])
-keys_loop_in_measure = Array[int]([4, 8, 12, 16, 20])
-keys_end_in_beat = Array[int]([])
+total_beat_count = 100
+keys_loop_in_measure = Array[int]([])
 keys_end_in_measure = Array[int]([])
