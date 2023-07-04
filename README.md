@@ -164,39 +164,73 @@ This method will play from the beginning the audio with the name assigned in *so
 
 ## AdaptiNodes
 
-Para agregar música adaptativa a nuestro proyecto podremos usar los AdaptiNodes. El objetivo de estos nodos es crear un solo track que contenga varias pistas de audio y una estructura determinada para reproducirse.
+To add adaptive music to our project we can use the AdaptiNodes. The objective of these nodes is to create a single track that contains several audio tracks and a certain structure to be played.
 
 ### ParallelTrack & ParallelLayer
 
-La funcion principal de `ParallelTrack` es reproducir varias pistas al mismo tiempo, y con los metodos llamados desde `AudioManager` controlar las diferentes capas.
-Para empezar a agregar una capa deberás agregar un `ParallelLayer` al nodo principal, como se ve en la imagen de a continuación. 
+The main function of `ParallelTrack` is to play several tracks at the same time, and with methods called from `AudioManager` control the different layers.
+To start adding a layer you will need to add a `ParallelLayer` to the main node, as seen in the image below.
 
 ![ParallelTrack](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/7cf0b5f7-f4e0-4b7b-9427-1f2d7ffa7fc0)
 
-Puedes renombrar las capas para que posteriormente sea más sencillo manejarlas. Cada ParallelLayer puede contener varias pistas, y todas las pistas se reproducirán juntas cuando la capa a la que perteneces se active.
-Por ejemplo podemos tener la siguiente estructura:
-(ParallelLayer)Base: contiene pistas de drums y basses
-(ParallelLayer)Top: contiene pistas melódicas
+You can rename the layers so that later it is easier to manage them. Each ParallelLayer can contain multiple tracks, and all tracks will play together when the layer they belong to is activated.
+
+For example we can have the following structure:
+- (ParallelLayer)Base: contains drum and bass tracks
+- (ParallelLayer)Top: contains melodic tracks
 
 ![ParallelTrack_structure](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/837fca0f-72ba-4ded-9f94-5336a63abf2e)
 
-`ParallelLayer` tiene las siguientes propiedades:
+`ParallelLayer` has the following properties:
 
-- `playing_type:` `Always` se reproducira al llamar a `play_music`, y siempre estara activada al menos que se detenga con `stop_music`, si es `Trigger` solo se activara al llamar una funcion especifica. `play_layer`
-Nota: `Always` se reproduce desde el inicio, pero no necesariamente se estará escuchando. para está la propiedad `layer_on`
+- `playing_type:` `Always` will play when calling `play_music`, and it will always be activated unless stopped with `stop_music`, if `Trigger` it will only be activated when calling the `play_layer` method.
 
-- `audio_stream:` aqui agregas las pistas de audio que se activaran con esta capa
-- `layer_on:` si es verdadero, entonces la capa se escuchara desde el comienzo, al ser llamada por `play_music`.
-- `loop:` si es verdadero, la capa se reproducira en bucle.
-- `Groups:` puedes asignar grupos personalizados a cada capa, y despues llamarlos con la funcion `layer_on` o `layer_off`.
+Note: `Always` plays from the start, but it won't necessarily be listening. for is the `layer_on` property.
+
+- `audio_stream:` here you add the audio tracks that will be activated with this layer.
+- `layer_on:` if true, then the layer will be listenning from the beginning, when called by `play_music`.
+- `loop:` if true, the layer will play in a loop.
+- `Groups:` you can assign custom groups to each layer, and then call them with the `layer_on` or `layer_off` function.
 
 ![ParallelLayer](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/06e46a1b-7f7f-4ec8-b3fe-09de0661f74d)
 
-
+The objective of this structure is that all the layers of type `Always` are playing in parallel, and with the `layer_on` and `layer_off` methods we activate or deactivate them respectively to be heard.
 
 
 ### AdaptiveTrack
 
+The main function of `AdaptiveTrack` is to reproduce the following structure:
+
+| Intro | Loops | Outro |
+| ----- | ----- | ----- |
+- `Intro:` It is a track that plays only once, and can only be stopped with a track change (`play_music`), or with the `stop_music` method.
+- `Loops:` These tracks will play in a loop, but only one track will play at a time, to change from one loop to another you must call the `change_loop` method.
+- `Outro:` This track will play only once, and can only be interrupted by the `change_loop`, or `stop_music` method. to go from the loops section to the outro you must call `to_outro` method.
+
+![AdaptiveTrack](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/99adb29a-91dd-428c-8870-0886dae90ebb)
+
+AdaptiveTrack properties
+- `intro_file:` here you must add the audio file that will be played as `Intro`. you can leave it empty and playback will start directly with the first loop.
+- `loops_files:` To add a loop you will need to follow some additional steps:
+![loopfile](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/7ee21ab8-4f66-49d2-89b2-9f57d26791e6)
+Loops are resources of `BaseAudioTrack` class, you can create a new one as seen in the image above.
+
+- `audio_file:` here you must add the audio file that will be played in a loop
+- `track_name:` give the loop a name
+- `BPM:` beat per minute from track
+- `metric:` is the number of beats within a measure
+
+The loops have a beat and bar counting system. The following properties make use of this feature.
+
+- `keys_loop_in_beat:` in this property you can assign keys on specific beats, when the `change_loop` method is called the track will be changed **only when the track goes through one of these keys(beats)**.
+- `keys_loop_in_measure:` in this property you can assign keys to specific measures, when the `change_loop` method is called the track will be changed **only when the track enters one of these keys(measures)**.
+
+- `keys_end_in_beat:` in this property you can assign keys to specific beats, when the `to_outro` method is called the track will be changed **only when the track goes through one of these keys(beats)**.
+- `keys_end_in_measure:` in this property you can assign keys to specific measures, when the `to_outro` method is called the track will be changed **only when the track enters one of these keys(measures)**.
+
+If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
+
+- `outro_file:`  here you need to add the audio file to be played as `Outro`. You can leave it empty and the playback will stop when calling `to_outro` method.
 
 ### 📃Credits
 - Made by [Isaías Arrué R.](https://github.com/MrWalkmanDev) ( [Mr. Walkman](https://mr-walkman.itch.io) )
