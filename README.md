@@ -1,6 +1,6 @@
 # AdaptiSound
 
-![AdaptiSound](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/ce14de36-2ee7-40b5-97a6-fba90383778b)
+![AdaptiSound](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/1cc3b899-e375-4be2-9d8b-91e9aae6ceb0)
 
 Complete Background Audio Manager for Godot 4.0
 
