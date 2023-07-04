@@ -204,7 +204,7 @@ AdaptiveTrack properties
 - `outro_file:`  here you need to add the audio file to be played as `Outro`. You can leave it empty and the playback will stop when calling `to_outro` method.
 - `loops_files:` To add a loop you will need to follow some additional steps:
 
-![loopfile](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/7ee21ab8-4f66-49d2-89b2-9f57d26791e6)
+![loopfile](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/8dc6da42-e189-407a-9b12-2c66eab618a3)
 
 Loops are resources of `BaseAudioTrack` class, you can create a new one as seen in the image above.
 
@@ -214,11 +214,8 @@ Loops are resources of `BaseAudioTrack` class, you can create a new one as seen 
 - `metric:` is the number of beats within a measure
 
 The loops have a beat and bar counting system. The following properties make use of this feature.
-
-- `keys_loop_in_beat:` in this property you can assign keys on specific beats, when the `change_loop` method is called the track will be changed ***only when the track goes through one of these keys(beats)***.
+- `total_beat_count:` is the total number of beats that the loop has. ***You must have this data to make the beats and bars counter work***
 - `keys_loop_in_measure:` in this property you can assign keys to specific measures, when the `change_loop` method is called the track will be changed ***only when the track enters one of these keys(measures)***.
-
-- `keys_end_in_beat:` in this property you can assign keys to specific beats, when the `to_outro` method is called the track will be changed ***only when the track goes through one of these keys(beats)***.
 - `keys_end_in_measure:` in this property you can assign keys to specific measures, when the `to_outro` method is called the track will be changed ***only when the track enters one of these keys(measures)***.
 
 If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
