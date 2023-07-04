@@ -28,9 +28,9 @@ func _enter_tree():
 	preload("res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelLayer.gd"),
 	layer_track_icon)
 	
-	add_custom_type("SecuenceTrack", "Node",
-	preload("res://addons/AdaptiSound/Nodes/SecuenceTrack/SecuenceTrack.gd"),
-	secuencetrack_icon)
+	#add_custom_type("SecuenceTrack", "Node",
+	#preload("res://addons/AdaptiSound/Nodes/SecuenceTrack/SecuenceTrack.gd"),
+	#secuencetrack_icon)
 	
 	main_instance = MainPanel.instantiate()
 	main_instance.hide()
@@ -46,7 +46,7 @@ func _exit_tree():
 	remove_custom_type("AdaptiveTrack")
 	remove_custom_type("ParallelTrack")
 	remove_custom_type("ParallelLayer")
-	remove_custom_type("SecuenceTrack")
+	#remove_custom_type("SecuenceTrack")
 	
 	if main_instance:
 		remove_control_from_bottom_panel(main_instance)
@@ -64,47 +64,3 @@ func _get_plugin_name():
 	
 func _get_plugin_icon():
 	return dock_icon #get_editor_interface().get_base_control().get_theme_icon("AudioStreamPlayer", "EditorIcons")
-
-### FILE SYSTEM ###
-
-"""func get_sound_file_names_from_path_r(path : String) -> PackedStringArray:
-	var directory : EditorFileSystemDirectory = get_editor_interface().get_resource_filesystem().get_filesystem_path(path)
-	var file_name := get_sound_file_names_from_dir_r(directory)
-#	directory.free()
-	return file_name
-
-
-func get_sound_file_names_from_dir_r(directory : EditorFileSystemDirectory) -> PackedStringArray:
-	if directory == null:
-		return PackedStringArray([])
-	var file_name = get_sound_file_names_from_dir(directory)
-	for i in range(0, directory.get_subdir_count()):
-		var subdir = directory.get_subdir(i)
-		if subdir.get_name() != "addons":
-			file_name += get_sound_file_names_from_dir_r(directory.get_subdir(i))
-	return file_name
-
-
-func get_sound_file_names_from_dir(directory : EditorFileSystemDirectory) -> PackedStringArray:
-	var file_names : PackedStringArray = []
-	if directory:
-		for i in range(0, directory.get_file_count()):
-			var file_name = directory.get_file(i)
-			if (file_name.get_extension() == "ogg" or
-					file_name.get_extension() == "mp3" or
-					file_name.get_extension() == "wav" or
-					file_name.get_extension() == "opus"):
-				file_name = directory.get_path() + file_name
-				file_names.append(file_name)
-	return file_names
-
-func check_file_names_from_paths() -> void:
-	var file_names = get_sound_file_names_from_path_r("res://")
-	main_instance.file_names_updated(file_names)
-	#emit_signal("file_names_updated", file_names)
-
-func _on_filesystem_changed() -> void:
-	check_file_names_from_paths()
-
-func _on_check_file_names_requested() -> void:
-	check_file_names_from_paths()"""
