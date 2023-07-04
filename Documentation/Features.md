@@ -211,11 +211,14 @@ Loops are resources of `BaseAudioTrack` class, you can create a new one as seen 
 - `audio_file:` here you must add the audio file that will be played in a loop
 - `track_name:` give the loop a name
 - `BPM:` beat per minute from track
-- `metric:` is the number of beats within a measure
+- `metric:` is the number of beats within a measure/bar
 
 The loops have a beat and bar counting system. The following properties make use of this feature.
 - `total_beat_count:` is the total number of beats that the loop has. ***You must have this data to make the beats and bars counter work***
-- `keys_loop_in_measure:` in this property you can assign keys to specific measures, when the `change_loop` method is called the track will be changed ***only when the track enters one of these keys(measures)***.
-- `keys_end_in_measure:` in this property you can assign keys to specific measures, when the `to_outro` method is called the track will be changed ***only when the track enters one of these keys(measures)***.
+
+(An easy way to get it is to multiply the total number of bars x metric)
+
+- `keys_loop_in_measure:` in this property you can assign keys to specific measures/bar, when the `change_loop` method is called the track will be changed ***only when the track enters one of these keys(measures/bar)***.
+- `keys_end_in_measure:` in this property you can assign keys to specific measures/bar, when the `to_outro` method is called the track will be changed ***only when the track enters one of these keys(measures/bar)***.
 
 If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
