@@ -94,3 +94,11 @@ func _on_area_2d_body_exited(_body):
 	if vol != null:
 		var tween = create_tween()
 		tween.tween_method(AudioManager.set_bus_volume_db.bind(index), vol, 0.0, 1.5)
+
+
+
+
+# Change Scene #
+func _on_exit_body_entered(body):
+	if body.is_in_group("Player"):
+		get_tree().change_scene_to_file("res://DEMO/Scenes/AdaptiveScene.tscn")
