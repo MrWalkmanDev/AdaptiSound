@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://uaucfx2mbcym"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiveTrack/AdaptiveTrack.gd" id="1_3rd6o"]
+[ext_resource type="Resource" uid="uid://dbno1rid0qy04" path="res://DEMO/Audio/Music/ABGM/Boss/loop.tres" id="2_poiph"]
+
+[node name="Boss_Music" type="Node"]
+script = ExtResource("1_3rd6o")
+loop_files = Array[Resource("res://addons/AdaptiSound/Nodes/BaseAudioTrack.gd")]([ExtResource("2_poiph")])

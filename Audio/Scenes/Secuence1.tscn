@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://b4pco0hs0pbeg"]
-
-[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/SecuenceTrack/SecuenceTrack.gd" id="1_dnjax"]
-
-[node name="Secuence1" type="Node"]
-script = ExtResource("1_dnjax")

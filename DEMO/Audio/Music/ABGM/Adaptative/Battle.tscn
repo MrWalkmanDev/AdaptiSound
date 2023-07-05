@@ -1,0 +1,23 @@
+[gd_scene load_steps=6 format=3 uid="uid://b3vsd55vfaaqt"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiveTrack/AdaptiveTrack.gd" id="1_a481l"]
+[ext_resource type="AudioStream" uid="uid://deo87tguctvp4" path="res://DEMO/Audio/Music/ABGM/Adaptative/Battle_Intro.ogg" id="2_0cx5s"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/BaseAudioTrack.gd" id="3_p6hdk"]
+[ext_resource type="AudioStream" uid="uid://cu5i7wu7ywgly" path="res://DEMO/Audio/Music/ABGM/Adaptative/Battle_Outro.ogg" id="4_y7nu7"]
+
+[sub_resource type="Resource" id="Resource_bu05e"]
+script = ExtResource("3_p6hdk")
+audio_file = "res://DEMO/Audio/Music/ABGM/Adaptative/Battle_Loop.ogg"
+track_name = "Loop"
+bpm = 200.0
+metric = 4
+loop = true
+total_beat_count = 32
+keys_loop_in_measure = Array[int]([])
+keys_end_in_measure = Array[int]([1, 2, 3, 4, 5, 6, 7, 8])
+
+[node name="Battle" type="Node"]
+script = ExtResource("1_a481l")
+intro_file = ExtResource("2_0cx5s")
+loop_files = Array[ExtResource("3_p6hdk")]([SubResource("Resource_bu05e")])
+outro_file = ExtResource("4_y7nu7")

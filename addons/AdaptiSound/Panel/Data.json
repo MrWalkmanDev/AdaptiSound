@@ -1,1 +1,1 @@
-{"ABGM":"res://Audio/","BGM":"res://Audio/","BGS":"","abgm_bus":"Master","bgm_bus":"Master","bgs_bus":"Master","bgs_extensions":["wav","ogg"],"debbug":true,"extensions":["wav","ogg"]}
+{"ABGM":"res://DEMO/Audio/Music/ABGM/","BGM":"res://DEMO/Audio/Music/BGM/","BGS":"res://DEMO/Audio/Music/BGS/","abgm_bus":"Master","bgm_bus":"Master","bgs_bus":"Master","bgs_extensions":["wav","ogg"],"debbug":true,"extensions":["wav","ogg"]}
