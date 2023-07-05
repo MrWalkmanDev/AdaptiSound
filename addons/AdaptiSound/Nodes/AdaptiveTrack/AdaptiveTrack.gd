@@ -406,8 +406,10 @@ func change_outro(fade_out, fade_in):
 				i.stop()
 			else:
 				i.on_stop()
-			
+				
 	current_playback.on_fade_out(fade_out)
+	if fade_in != 0.0:
+		outro_player.volume_db = -50.0
 	outro_player.on_fade_in(volume_db, fade_in)
 	outro_player.play()
 	current_playback = outro_player

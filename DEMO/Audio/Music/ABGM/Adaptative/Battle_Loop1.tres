@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BaseAudioTrack" load_steps=2 format=3 uid="uid://svngl0jhexrh"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/BaseAudioTrack.gd" id="1_maxcb"]
+
+[resource]
+script = ExtResource("1_maxcb")
+audio_file = "res://DEMO/Audio/Music/ABGM/Adaptative/Battle_Loop.ogg"
+track_name = "Loop"
+bpm = 200.0
+metric = 4
+loop = true
+total_beat_count = 32
+keys_loop_in_measure = Array[int]([1, 2, 3, 4, 5, 6, 7, 8])
+keys_end_in_measure = Array[int]([1, 2, 3, 4, 5, 6, 7, 8])

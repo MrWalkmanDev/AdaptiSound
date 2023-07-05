@@ -95,6 +95,10 @@ func on_trigger_layer(layer_name : String, fade_time := 0.5):
 
 
 func on_layers(layers_names : Array, fade_in := 2.0):
+	if layers_names == []:
+		for i in get_children():
+			check_node(i, fade_in, true)
+	
 	for i in layers_names:
 		if typeof(i) == TYPE_INT:
 			if i > get_child_count() - 1:
