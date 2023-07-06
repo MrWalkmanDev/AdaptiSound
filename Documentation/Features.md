@@ -128,6 +128,25 @@ This method stops the current playback.
 - `layer_names:` type `Array`, names, groups, or indices of the layers to be unheard.
 - `fade_time:` time of fade in. `3.0 default`
 
+### `play_layer`
+<sub>Only for ABGM</sub>
+
+![playlayer](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/2c414ffa-5e00-424c-b84f-86ecd1271f3f)
+
+- `track_name:` argument type `String`, name of the track that contains the layers to play.
+- `layer_names:` type `Array`, names, groups, or indices of trigger layers to play.
+- `can_fade:` if true, tracks will play with fade in. `false default`
+- `fade_time:` time of fade in. `3.0 default`
+
+### `stop_layer`
+<sub>Only for ABGM</sub>
+
+![playlayer](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/2c414ffa-5e00-424c-b84f-86ecd1271f3f)
+
+- `track_name:` argument type `String`, name of the track that contains the layers to stop.
+- `layer_names:` type `Array`, names, groups, or indices of trigger layers to stop.
+- `can_fade:` if true, tracks will play with fade out. `false default`
+- `fade_time:` time of fade out. `3.0 default`
 
 ### `stop_all` 
 <sub>For All</sub>
@@ -149,7 +168,9 @@ This method will play from the beginning the audio with the name assigned in *so
 
 *Same as play_music*
 
-*BGS playback options not yet available.*
+*Use `stop_all("BGS")` for stop sounds*
+
+*ABGS playback options not yet available.*
 
 
 ## AdaptiNodes
