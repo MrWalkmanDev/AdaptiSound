@@ -141,8 +141,6 @@ This method stops the current playback.
 ### `stop_layer`
 <sub>Only for ABGM</sub>
 
-![playlayer](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/2c414ffa-5e00-424c-b84f-86ecd1271f3f)
-
 - `track_name:` argument type `String`, name of the track that contains the layers to stop.
 - `layer_names:` type `Array`, names, groups, or indices of trigger layers to stop.
 - `can_fade:` if true, tracks will play with fade out. `false default`
