@@ -81,6 +81,10 @@ alignment = 1
 layout_mode = 2
 text = "All Layers"
 
+[node name="Trigger" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Trigger"
+
 [node name="Stop" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer"]
 layout_mode = 2
 text = "Stop"
@@ -107,4 +111,5 @@ vertical_alignment = 1
 [connection signal="toggled" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Layer2" to="." method="_on_layer_2_toggled"]
 [connection signal="toggled" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Layer3" to="." method="_on_layer_3_toggled"]
 [connection signal="toggled" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer2/CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/Trigger" to="." method="_on_trigger_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/Stop" to="." method="_on_stop_pressed"]

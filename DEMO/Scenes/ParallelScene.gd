@@ -48,3 +48,7 @@ func _on_stop_pressed():
 	console.text = "AudioManager.stop_music(true)"
 
 
+
+
+func _on_trigger_pressed():
+	AudioManager.play_layer("JazzTheme", ["Trigger"])
