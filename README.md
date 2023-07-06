@@ -2,7 +2,7 @@
 
 ![AdaptiSound-fotor-20230704182528](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/c3aeb9ca-4fe0-4689-ba1c-36309289593b)
 
-Complete Background Audio Manager for Godot 4.0
+Complete Audio Manager for Godot 4.0
 
 AdaptiSound will help you implement music in your videogame. Explore the world of interactive and adaptive music with the different tools that this plugin gives you.
 Your creativity is the limit!
