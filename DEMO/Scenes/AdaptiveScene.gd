@@ -2,6 +2,7 @@ extends Node2D
 
 func _on_play_pressed():
 	AudioManager.play_music("Battle", 0.0, 0.0, 1.5)
+	#AudioManager.play_music("ParallelBase")
 
 
 func _on_loop_1_pressed():
@@ -14,3 +15,4 @@ func _on_loop_2_pressed():
 
 func _on_outro_pressed():
 	AudioManager.to_outro("Battle")
+	#AudioManager.stop_music(true)

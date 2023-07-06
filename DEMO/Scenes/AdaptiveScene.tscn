@@ -24,7 +24,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.184314, 0.203922, 0.219608, 1)
 
-[node name="Label" type="Label" parent="CanvasLayer/Control"]
+[node name="Tittle" type="Label" parent="CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
