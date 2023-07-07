@@ -1,6 +1,6 @@
 # AdaptiSound
 
-![AdaptiSound-fotor-20230704182528](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/c3aeb9ca-4fe0-4689-ba1c-36309289593b)
+![AdaptiSound-fotor-20230704182528](https://i.imgur.com/0AQxKDq.png)
 
 Complete Audio Manager for Godot 4.0
 
