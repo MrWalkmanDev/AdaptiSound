@@ -2,7 +2,7 @@
 
 ## Main Panel
 
-![MainPanel](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/e9348ba6-5fb8-4d33-b96f-9adb4f76a1d8)
+![Imgur](https://i.imgur.com/ue4WQfU.png)
 
 The `Main Panel` will help you organize the audio files in your project.
 You can separate the music into 3 different categories:
@@ -12,7 +12,7 @@ You can separate the music into 3 different categories:
 
 ### **Audio Directories**
 
-![Directories](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/43df5d91-49a7-4f7c-ad4b-018936f2d3ab)
+![Imgur](https://i.imgur.com/GDCFHb8.png)
 
 You will have to assign a directory for each category, `Main Panel` will look in all the subfolders for audio files with the extensions selected in **Audio Extensions**.
 With the *search* button you can view the files found in the directories.
@@ -21,20 +21,20 @@ With the *search* button you can view the files found in the directories.
 
 ### **Audio Bus**
 
-![Bus](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/85044888-b568-4134-9d89-39cfede581b7)
+![Imgur](https://i.imgur.com/eQ1QWgm.png)
 
 Here you can assign an audio *BUS* for each category. This will help with later in-game audio volume management.
 
 ### **Debug and ABGS Support**
 
-![Debugging](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/138b7e7d-3bd2-47e5-b860-3a06a794b796)
+![Imgur](https://i.imgur.com/gtskvKC.png)
 
 - `Debugging`: You will be able to see the plugin's operation in the output panel.
 - `ABGS Support`: It will allow you to add scenes with AdaptiveTrack or ParallelTrack nodes in the BGS category.
 
 ## **Save Button** 
 you must use this button to save any changes you make in the main panel.
-![save](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/267442ed-13d8-4287-9e44-eb71411edfd7)
+![Imgur](https://i.imgur.com/pAEEVqe.png)
 
 
 ## AudioManager Singleton
@@ -44,7 +44,7 @@ This tool is designed with the objective of implementing global background music
 - The `current_playback` variable stores the only currently playing BGM or ABGM.
 - The `current_bgs_playback` variable stores the only current playback of the BGS.
 
-![AudioManager](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/8bdfc8b4-9ede-4844-9335-7db9dfebbd91)
+![Imgur](https://i.imgur.com/X41Xw0x.png)
 
 `AudioManager` will automatically preload audio files for when `playback methods` are called.
 
@@ -55,7 +55,7 @@ This tool is designed with the objective of implementing global background music
 ### `play_music` 
 <sub>Only for BGM/ABGM</sub>
 
-![play_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/d97fedf0-1d24-4194-8f92-d716bc403764)
+![Imgur](https://i.imgur.com/isVC4CR.png)
 
 This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
@@ -70,7 +70,7 @@ This method will play from the beginning the audio with the name assigned in *so
 ### `reset_music` 
 <sub>Only for BGM/ABGM</sub>
 
-![reset_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/4061983a-3a92-42d2-8f0e-76ce33332c9d)
+![Imgur](https://i.imgur.com/PvFIyCe.png)
 
 This method returns the currently playing track to the beginning.
 - `fade_out:` argument type `Float`, set the fade time when the current playback out. `0.0 default`
@@ -80,7 +80,7 @@ This method returns the currently playing track to the beginning.
 ### `stop_music` 
 <sub>Only for BGM/ABGM</sub>
 
-![stop_music](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/b3fd1554-36d5-4dca-9399-cb5d6a2ccafd)
+![Imgur](https://i.imgur.com/h5yE4sL.png)
 
 This method stops the current playback.
 - `can_fade:` if true, apply fade_out on current playback track. `false default`
@@ -90,7 +90,7 @@ This method stops the current playback.
 ### `change_loop` 
 <sub>Only for ABGM</sub>
 
-![change_loop](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/3ce8a847-c3f4-46af-8271-a4350645a381)
+![Imgur](https://i.imgur.com/q8LL0bG.png)
 
 - `sound_name:` argument type `String`, name of the AdaptiveTrack on which the playing `Loop` will be changed.
 - `loop_by_index:` loop index to play.
@@ -101,7 +101,7 @@ This method stops the current playback.
 ### `to_outro` 
 <sub>Only for ABGM</sub>
 
-![to_outro](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/d588bcf8-6a7f-4f38-a364-07b92cc39dc9)
+![Imgur](https://i.imgur.com/tkCCQny.png)
 
 - `sound_name:` argument type `String`, name of the AdaptiveTrack in which to switch to the `Outro`
 - `can_fade:` if true, tracks will change with fades. `false default`
@@ -113,7 +113,7 @@ This method stops the current playback.
 ### `layer_on` 
 <sub>Only for ABGM</sub>
 
-![layer_on](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/c9bfa806-ba06-4eb1-8aad-17d247823868)
+![Imgur](https://i.imgur.com/G42Roq9.png)
 
 - `track_name:` argument type `String`, name of ParallelTrack on which a layer will be played.
 - `layer_names:` type `Array`, names, groups, or indexes of the layers to be heard.
@@ -122,7 +122,7 @@ This method stops the current playback.
 ### `layer_off` 
 <sub>Only for ABGM</sub>
 
-![layer_off](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/4465b310-6636-47a8-b700-504233a09644)
+![Imgur](https://i.imgur.com/SolmYzZ.png)
 
 - `track_name:` argument type `String`, name of ParallelTrack on which to stop listening to a layer
 - `layer_names:` type `Array`, names, groups, or indices of the layers to be unheard.
@@ -131,7 +131,7 @@ This method stops the current playback.
 ### `play_layer`
 <sub>Only for ABGM</sub>
 
-![playlayer](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/2c414ffa-5e00-424c-b84f-86ecd1271f3f)
+![Imgur](https://i.imgur.com/Fmz0ZTI.png)
 
 - `track_name:` argument type `String`, name of the track that contains the layers to play.
 - `layer_names:` type `Array`, names, groups, or indices of trigger layers to play.
@@ -149,7 +149,7 @@ This method stops the current playback.
 ### `stop_all` 
 <sub>For All</sub>
 
-![stop_all](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/c509e425-9ec9-4f45-a455-cbe914b34747)
+![Imgur](https://i.imgur.com/sKLJbHk.png)
 
 This method stops all currently playing BGM/ABGM and BGS tracks, and removes them from the tree.
 - `type:` argument type `String`, set a specific category you want to stop. `"all" default`
@@ -160,7 +160,7 @@ This method stops all currently playing BGM/ABGM and BGS tracks, and removes the
 ### `play_sound`
 <sub>Only for BGS</sub>
 
-![play_sound](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/931b7595-c39a-4e53-bacf-f2a60ee03eb1)
+![Imgur](https://i.imgur.com/r7e01zW.png)
 
 This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
@@ -180,7 +180,7 @@ To add adaptive music to our project we can use the AdaptiNodes. The objective o
 The main function of `ParallelTrack` is to play several tracks at the same time, and with methods called from `AudioManager` control the different layers.
 To start adding a layer you will need to add a `ParallelLayer` to the main node, as seen in the image below.
 
-![ParallelTrack](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/7cf0b5f7-f4e0-4b7b-9427-1f2d7ffa7fc0)
+![Imgur](https://i.imgur.com/Otz3qC7.png)
 
 You can rename the layers so that later it is easier to manage them. Each ParallelLayer can contain multiple tracks, and all tracks will play together when the layer they belong to is activated.
 
@@ -188,7 +188,7 @@ For example we can have the following structure:
 - (ParallelLayer)Base: contains drum and bass tracks
 - (ParallelLayer)Top: contains melodic tracks
 
-![ParallelTrack_structure](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/837fca0f-72ba-4ded-9f94-5336a63abf2e)
+![Imgur](https://i.imgur.com/vkvvqmN.png)
 
 `ParallelLayer` has the following properties:
 
@@ -201,7 +201,7 @@ Note: `Always` plays from the start, but it won't necessarily be listening. for 
 - `loop:` if true, the layer will play in a loop.
 - `Groups:` you can assign custom groups to each layer, and then call them with the `layer_on` or `layer_off` function.
 
-![ParallelLayer](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/06e46a1b-7f7f-4ec8-b3fe-09de0661f74d)
+![Imgur](https://i.imgur.com/Ka5jHfO.png)
 
 The objective of this structure is that all the layers of type `Always` are playing in parallel, and with the `layer_on` and `layer_off` methods we activate or deactivate them respectively to be heard.
 
@@ -216,14 +216,14 @@ The main function of `AdaptiveTrack` is to reproduce the following structure:
 - `Loops:` These tracks will play in a loop, but only one track will play at a time, to change from one loop to another you must call the `change_loop` method.
 - `Outro:` This track will play only once, and can only be interrupted by the `change_loop`, or `stop_music` method. to go from the loops section to the outro you must call `to_outro` method.
 
-![AdaptiveTrack](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/99adb29a-91dd-428c-8870-0886dae90ebb)
+![Imgur](https://i.imgur.com/5av3yLb.png)
 
 AdaptiveTrack properties
 - `intro_file:` here you must add the audio file that will be played as `Intro`. you can leave it empty and playback will start directly with the first loop.
 - `outro_file:`  here you need to add the audio file to be played as `Outro`. You can leave it empty and the playback will stop when calling `to_outro` method.
 - `loops_files:` To add a loop you will need to follow some additional steps:
 
-![loopfile](https://github.com/MrWalkmanDev/AdaptiSound/assets/109055491/8dc6da42-e189-407a-9b12-2c66eab618a3)
+![Imgur](https://i.imgur.com/Hq85fNJ.png)
 
 Loops are resources of `BaseAudioTrack` class, you can create a new one as seen in the image above.
 
