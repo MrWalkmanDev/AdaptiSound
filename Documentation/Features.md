@@ -178,7 +178,7 @@ To add adaptive music to our project we can use the AdaptiNodes. The objective o
 ### ParallelTrack & ParallelLayer
 
 The main function of `ParallelTrack` is to play multiple tracks at the same time, and with methods called from `AudioManager` control the different layers.
-To start adding a layer you will need to add a `ParallelLayer` to the main node, as seen in the image below.
+To get started, you'll need to add a ParallelLayer to the parent node.
 
 ![Imgur](https://i.imgur.com/Otz3qC7.png)
 
