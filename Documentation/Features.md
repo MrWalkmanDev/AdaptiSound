@@ -192,7 +192,7 @@ For example we can have the following structure:
 
 `ParallelLayer` has the following properties:
 
-- `playing_type:` `Always` will play when calling `play_music`, and it will always be activated unless stopped with `stop_music`, if `Trigger` it will only be activated when calling the `play_layer` method.
+- `playing_type:` if `Always`, will play when calling `play_music`, and it will always be activated unless stopped with `stop_music`, if `Trigger` it will only be activated when calling the `play_layer` method.
 
 Note: `Always` plays from the start, but it won't necessarily be listening. for is the `layer_on` property.
 
