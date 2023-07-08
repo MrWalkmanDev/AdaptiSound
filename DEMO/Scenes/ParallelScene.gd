@@ -10,36 +10,36 @@ func _on_play_pressed():
 
 func _on_layer_1_toggled(button_pressed):
 	if button_pressed:
-		AudioManager.layer_on("JazzTheme", [0])
+		AudioManager.mute_layer("JazzTheme", [0], false)
 		console.text = "AudioManager.layer_on(sound_name, [0])"
 	else:
-		AudioManager.layer_off("JazzTheme", [0])
+		AudioManager.mute_layer("JazzTheme", [0], true)
 		console.text = "AudioManager.layer_off(sound_name, [0])"
 
 
 func _on_layer_2_toggled(button_pressed):
 	if button_pressed:
-		AudioManager.layer_on("JazzTheme", [1])
+		AudioManager.mute_layer("JazzTheme", [1], false)
 		console.text = "AudioManager.layer_on(sound_name, [1])"
 	else:
-		AudioManager.layer_off("JazzTheme", [1])
+		AudioManager.mute_layer("JazzTheme", [1], true)
 		console.text = "AudioManager.layer_off(sound_name, [1])"
 
 
 func _on_layer_3_toggled(button_pressed):
 	if button_pressed:
-		AudioManager.layer_on("JazzTheme", [2])
+		AudioManager.mute_layer("JazzTheme", [2], false)
 		console.text = "AudioManager.layer_on(sound_name, [2])"
 	else:
-		AudioManager.layer_off("JazzTheme", [2])
+		AudioManager.mute_layer("JazzTheme", [2], true)
 		console.text = "AudioManager.layer_off(sound_name, [2])"
 
 func _on_check_button_toggled(button_pressed):
 	if button_pressed:
-		AudioManager.layer_on("JazzTheme", [])
+		AudioManager.mute_layer("JazzTheme", [], false)
 		console.text = "AudioManager.layer_on(sound_name, [])"
 	else:
-		AudioManager.layer_off("JazzTheme", [])
+		AudioManager.mute_layer("JazzTheme", [], true)
 		console.text = "AudioManager.layer_off(sound_name, [])"
 
 

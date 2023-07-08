@@ -41,7 +41,7 @@ func reset_theme(track):
 	if track.is_connected("end_track", reset_theme):
 		track.disconnect("end_track", reset_theme)
 	AudioManager.play_music("Parallel(Example)")
-	AudioManager.layer_on("Parallel(Example)", [music_zone], 0.5)
+	AudioManager.mute_layer("Parallel(Example)", [music_zone], false, 0.5)
 	
 func _on_button_pressed():
 	var instance = ENEMY.instantiate()
@@ -55,26 +55,26 @@ func _on_button_pressed():
 
 func _on_forest_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.layer_off("Parallel(Example)", [])
-		AudioManager.layer_on("Parallel(Example)", ["Forest"], 0.5)
+		AudioManager.mute_layer("Parallel(Example)", [], true)
+		AudioManager.mute_layer("Parallel(Example)", ["Forest"], false, 0.5)
 		music_zone = "Forest"
 
 func _on_ice_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.layer_off("Parallel(Example)", [])
-		AudioManager.layer_on("Parallel(Example)", ["Freeze"], 0.5)
+		AudioManager.mute_layer("Parallel(Example)", [], true)
+		AudioManager.mute_layer("Parallel(Example)", ["Freeze"], false, 0.5)
 		music_zone = "Freeze"
 
 func _on_desert_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.layer_off("Parallel(Example)", [])
-		AudioManager.layer_on("Parallel(Example)", ["Desert"], 0.5)
+		AudioManager.mute_layer("Parallel(Example)", [], true)
+		AudioManager.mute_layer("Parallel(Example)", ["Desert"], false, 0.5)
 		music_zone = "Desert"
 
 func _on_volvano_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.layer_off("Parallel(Example)", [])
-		AudioManager.layer_on("Parallel(Example)", ["Volcano"], 0.5)
+		AudioManager.mute_layer("Parallel(Example)", [], true)
+		AudioManager.mute_layer("Parallel(Example)", ["Volcano"], false, 0.5)
 		music_zone = "Volcano"
 
 

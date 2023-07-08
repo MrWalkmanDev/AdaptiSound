@@ -198,11 +198,14 @@ func to_outro(sound_name : String, can_fade := false, fade_out := 1.5,
 
 
 ## ParallelTrack Options
-func layer_on(track_name: String, layer_names: Array, fade_time := 2.0):
-	ABGM.layer_on(track_name, layer_names, fade_time)
+func mute_layer(track_name: String, layer_names: Array, state: bool, fade_time := 2.0):
+	if state:
+		ABGM.layer_off(track_name, layer_names, fade_time)
+	else:
+		ABGM.layer_on(track_name, layer_names, fade_time)
 
-func layer_off(track_name: String, layer_names: Array, fade_time := 3.0):
-	ABGM.layer_off(track_name, layer_names, fade_time)
+#func layer_off(track_name: String, layer_names: Array, fade_time := 3.0):
+#	ABGM.layer_off(track_name, layer_names, fade_time)
 	
 func play_layer(track_name: String, layer_names: Array, can_fade := false, fade_time := 3.0):
 	ABGM.play_layer(track_name, layer_names, can_fade, fade_time)

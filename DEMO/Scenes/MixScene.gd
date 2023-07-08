@@ -13,23 +13,23 @@ func _on_loop_2_pressed():
 
 func _on_layer_1_toggled(button_pressed):
 	if button_pressed:
-		AudioManager.layer_on("BossMusic", ["Staccato"])
+		AudioManager.mute_layer("BossMusic", ["Staccato"], false)
 	else:
-		AudioManager.layer_off("BossMusic", ["Staccato"])
+		AudioManager.mute_layer("BossMusic", ["Staccato"], true)
 
 
 func _on_layer_2_toggled(button_pressed):
 	if button_pressed:
-		AudioManager.layer_on("BossMusic", ["Mid"], 0.65)
+		AudioManager.mute_layer("BossMusic", ["Mid"], false, 0.65)
 	else:
-		AudioManager.layer_off("BossMusic", ["Mid"])
+		AudioManager.mute_layer("BossMusic", ["Mid"], true)
 
 
 func _on_layer_3_toggled(button_pressed):
 	if button_pressed:
-		AudioManager.layer_on("BossMusic", ["Top"], 0.75)
+		AudioManager.mute_layer("BossMusic", ["Top"], false, 0.75)
 	else:
-		AudioManager.layer_off("BossMusic", ["Top"])
+		AudioManager.mute_layer("BossMusic", ["Top"], true)
 
 
 # AdaptiveTrack Outro#
