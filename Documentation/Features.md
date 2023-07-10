@@ -107,7 +107,6 @@ This method stops the current playback.
 - `can_fade:` if true, tracks will change with fades. `false default`
 - `fade_out:` time of fade out. `1.5 default`
 - `fade_in:` time of fade in. `0.5 default`
-- `can_destroy:` if true, when track stops it will be removed from the tree. `false default`
 
 
 ### `layer_on` 
