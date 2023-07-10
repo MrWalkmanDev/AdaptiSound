@@ -2,7 +2,6 @@ extends Node2D
 
 @onready var console = get_node("CanvasLayer/Control/CenterContainer/VBoxContainer/Panel/Console")
 
-
 func _on_play_pressed():
 	AudioManager.play_music("JazzTheme")
 	console.text = "AudioManager.play_music()"
@@ -10,7 +9,7 @@ func _on_play_pressed():
 
 func _on_layer_1_toggled(button_pressed):
 	if button_pressed:
-		AudioManager.mute_layer("JazzTheme", [0], false)
+		AudioManager.mute_layer("JazzTheme", [0], false, 1.5)
 		console.text = "AudioManager.layer_on(sound_name, [0])"
 	else:
 		AudioManager.mute_layer("JazzTheme", [0], true)

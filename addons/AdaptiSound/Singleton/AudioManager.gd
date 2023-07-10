@@ -192,7 +192,7 @@ func change_loop(sound_name, loop_by_index, can_fade := false,
 		ABGM.change_loop(sound_name, loop_by_index, can_fade, fade_in, fade_out)
 		
 func to_outro(sound_name : String, can_fade := false, fade_out := 1.5,
-	fade_in := 0.5, can_destroy := false):
+	fade_in := 0.5):
 		#current_playback = null
 		return ABGM.to_outro(sound_name, can_fade, fade_out, fade_in)
 

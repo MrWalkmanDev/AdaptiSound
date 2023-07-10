@@ -132,6 +132,7 @@ icon_alignment = 1
 
 [node name="Debbug" type="CheckButton" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
+button_pressed = true
 text = "Debugging"
 icon = ExtResource("3_les4x")
 
@@ -140,6 +141,7 @@ layout_mode = 2
 offset_left = 155.0
 offset_right = 334.0
 offset_bottom = 31.0
+disabled = true
 text = "ABGS Support"
 icon = ExtResource("2_iliwq")
 clip_text = true
