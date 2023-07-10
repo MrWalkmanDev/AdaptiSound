@@ -2,7 +2,7 @@
 
 ![AdaptiSound-fotor-20230704182528](https://i.imgur.com/0AQxKDq.png)
 
-Complete Audio Manager for Godot 4.0
+Complete Audio Manager for Godot 4.1
 
 AdaptiSound will help you implement music in your videogame. Explore the world of interactive and adaptive music with the different tools that this plugin gives you.
 Your creativity is the limit!
