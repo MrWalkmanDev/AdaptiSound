@@ -101,7 +101,7 @@ This method stops the current playback.
 ### `to_outro` 
 <sub>Only for ABGM</sub>
 
-![Imgur](https://i.imgur.com/tkCCQny.png)
+![Imgur](https://i.imgur.com/Iqv62Hg.png)
 
 - `sound_name:` argument type `String`, name of the AdaptiveTrack in which to switch to the `Outro`
 - `can_fade:` if true, tracks will change with fades. `false default`
