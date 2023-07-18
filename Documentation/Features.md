@@ -108,24 +108,14 @@ This method stops the current playback.
 - `fade_out:` time of fade out. `1.5 default`
 - `fade_in:` time of fade in. `0.5 default`
 
-
-### `layer_on` 
+### `mute_layer` 
 <sub>Only for ABGM</sub>
 
-![Imgur](https://i.imgur.com/G42Roq9.png)
+![Imgur](https://i.imgur.com/lOTRekw.png)
 
-- `track_name:` argument type `String`, name of ParallelTrack on which a layer will be played.
-- `layer_names:` type `Array`, names, groups, or indexes of the layers to be heard.
+- `track_name:` argument type `String`, name of the ParallelTrack in which the layers will be muted or unmuted.
+- `layer_names:` type `Array`, names, groups, or indexes of the layers to be unheard.
 - `fade_time:` time of fade in. `2.0 default`
-
-### `layer_off` 
-<sub>Only for ABGM</sub>
-
-![Imgur](https://i.imgur.com/SolmYzZ.png)
-
-- `track_name:` argument type `String`, name of ParallelTrack on which to stop listening to a layer
-- `layer_names:` type `Array`, names, groups, or indices of the layers to be unheard.
-- `fade_time:` time of fade in. `3.0 default`
 
 ### `play_layer`
 <sub>Only for ABGM</sub>
