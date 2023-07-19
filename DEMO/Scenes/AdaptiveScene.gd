@@ -14,5 +14,5 @@ func _on_loop_2_pressed():
 
 
 func _on_outro_pressed():
-	#AudioManager.to_outro("Battle")
-	AudioManager.stop_all()
+	AudioManager.to_outro("Battle")
+	#AudioManager.stop_all()

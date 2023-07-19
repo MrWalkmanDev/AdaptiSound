@@ -39,7 +39,7 @@ func files_load(path, extension):
 					sounds[file_name_key] = load(file_name_to_load)
 #					print("222[%s]:%s" % [file_name_key,file_name_to_load])
 			file_name = dir.get_next()
-		print(sounds)
+		#print(sounds)
 		return sounds
 		
 	else:
