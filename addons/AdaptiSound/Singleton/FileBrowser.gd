@@ -3,6 +3,7 @@ extends Node
 #class_name Tools
 
 const EXTENSION_ANDROID = "import"
+const EXPORT_TSCN_SUFFIX = "remap"
 
 ### FILE SYSTEM ###
 
@@ -12,50 +13,33 @@ func files_load(path, extension):
 		
 	var sounds = {}
 	var dir = DirAccess.open(path)
+	print("open_path:",path)
 
 	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
-		
 		while file_name != "":
-			
-			if extension.has(file_name.get_extension()):
-				
-				var file_name_to_load : String
-				var file_name_key : String
-				
-				"""if OS.get_name() == "Android":
-					print("Android")
-					file_name_to_load = (dir.get_current_dir() + "/" + file_name).replace("." + EXTENSION_ANDROID, "")
-					file_name_key = file_name.replace("." + file_name.get_extension() + "." + EXTENSION_ANDROID, "")
-					sounds[file_name_key] = load(file_name_to_load)
-				if OS.get_name() == "Web":
-					print("Web")
-					file_name_to_load = (dir.get_current_dir() + "/" + file_name).replace("." + EXTENSION_ANDROID, "")
-					file_name_key = file_name.replace("." + file_name.get_extension() + "." + EXTENSION_ANDROID, "")
-					sounds[file_name_key] = load(file_name_to_load)
-				if OS.get_name() == "X11":
-					print("X11")
-					file_name_to_load = (dir.get_current_dir() + "/" + file_name).replace("." + EXTENSION_ANDROID, "")
-					file_name_key = file_name.replace("." + file_name.get_extension() + "." + EXTENSION_ANDROID, "")
-					sounds[file_name_key] = load(file_name_to_load)
-				if OS.get_name() == "Windows":
-					print("Windows")
-					file_name_to_load = (dir.get_current_dir() + "/" + file_name).replace("." + EXTENSION_ANDROID, "")
-					file_name_key = file_name.replace("." + "ogg" + "." + EXTENSION_ANDROID, "")
-					sounds[file_name_key] = load(file_name_to_load)"""
-				if extension.has(file_name.get_extension()):
-					file_name_to_load = (dir.get_current_dir() + "/" + file_name)
-					file_name_key = file_name.replace("." + file_name.get_extension(), "")
-					sounds[file_name_key] = load(file_name_to_load)
 			
 			if dir.current_is_dir():
 				var subfolder = path + "/" + file_name
 				var sub_sounds = files_load(subfolder, extension)
 				sounds.merge(sub_sounds)
-			
+			else:
+				var file_name_to_load : String
+				var file_name_key : String
+				if file_name.get_extension() == EXTENSION_ANDROID:
+					file_name_to_load = (dir.get_current_dir() + "/" + file_name).replace("." + EXTENSION_ANDROID, "")
+					file_name_key = file_name.replace("." + file_name_to_load.get_extension() + "." + EXTENSION_ANDROID, "")
+					sounds[file_name_key] = load(file_name_to_load)
+#					print("111[%s]:%s" % [file_name_key,file_name_to_load])
+					
+				elif extension.has(file_name.get_extension()):
+					file_name_to_load = (dir.get_current_dir() + "/" + file_name)
+					file_name_key = file_name.replace("." + file_name.get_extension(), "")
+					sounds[file_name_key] = load(file_name_to_load)
+#					print("222[%s]:%s" % [file_name_key,file_name_to_load])
 			file_name = dir.get_next()
-		
+		print(sounds)
 		return sounds
 		
 	else:
@@ -75,13 +59,19 @@ func preload_adaptive_tracks(path):
 		var file_name = dir.get_next()
 		
 		while file_name != "":
-			if file_name.get_extension() == "tscn":
-				var file_name_to_load : String
-				var file_name_key : String
-				
+			
+			var file_name_to_load : String
+			var file_name_key : String
+			if file_name.get_extension() == EXPORT_TSCN_SUFFIX:
+				file_name_to_load = (dir.get_current_dir() + "/" + file_name).replace("." + EXPORT_TSCN_SUFFIX, "")
+				file_name_key = file_name.replace("." + file_name_to_load.get_extension() + "." + EXPORT_TSCN_SUFFIX, "")
+				tracks[file_name_key] = load(file_name_to_load)
+#				print("111[%s]:%s" % [file_name_key,file_name_to_load])
+			elif file_name.get_extension() == "tscn":
 				file_name_to_load = (dir.get_current_dir() + "/" + file_name)
 				file_name_key = file_name.replace("." + file_name.get_extension(), "")
 				tracks[file_name_key] = load(file_name_to_load)
+#				print("222[%s]:%s" % [file_name_key,file_name_to_load])
 			
 			if dir.current_is_dir():
 				var subfolder = path + "/" + file_name
