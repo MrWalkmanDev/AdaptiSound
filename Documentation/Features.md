@@ -233,6 +233,8 @@ AdaptiTrack properties
 - `show_measure_count:` type `Bool`, If true, show measure count system in the output.
 - `loops:` To add a loop you will need to follow some additional steps:
 
+Each loop can contain multiple layers, so it will work like a ParallelTrack. And additionally, the loop can also randomly play each layer in sequence by setting the `random_sequence` property.
+
 ![Imgur](https://i.imgur.com/7RFqEQ4.png)
 
 Loops are resources of `LoopResource` class, you can create a new one as seen in the image above.
