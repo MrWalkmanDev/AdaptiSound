@@ -55,7 +55,7 @@ This tool is designed with the objective of implementing global background music
 ### `play_music` 
 <sub>Only for BGM/ABGM</sub>
 
-![Imgur](https://i.imgur.com/isVC4CR.png)
+![Imgur](https://i.imgur.com/1NKMCrg.png)
 
 This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
