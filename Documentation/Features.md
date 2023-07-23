@@ -60,7 +60,7 @@ This tool is designed with the objective of implementing global background music
 This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
 - `sound_name:` with this argument type `String`, `AudioManager` will look for the preloaded sounds and play audio with this name.
-- ~~`volume_db:` argument type `Float`, set volume in dB of the track when played. `0.0 default`~~ To manage the volume you will have to use the set_volume_db function. see [Setters and Getters]()
+- ~~`volume_db:` argument type `Float`, set volume in dB of the track when played. `0.0 default`~~ To manage the volume you will have to use the set_volume_db function. see [Setters and Getters](https://github.com/MrWalkmanDev/AdaptiSound/blob/main/Documentation/Features.md#setters--getters)
 - `fade_in:` argument type `Float`, set the fade time when the track is played. `0.5 default`
 - `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
 - `skip_intro:` **only for AdaptiveTrack**, `Bool` if true, play the loop directly. `false default`
