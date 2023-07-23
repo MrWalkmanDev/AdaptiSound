@@ -3,7 +3,7 @@ extends AdaptiNode
 var layers = []
 var groups = {}
 
-func _ready():
+func _enter_tree():
 	## Parameters set in Layers
 	for i in get_children():
 		layers.append(i)
@@ -11,9 +11,9 @@ func _ready():
 		#i.set_bus(bus)
 		
 		## AudioStream in Layer
-		for n in i.get_children():
-			n.volume_db = volume_db
-			n.set_bus(bus)
+		#for n in i.get_children():
+		#	n.volume_db = volume_db	## Parallel layer hace esto mismo
+			#n.set_bus(bus)
 			
 		## Add Groups
 		for n in i.groups:
@@ -22,6 +22,10 @@ func _ready():
 				arr = groups[n]
 			arr.append(i)
 			groups[n] = arr
+			
+			
+	set_pitch_scale(pitch_scale)
+	set_volume_db(volume_db)
 	
 	
 func on_play(fade_time := 0.0, _skip_intro := false, _loop_index := 0):
@@ -94,53 +98,44 @@ func on_trigger_layer(layer_name : String, fade_time := 0.5):
 	layer.on_play()
 
 
-func on_layers(layers_names : Array, fade_in := 2.0):
+func on_mute_layers(layers_names : Array, mute_state : bool, fade_time, loop_target):
 	if layers_names == []:
 		for i in get_children():
-			check_node(i, fade_in, true)
+			if mute_state:
+				check_node(i, fade_time, false, false)
+			else:
+				check_node(i, fade_time, true)
+			
 	
 	for i in layers_names:
 		if typeof(i) == TYPE_INT:
 			if i > get_child_count() - 1:
-				check_node(null, fade_in, true)
+				AudioManager.debug._print("DEBUG: Layer not found")
 			else:
 				var node = get_children()[i]
-				check_node(node, fade_in, true)
+				if mute_state:
+					check_node(node, fade_time, false, false)
+				else:
+					check_node(node, fade_time, true)
+					
 		if typeof(i) == TYPE_STRING:
 			if groups.has(i):
 				for n in groups[i]:
-					n.change(volume_db, fade_in, true)
+					if mute_state:
+						n.change(volume_db, fade_time, false, false)
+					else:
+						n.change(volume_db, fade_time, true)
 			else:
 				var node = get_layer(i)
-				check_node(node, fade_in, true)
-
-
-func off_layers(layers_names : Array, fade_out := 3.0):
-	if layers_names == []:
-		for i in get_children():
-			check_node(i, fade_out, false, false)
-	
-	for i in layers_names:
-		if typeof(i) == TYPE_INT:
-			if i > get_child_count() - 1:
-				check_node(null, fade_out, false, false)
-			else:
-				var node = get_children()[i]
-				check_node(node, fade_out, false, false)
-		if typeof(i) == TYPE_STRING:
-			if groups.has(i):
-				for n in groups[i]:
-					n.change(volume_db, fade_out, false, false)
-			else:
-				var node = get_layer(i)
-				check_node(node, fade_out, false, false)
+				if mute_state:
+					check_node(node, fade_time, false, false)
+				else:
+					check_node(node, fade_time, true)
 
 
 func check_node(node, fade_time, fade_type, can_stop := true):
 	if node != null:
 		node.change(volume_db, fade_time, fade_type, can_stop)
-	else:
-		AudioManager.debug._print("DEBUG: Layer not found")
 
 
 
@@ -158,28 +153,6 @@ func on_fade_out(fade_out):
 	#######################
 	# Getters and Setters #
 	#######################
-	
-"""func set_layer_on(layer_names : Array):
-	for i in get_children():
-		if layer_names == []:
-			i.layer_on = true
-		else:
-			for n in layer_names:
-				if i.name == n:
-					i.layer_on = true
-				
-	return self
-			
-func set_layer_off(layer_names : Array):
-	for i in get_children():
-		for n in layer_names:
-			if layer_names == []:
-				i.layer_on = false
-			else:
-				if i.name == n:
-					i.layer_on = false
-				
-	return self"""
 	
 func get_layer(layer_name : String):
 	var childrens = get_children()

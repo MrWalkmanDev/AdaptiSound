@@ -26,7 +26,7 @@ const AUDIO = preload("res://addons/AdaptiSound/Nodes/ParallelTrack/Audio_Stream
 var tween
 var can_change = true
 
-func _ready():
+func _enter_tree():
 	#connect("finished", to_loop) 
 	
 	if audio_streams != []:
@@ -36,21 +36,15 @@ func _ready():
 			audio_stream.loop = loop
 			audio_stream.stream = i
 			add_child(audio_stream)
-			
-"""func _process(delta):
-	if stream != null and self.playing:
-		if(self.stream.get_length() - self.get_playback_position()) <= 0.01 and can_change:
-			can_change = false
-			to_loop()
-
-func to_loop():
-	if can_loop:
-		can_change = true
-		play()"""
+	
+	set_pitch_scale(pitch_scale)
+	set_volume_db(volume_db)
 
 func on_play(fade_time, volume):
 	if get_child_count() > 0: 
 		for i in get_children():
+			i.set_bus(bus)
+			i.on_mute = false
 			if fade_time != 0.0:
 				i.volume_db = -50.0
 				i.play()
@@ -65,6 +59,7 @@ func change(volume, fade_time, fade_type := true, can_stop := true):
 	if fade_type:
 		if get_child_count() > 0:
 			for i in get_children():
+				i.on_mute = false
 				if fade_time != 0.0:
 					i.on_fade_in(volume, fade_time)
 				else:
@@ -75,6 +70,7 @@ func change(volume, fade_time, fade_type := true, can_stop := true):
 	else:
 		if get_child_count() > 0:
 			for i in get_children():
+				i.on_mute = true
 				if fade_time != 0.0:
 					i.on_fade_out(fade_time, can_stop)
 				else:
@@ -84,28 +80,4 @@ func change(volume, fade_time, fade_type := true, can_stop := true):
 						i.volume_db = -50.0
 		else:
 			AudioManager.debug._print("DEBUG: No tracks in " + str(self.name))
-
-
-
-	#########################
-	## SETTERS AND GETTERS ##
-	#########################
-
-"""func set_volume_db(value):
-	volume_db = value
-	for i in get_children():
-		i.volume_db = value
-	
-func get_volume_db():
-	return volume_db
-	
-func set_pitch_scale(value):
-	pitch_scale = value
-	for i in get_children():
-		for n in i.get_children():
-			n.pitch_scale = pitch_scale
 			
-		i.pitch_scale = pitch_scale
-	
-func get_pitch_scale():
-	return pitch_scale"""

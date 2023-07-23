@@ -5,7 +5,6 @@ const dock_icon = preload("res://addons/AdaptiSound/Icons/Dock.png")
 const adaptive_track_icon = preload("res://addons/AdaptiSound/Icons/Adaptive.png") 
 const parallel_track_icon = preload("res://addons/AdaptiSound/Icons/Parallel.png")
 const layer_track_icon = preload("res://addons/AdaptiSound/Icons/Layer.png")
-const secuencetrack_icon = preload("res://addons/AdaptiSound/Icons/Secuencer.png")
 
 const MainPanel := preload("res://addons/AdaptiSound/Panel/MainPanel.tscn")
 #signal file_names_updated(file_names)
@@ -16,8 +15,8 @@ func _enter_tree():
 	add_autoload_singleton("AudioManager", "res://addons/AdaptiSound/Singleton/AudioManager.tscn")
 	
 	# Add nodes #
-	add_custom_type("AdaptiveTrack", "Node",
-	preload("res://addons/AdaptiSound/Nodes/AdaptiveTrack/AdaptiveTrack.gd"), 
+	add_custom_type("AdaptiTrack", "Node",
+	preload("res://addons/AdaptiSound/Nodes/AdaptiTrack/AdaptiTrack.gd"), 
 	adaptive_track_icon)
 	
 	add_custom_type("ParallelTrack", "Node",
@@ -27,10 +26,6 @@ func _enter_tree():
 	add_custom_type("ParallelLayer", "Node",
 	preload("res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelLayer.gd"),
 	layer_track_icon)
-	
-	#add_custom_type("SecuenceTrack", "Node",
-	#preload("res://addons/AdaptiSound/Nodes/SecuenceTrack/SecuenceTrack.gd"),
-	#secuencetrack_icon)
 	
 	main_instance = MainPanel.instantiate()
 	main_instance.hide()
@@ -43,10 +38,9 @@ func _enter_tree():
 	
 func _exit_tree():
 	remove_autoload_singleton("AudioManager")
-	remove_custom_type("AdaptiveTrack")
+	remove_custom_type("AdaptiTrack")
 	remove_custom_type("ParallelTrack")
 	remove_custom_type("ParallelLayer")
-	#remove_custom_type("SecuenceTrack")
 	
 	if main_instance:
 		remove_control_from_bottom_panel(main_instance)

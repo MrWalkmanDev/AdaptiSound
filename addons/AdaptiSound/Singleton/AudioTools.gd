@@ -4,24 +4,17 @@ const AUDIO = preload("res://addons/AdaptiSound/Nodes/ParallelTrack/Audio_Stream
 const SAVE_PATH = "res://addons/AdaptiSound/Panel/Data.json"
 
 ## Check if can use Fade_In or Fade_Out
-func check_fade(node, fade_time, type: bool, volume_db := 0.0, skip_intro := false, loop_index := 0):
+func check_fade(node, fade_time, type: bool, skip_intro := false, loop_index := 0):
 	if type:
 		if node is AudioStreamPlayer:
-			if fade_time != 0.0:
-				#if current_playback == null:
-				node.volume_db = -50.0
-				node.on_fade_in(volume_db, fade_time)
-				node.play()
-			else:
-				node.play()
+			node.on_fade_in(0.0, fade_time)
+			node.play()
 		else:
 			node.on_play(fade_time, skip_intro, loop_index)
 	else:
 		if node is AudioStreamPlayer:
-			if fade_time != 0.0:
-				node.on_fade_out(fade_time)
-			else:
-				node.stop()
+			node.on_fade_out(fade_time)
+			node.stop()
 		else:
 			node.on_stop(fade_time)
 
@@ -54,8 +47,6 @@ func fades(object, value, fade_time, destroy := false):
 ## Queue free nodes
 func destroy_audiostream(track):
 	if track != null:
-		if track.is_class("AudioStreamPlayer"):
-			track.stop()
 		track.queue_free()
 
 ## Load Panel Data info

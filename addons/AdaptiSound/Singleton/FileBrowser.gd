@@ -1,7 +1,5 @@
 extends Node
 
-#class_name Tools
-
 const EXTENSION_ANDROID = "import"
 const EXPORT_TSCN_SUFFIX = "remap"
 

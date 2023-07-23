@@ -2,16 +2,19 @@ extends Node
 
 class_name AdaptiNode
 
-## Here you can edit the parameters for all the tracks that derive from this main track. 
-@export_group("MainTrack Parameters")
+# Here you can edit the parameters for all the tracks that derive from this main track. 
+#@export_group("MainTrack Parameters")
 
 ## Volume of track, in dB. [br][b]This parameter affects all the tracks that belong to it[/b].
-#@export_range(-80.0, 24.0) 
-var volume_db : float = 0.0 : set = set_volume_db, get = get_volume_db
+@export_range(-80.0, 24.0) var volume_db : float = 0.0 : set = set_volume_db, get = get_volume_db
 
 ## Pitch and tempo of the audio. [br][b]This parameter affects all the tracks that belong to it[/b].
-#@export_range(0.01, 4.0) 
-var pitch_scale : float = 1.0 : set = set_pitch_scale, get = get_pitch_scale
+@export_range(0.01, 4.0) var pitch_scale : float = 1.0 : set = set_pitch_scale, get = get_pitch_scale
+
+
+@export_subgroup("Debug")
+## Show measure count system
+@export var show_measure_count : bool = true
 
 ## Audio Bus of the audio. [br][b]This parameter affects all the tracks that belong to it[/b]
 var bus : String = "Master" : set = set_bus, get = get_bus
@@ -20,20 +23,33 @@ var bus : String = "Master" : set = set_bus, get = get_bus
 var destroy : bool = false
 
 ##  If true, the track when stopped will start other track
-var secuence = {}
+var sequence = false
+var method_sequence : Callable
 
 func _process(delta):
-	if destroy:
+	check_track_is_playing()
+
+func check_track_is_playing():
+	if sequence or destroy:
 		if get_stream_playing() == null:
-			destroy_track()
+			if sequence:
+				sequence = false
+				method_sequence.call()
+			if destroy:
+				destroy = false
+				destroy_track()
 
 func set_volume_db(value : float):
 	volume_db = value
 	for i in get_children():
 		if i is AudioStreamPlayer:
-			if i.tween:
-				i.tween.kill()
-		i.volume_db = volume_db
+			if i.on_mute == false:
+				if i.tween:
+					i.tween.kill()
+					print("stoprween")
+				i.volume_db = volume_db
+		else:
+			i.volume_db = volume_db
 		
 	return self
 	
@@ -72,19 +88,18 @@ func get_bus():
 
 func set_destroy(value: bool):
 	destroy = value
-	if get_stream_playing() == null and destroy:
-		destroy_track()
+	#if get_stream_playing() == null and destroy:
+	#	destroy_track()
 		
 func destroy_track():
-	for i in get_children():
-		if i is AudioStreamPlayer:
-			i.stop()
+	#for i in get_children():
+	#	if i is AudioStreamPlayer:
+	#		i.stop()
 		
 	queue_free()
 
 func get_stream_playing():
-	var childs = get_children()
-	for i in childs:
+	for i in get_children():
 		if i is AudioStreamPlayer:
 			if i.playing:
 				return i

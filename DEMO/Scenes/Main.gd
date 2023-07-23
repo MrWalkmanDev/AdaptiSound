@@ -7,9 +7,10 @@ const ENEMY = preload("res://DEMO/Prefabs/skeleton.tscn")
 var music_zone = "Forest"
 var combat = false
 
-func _ready():
-	AudioManager.play_music("Parallel(Example)")
+var parallel_track_name : String = "AdaptiParallel"#"Parallel(Example)"
 
+func _ready():
+	AudioManager.play_music(parallel_track_name)
 
 ## BATTLE ADAPTIVETRACK ##
 func _process(_delta):
@@ -24,24 +25,19 @@ func _process(_delta):
 			off_combat()
 		
 func on_combat():
-	AudioManager.play_music("Battle", 0.0, 0.5, 1.5, true) # Without Intro
-	#AudioManager.play_music("Battle")                       # With Intro
+	AudioManager.play_music("Battle", 0.5, 1.5, true) # Without Intro
+	#AudioManager.play_music("Battle")                # With Intro
 	AudioManager.change_loop("Battle", 0, true)
-	
+
 func off_combat():
-	var track = AudioManager.get_audio_track("Battle")
-	if !track.is_connected("end_track", reset_theme):
-		track.connect("end_track", reset_theme.bind(track))
-	AudioManager.to_outro("Battle")
+	AudioManager.set_sequence(reset_theme)
+	AudioManager.set_destroy(true)
+	AudioManager.to_outro("Battle")#.set_destroy(true)
 	
-	#AudioManager.play_music("Parallel(Example)")
-	#AudioManager.layer_on("Parallel(Example)", [music_zone])
-		
-func reset_theme(track):
-	if track.is_connected("end_track", reset_theme):
-		track.disconnect("end_track", reset_theme)
-	AudioManager.play_music("Parallel(Example)")
-	AudioManager.mute_layer("Parallel(Example)", [music_zone], false, 0.5)
+	
+func reset_theme():
+	AudioManager.play_music(parallel_track_name)
+	AudioManager.mute_layer(parallel_track_name, [music_zone], false, 0.5)
 	
 func _on_button_pressed():
 	var instance = ENEMY.instantiate()
@@ -55,26 +51,26 @@ func _on_button_pressed():
 
 func _on_forest_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_layer("Parallel(Example)", [], true)
-		AudioManager.mute_layer("Parallel(Example)", ["Forest"], false, 0.5)
+		AudioManager.mute_layer(parallel_track_name, [], true)
+		AudioManager.mute_layer(parallel_track_name, ["Forest"], false, 0.5)
 		music_zone = "Forest"
 
 func _on_ice_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_layer("Parallel(Example)", [], true)
-		AudioManager.mute_layer("Parallel(Example)", ["Freeze"], false, 0.5)
+		AudioManager.mute_layer(parallel_track_name, [], true)
+		AudioManager.mute_layer(parallel_track_name, ["Freeze"], false, 0.5)
 		music_zone = "Freeze"
 
 func _on_desert_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_layer("Parallel(Example)", [], true)
-		AudioManager.mute_layer("Parallel(Example)", ["Desert"], false, 0.5)
+		AudioManager.mute_layer(parallel_track_name, [], true)
+		AudioManager.mute_layer(parallel_track_name, ["Desert"], false, 0.5)
 		music_zone = "Desert"
 
 func _on_volvano_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_layer("Parallel(Example)", [], true)
-		AudioManager.mute_layer("Parallel(Example)", ["Volcano"], false, 0.5)
+		AudioManager.mute_layer(parallel_track_name, [], true)
+		AudioManager.mute_layer(parallel_track_name, ["Volcano"], false, 0.5)
 		music_zone = "Volcano"
 
 
@@ -82,18 +78,32 @@ func _on_volvano_body_entered(body):
 	## VOLUME MANAGER ##
 
 func _on_area_2d_body_entered(_body):
-	var vol = AudioManager.get_track_bus_volume_db()
-	var index = AudioManager.get_track_bus_index()
-	if vol != null:
-		var tween = create_tween()
-		tween.tween_method(AudioManager.set_bus_volume_db.bind(index), vol, -10.0, 1.5)
+	## With Bus Volume
+	#with_bus_volume(-10.0)
+	
+	## With Track Volume
+	with_track_volume(-10.0)
 
 func _on_area_2d_body_exited(_body):
+	## With Bus Volume
+	#with_bus_volume(0.0)
+		
+	## With Track Volume
+	with_track_volume(0.0)
+	
+
+func with_bus_volume(target_volume):
 	var vol = AudioManager.get_track_bus_volume_db()
 	var index = AudioManager.get_track_bus_index()
-	if vol != null:
+	if AudioManager.current_playback != null: # (if AudioManager.current_playnback is null, vol will be null)
 		var tween = create_tween()
-		tween.tween_method(AudioManager.set_bus_volume_db.bind(index), vol, 0.0, 1.5)
+		tween.tween_method(AudioManager.set_bus_volume_db.bind(index), vol, target_volume, 1.5)
+	
+func with_track_volume(target_volume):
+	if AudioManager.current_playback != null:
+		var tween = create_tween()
+		tween.tween_property(AudioManager.current_playback, "volume_db", target_volume, 1.5)
+
 
 
 
