@@ -59,12 +59,12 @@ This tool is designed with the objective of implementing global background music
 
 This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
-- `sound_name:` with this argument type `String`, `AudioManager` will look for the preloaded sounds and play audio with this name.
-- ~~`volume_db:` argument type `Float`, set volume in dB of the track when played. `0.0 default`~~ To manage the volume you will have to use the set_volume_db function. see [Setters and Getters](https://github.com/MrWalkmanDev/AdaptiSound/blob/main/Documentation/Features.md#setters--getters)
-- `fade_in:` argument type `Float`, set the fade time when the track is played. `0.5 default`
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
-- `skip_intro:` **only for AdaptiveTrack**, `Bool` if true, play the loop directly. `false default`
-- `loop_index:` **only for AdaptiveTrack**, `Int` sets the index of the loop to be played after the intro. `0 default`
+- `sound_name:` type `String`, `AudioManager` will look for the preloaded sounds and play audio with this name.
+- ~~volume_db: type Float, set volume in dB of the track when played. 0.0 default~~ To manage the volume you will have to use the `set_volume_db` function. see [Setters and Getters](https://github.com/MrWalkmanDev/AdaptiSound/blob/main/Documentation/Features.md#setters--getters)
+- `fade_in:` `Float`, set the fade time when the track is played. `0.5 default`
+- `fade_out:` type `Float`, set the fade time when the current playback out. `1.5 default`
+- `skip_intro:` **only for AdaptiveTrack**, type `Bool`, if true, play the loop directly. `false default`
+- `loop_index:` **only for AdaptiveTrack**, type `Int`, sets the index of the loop to be played after the intro. `0 default`
 
 
 ### `reset_music` 
@@ -73,8 +73,8 @@ This method will play from the beginning the audio with the name assigned in *so
 ![Imgur](https://i.imgur.com/PvFIyCe.png)
 
 This method returns the currently playing track to the beginning.
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. `0.0 default`
-- `fade_in:` argument type `Float`, set the fade time when the track is played. `0.0 default`
+- `fade_out:` type `Float`, set the fade time when the current playback out. `0.0 default`
+- `fade_in:` type `Float`, set the fade time when the track is played. `0.0 default`
 
 
 ### `stop_music` 
@@ -83,8 +83,8 @@ This method returns the currently playing track to the beginning.
 ![Imgur](https://i.imgur.com/h5yE4sL.png)
 
 This method stops the current playback.
-- `can_fade:` if true, apply fade_out on current playback track. `false default`
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
+- `can_fade:` type `Bool`, if true, apply fade_out on current playback track. `false default`
+- `fade_out:` type `Float`, set the fade time when the current playback out. `1.5 default`
 
 
 ### `change_loop` 
@@ -92,48 +92,48 @@ This method stops the current playback.
 
 ![Imgur](https://i.imgur.com/q8LL0bG.png)
 
-- `sound_name:` argument type `String`, name of the AdaptiveTrack on which the playing `Loop` will be changed.
-- `loop_by_index:` loop index to play.
-- `can_fade:` if true, tracks will change with fades. `false default`
-- `fade_in:` time of fade in. `0.5 default`
-- `fade_out:` time of fade out. `1.5 default`
+- `sound_name:` type `String`, name of the AdaptiveTrack on which the playing `Loop` will be changed.
+- `loop_by_index:` type `Int`, loop index to play.
+- `can_fade:` type `Bool`, if true, tracks will change with fades. `false default`
+- `fade_in:` type `Float`, time of fade in. `0.5 default`
+- `fade_out:` type `Float`, time of fade out. `1.5 default`
 
 ### `to_outro` 
 <sub>Only for ABGM</sub>
 
 ![Imgur](https://i.imgur.com/Iqv62Hg.png)
 
-- `sound_name:` argument type `String`, name of the AdaptiveTrack in which to switch to the `Outro`
-- `can_fade:` if true, tracks will change with fades. `false default`
-- `fade_out:` time of fade out. `1.5 default`
-- `fade_in:` time of fade in. `0.5 default`
+- `sound_name:` type `String`, name of the AdaptiveTrack in which to switch to the `Outro`
+- `can_fade:` type `Bool`, if true, tracks will change with fades. `false default`
+- `fade_out:` type `Float`, time of fade out. `1.5 default`
+- `fade_in:` type `Float`, time of fade in. `0.5 default`
 
 ### `mute_layer` 
 <sub>Only for ABGM</sub>
 
 ![Imgur](https://i.imgur.com/lOTRekw.png)
 
-- `track_name:` argument type `String`, name of the ParallelTrack in which the layers will be muted or unmuted.
+- `track_name:` type `String`, name of the ParallelTrack in which the layers will be muted or unmuted.
 - `layer_names:` type `Array`, names, groups, or indexes of the layers to be unheard.
-- `fade_time:` time of fade in. `2.0 default`
+- `fade_time:` type `Float`, time of fade in. `2.0 default`
 
 ### `play_layer`
 <sub>Only for ABGM</sub>
 
 ![Imgur](https://i.imgur.com/Fmz0ZTI.png)
 
-- `track_name:` argument type `String`, name of the track that contains the layers to play.
+- `track_name:` type `String`, name of the track that contains the layers to play.
 - `layer_names:` type `Array`, names, groups, or indices of trigger layers to play.
-- `can_fade:` if true, tracks will play with fade in. `false default`
-- `fade_time:` time of fade in. `3.0 default`
+- `can_fade:` type `Bool`, if true, tracks will play with fade in. `false default`
+- `fade_time:` type `Float`, time of fade in. `3.0 default`
 
 ### `stop_layer`
 <sub>Only for ABGM</sub>
 
-- `track_name:` argument type `String`, name of the track that contains the layers to stop.
+- `track_name:` type `String`, name of the track that contains the layers to stop.
 - `layer_names:` type `Array`, names, groups, or indices of trigger layers to stop.
-- `can_fade:` if true, tracks will play with fade out. `false default`
-- `fade_time:` time of fade out. `3.0 default`
+- `can_fade:` type `Bool`, if true, tracks will play with fade out. `false default`
+- `fade_time:` type `Float`, time of fade out. `3.0 default`
 
 ### `stop_all` 
 <sub>For All</sub>
@@ -141,23 +141,38 @@ This method stops the current playback.
 ![Imgur](https://i.imgur.com/sKLJbHk.png)
 
 This method stops all currently playing BGM/ABGM and BGS tracks, and removes them from the tree.
-- `type:` argument type `String`, set a specific category you want to stop. `"all" default`
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
-- `can_destroy:` if true, all tracks removes from the tree. `true default`
+- `type:` type `String`, set a specific category you want to stop. `"all" default`
+- `fade_out:` type `Float`, set the fade time when the current playback out. `1.5 default`
+- `can_destroy:` type `Bool`, if true, all tracks removes from the tree. `true default`
 
 
 ### `play_sound`
 <sub>Only for BGS</sub>
 
-![Imgur](https://i.imgur.com/r7e01zW.png)
+![Imgur](https://i.imgur.com/Fqplyxs.png)
 
-This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
+This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the BGS current playback.
 
-*Same as play_music*
+- `sound_name:` type `String`, `AudioManager` will look for the preloaded sounds and play audio with this name.
+- `fade_in:` type `Float`, set the fade time when the track is played. `0.5 default`
+- `fade_out:` type `Float`, set the fade time when the current playback out. `1.5 default`
 
-*Use `stop_all("BGS")` for stop sounds*
+### `stop_sound`
+<sub>Only for BGS</sub>
 
-*ABGS playback options not yet available.*
+![Imgur](https://i.imgur.com/ShLqw4z.png)
+
+This method stops the BGS current playback.
+- `can_fade:` type `Bool`, if true, apply fade_out on BGS current playback track. `false default`
+- `fade_out:` type `Float`, set the fade time when the BGS current playback out. `1.5 default`
+
+### `mute_bgs_layer`
+
+![Imgur](https://i.imgur.com/tSK7l9p.png)
+
+- `track_name:` type `String`, name of the ParallelTrack in which the layers will be muted or unmuted.
+- `layer_names:` type `Array`, names, groups, or indexes of the layers to be unheard.
+- `fade_time:` type `Float`, time of fade in. `2.0 default`
 
 
 ## AdaptiNodes
