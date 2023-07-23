@@ -203,16 +203,18 @@ Note: `Always` plays from the start, but it won't necessarily be listening. for 
 - `audio_stream:` here you add the audio tracks that will be activated with this layer.
 - `layer_on:` if true, then the layer will be listenning from the beginning, when called by `play_music`.
 - `loop:` if true, the layer will play in a loop.
-- `Groups:` you can assign custom groups to each layer, and then call them with the `layer_on` or `layer_off` function.
+- `Groups:` you can assign custom groups to each layer, and then call them with the `mute_layer` method.
 
 ![Imgur](https://i.imgur.com/Ka5jHfO.png)
 
-The objective of this structure is that all the layers of type `Always` are playing in parallel, and with the `layer_on` and `layer_off` methods we activate or deactivate them respectively to be heard.
+The objective of this structure is that all the layers of type `Always` are playing in parallel, and with the `mute_layer` method they are muted or unmuted.
 
 
-### AdaptiveTrack
+### AdaptiTrack
 
-The main function of `AdaptiveTrack` is to reproduce the following structure:
+The `AdaptiveTrack` node was replaced by `AdaptiTrack`, a more complete node with new features.
+
+The main function of `AdaptiTrack` is to reproduce the following structure:
 
 | Intro | Loops | Outro |
 | ----- | ----- | ----- |
@@ -220,21 +222,43 @@ The main function of `AdaptiveTrack` is to reproduce the following structure:
 - `Loops:` These tracks will play in a loop, but only one track will play at a time, to change from one loop to another you must call the `change_loop` method.
 - `Outro:` This track will play only once, and can only be interrupted by the `change_loop`, or `stop_music` method. to go from the loops section to the outro you must call `to_outro` method.
 
-![Imgur](https://i.imgur.com/5av3yLb.png)
+![Imgur](https://i.imgur.com/hDHQcdX.png)
 
-AdaptiveTrack properties
+AdaptiTrack properties
 - `intro_file:` here you must add the audio file that will be played as `Intro`. you can leave it empty and playback will start directly with the first loop.
-- `outro_file:`  here you need to add the audio file to be played as `Outro`. You can leave it empty and the playback will stop when calling `to_outro` method.
-- `loops_files:` To add a loop you will need to follow some additional steps:
+- `outro_file:` here you need to add the audio file to be played as `Outro`. You can leave it empty and the playback will stop when calling `to_outro` method.
+- `outro_to_loop:` type `Bool`, Enables switching of the Outro to the Loop section.
+- `volume_db:` type `Float`, Sets the volume of the track. All layers will be affected by this parameter.
+- `pitch_scale:` type `Float`, Sets the pitch scale of the track. All layers will be affected by this parameter.
+- `loops:` To add a loop you will need to follow some additional steps:
 
-![Imgur](https://i.imgur.com/Hq85fNJ.png)
+![Imgur](https://i.imgur.com/7RFqEQ4.png)
 
-Loops are resources of `BaseAudioTrack` class, you can create a new one as seen in the image above.
+Loops are resources of `LoopResource` class, you can create a new one as seen in the image above.
 
-- `audio_file:` here you must add the audio file that will be played in a loop
-- `track_name:` give the loop a name
-- `BPM:` beat per minute from track
-- `metric:` is the number of beats within a measure/bar
+![Imgur](https://i.imgur.com/NIJHMjc.png)
+
+In `Music Layers` you can choose the number of layers your loop plays. Each layer is a `LayerResource` class resource, and as with loops, you'll need to create one.
+
+The layer properties are:
+
+- `audio_stream:` assign the audio file to the layer.
+- `name_layer:` type `String`, assign a name to the layer, this name will be used to recognize the AudioStreamPlayer in the scene.
+- `mute:` type `Bool`, if true, then the layer will be listenning from the beginning, when called by `play_music`.
+- `loop:` type `Bool`, if true, the layer will play in a loop.
+- `groups:` you can assign custom groups to each layer, and then call them with the `mute_layer` method.
+
+![Imgur](https://i.imgur.com/WvDjznG.png)
+
+Back to the loops, in `Sequence Track`:
+
+- `random_sequence:` type `Bool`, Defines if the loop is a random sequence. If true, sequence track plays only one layer at a time, and when finished goes to the next random layer. Remember set (loop = false) in each Layers
+- `first_playback_idx:` type `Int`, Assign the first audio to be played. If -1, the first play will be random.
+
+![Imgur](https://i.imgur.com/1xmxu4f.png)
+
+- `BPM:` beat per minute from track.
+- `metric:` is the number of beats within a measure/bar.
 
 The loops have a beat and bar counting system. The following properties make use of this feature.
 - `total_beat_count:` is the total number of beats that the loop has. ***You must have this data to make the beats and bars counter work***
