@@ -230,6 +230,7 @@ AdaptiTrack properties
 - `outro_to_loop:` type `Bool`, Enables switching of the Outro to the Loop section.
 - `volume_db:` type `Float`, Sets the volume of the track. All layers will be affected by this parameter.
 - `pitch_scale:` type `Float`, Sets the pitch scale of the track. All layers will be affected by this parameter.
+- `show_measure_count:` type `Bool`, If true, show measure count system in the output.
 - `loops:` To add a loop you will need to follow some additional steps:
 
 ![Imgur](https://i.imgur.com/7RFqEQ4.png)
