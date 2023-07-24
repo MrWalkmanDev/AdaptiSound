@@ -17,7 +17,7 @@ You can separate the music into 3 different categories:
 You will have to assign a directory for each category, `Main Panel` will look in all the subfolders for audio files with the extensions selected in **Audio Extensions**.
 With the *search* button you can view the files found in the directories.
 
-*`Note`: ABGM will search only .tscn files, as it will use only the scenes created with AdaptiveTrack, or ParallelTrack*
+*`Note`: ABGM will search only .tscn files, as it will use only the scenes created with AdaptiTrack, or ParallelTrack*
 
 ### **Audio Bus**
 
@@ -30,7 +30,7 @@ Here you can assign an audio *BUS* for each category. This will help with later 
 ![Imgur](https://i.imgur.com/gtskvKC.png)
 
 - `Debugging`: You will be able to see the plugin's operation in the output panel.
-- `ABGS Support`: It will allow you to add scenes with AdaptiveTrack or ParallelTrack nodes in the BGS category.
+- `ABGS Support`: It will allow you to add scenes with AdaptiTrack or ParallelTrack nodes in the BGS category.
 
 ## **Save Button** 
 you must use this button to save any changes you make in the main panel.
