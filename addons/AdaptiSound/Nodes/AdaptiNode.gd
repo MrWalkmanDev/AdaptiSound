@@ -46,7 +46,6 @@ func set_volume_db(value : float):
 			if i.on_mute == false:
 				if i.tween:
 					i.tween.kill()
-					print("stoprween")
 				i.volume_db = volume_db
 		else:
 			i.volume_db = volume_db

@@ -1,4 +1,4 @@
-#@tool 
+@tool 
 extends AdaptiNode
 
 signal measure
@@ -12,7 +12,7 @@ const AUDIOPLAYER = preload("res://addons/AdaptiSound/Nodes/ParallelTrack/Audio_
 
 @export_group("Loops Section")
 ## These are the tracks that can be looped. The first one will play automatically after the Intro.
-@export var loops : Array[LoopResource] #: set = set_custom_res, get = get_custom_res
+@export var loops : Array[LoopResource] : set = set_custom_res, get = get_custom_res
 
 @export_group("Outro Section")
 ## This track is played only once when calling the [b]end_music()[/b] function.
@@ -64,7 +64,9 @@ var rng = RandomNumberGenerator.new()
 
 
 func _enter_tree():
-	
+	if Engine.is_editor_hint():
+		return
+		
 	rng.randomize()
 	
 	intro_player = AUDIOPLAYER.instantiate()
@@ -245,7 +247,7 @@ func on_outro(fade_out, fade_in):
 		change_outro(current_loop_index, fade_out, fade_in)
 
 
-func on_mute_layers(layers_names : Array, mute_state : bool, fade_time : float, loop_target : int):
+func on_mute_layers(layers_names : Array, mute_state : bool, fade_time : float, loop_target := -1):
 	## Check if current_playback is loop ##
 	if current_playback == outro_player or current_playback == intro_player:
 		AudioManager.debug._print("DEBUG: No loop playing")
@@ -305,6 +307,10 @@ func on_stop(fade_out : float):
 	if outro_player.is_connected("finished", on_stop):
 		outro_player.disconnect("finished", on_stop)
 	
+	## Reset loops sequences
+	for i in loops:
+		i.first_sequence = true
+	
 	## Stop all audio streams ##
 	for i in get_children():
 		i.on_fade_out(fade_out)
@@ -316,6 +322,16 @@ func on_stop(fade_out : float):
 	## If AudioManager not current playback ##
 	if AudioManager.current_playback == self:
 		AudioManager.current_playback = null
+		
+		
+func play_layer(layer_names : Array, fade_time := 2.0):
+	var loop_index = get_loop_index(current_playback)
+	if loop_index != -1:
+		play_loop(loop_index, fade_time)
+	
+func stop_layer(layer_names : Array, fade_time := 2.0):
+	if current_playback != intro_player or current_playback != outro_player:
+		on_mute_layers(layer_names, true, fade_time)
 
 
 
@@ -353,7 +369,11 @@ func play_loop(loop_index : int, fade_time : float):
 	
 	## Sequence Track ##
 	if loops[loop_index].random_sequence:
-		var layer_playback_idx = loops[loop_index].first_playback_idx
+		var layer_playback_idx = -1
+		if loops[loop_index].first_sequence:
+			loops[loop_index].first_sequence = false
+			layer_playback_idx = loops[loop_index].first_playback_idx
+			
 		var current_loop_idx = get_loop_index(current_playback)
 		var current_audio_stream_idx
 		if current_loop_idx != -1:
@@ -365,6 +385,12 @@ func play_loop(loop_index : int, fade_time : float):
 				layer_playback_idx += 1
 				if layer_playback_idx > (loops[loop_index].layers.size() - 1):
 					layer_playback_idx = 0
+					
+		#for i in loops_audio_streams[loop_index]:
+		#	if i != loops_audio_streams[loop_index][layer_playback_idx]:
+		#		i.on_mute = true
+		
+		#loops_audio_streams[loop_index][layer_playback_idx].on_mute = false
 		loops_audio_streams[loop_index][layer_playback_idx].volume_db = volume_db
 		loops_audio_streams[loop_index][layer_playback_idx].on_fade_in(volume_db, fade_time)
 		loops_audio_streams[loop_index][layer_playback_idx].play()
@@ -454,6 +480,10 @@ func reset_beat_parameters(loop_index : int):
 #############
 
 func _process(delta):
+	if Engine.is_editor_hint():
+		return
+		
+		
 	check_track_is_playing()
 	
 	## Beat Count ##
@@ -537,7 +567,7 @@ func get_loop_index(audio_stream : AudioStreamPlayer):
 	return index
 
 
-"""## EDITOR ##
+## EDITOR ##
 
 func set_custom_res(value):
 	loops.resize(value.size())
@@ -548,4 +578,4 @@ func set_custom_res(value):
 			loops[i].resource_name = "LoopRes"
 	
 func get_custom_res():
-	return loops"""
+	return loops

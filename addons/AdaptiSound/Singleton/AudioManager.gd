@@ -89,7 +89,7 @@ func add_track(sound_name : String):
 	return audio_stream
 	
 ## Remove track
-func remove_track(track_name):
+func remove_track(track_name : String):
 	var audio_stream = get_audio_track(track_name)
 	tools.destroy_audiostream(audio_stream)
 
@@ -222,11 +222,11 @@ func mute_layer(track_name: String, layer_names: Array, mute_state: bool,
 	fade_time := 2.0, loop_target := -1):
 	ABGM.mute_layer(track_name, layer_names, mute_state, fade_time, loop_target)
 	
-func play_layer(track_name: String, layer_names: Array, can_fade := false, fade_time := 3.0):
-	ABGM.play_layer(track_name, layer_names, can_fade, fade_time)
+func play_layer(track_name: String, layer_names: Array, fade_time := 2.0):
+	ABGM.play_layer(track_name, layer_names, fade_time)
 
-func stop_layer(track_name: String, layer_names: Array, can_fade := false, fade_time := 3.0):
-	ABGM.stop_layer(track_name, layer_names, can_fade, fade_time)
+func stop_layer(track_name: String, layer_names: Array, fade_time := 2.0):
+	ABGM.stop_layer(track_name, layer_names, fade_time)
 
 
 
@@ -235,8 +235,8 @@ func stop_layer(track_name: String, layer_names: Array, can_fade := false, fade_
 ##########################
 
 ## Play BGS track or change for another one
-func play_sound(sound_name: String, volume_db := 0.0, fade_in: = 0.5, fade_out:= 1.5):
-	BGS.play_sound(sound_name, volume_db, fade_in, fade_out)
+func play_sound(sound_name: String, fade_in: = 0.5, fade_out:= 1.5):
+	BGS.play_sound(sound_name, fade_in, fade_out)
 
 ## Stop current BGS track
 func stop_sound(can_fade := false, fade_time := 1.5):

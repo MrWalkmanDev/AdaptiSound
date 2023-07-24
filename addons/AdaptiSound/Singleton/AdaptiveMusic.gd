@@ -47,9 +47,7 @@ func mute_layer(track_name: String, layer_names: Array,
 		AudioManager.debug._print("DEBUG: ParallelTrack not found")
 
 
-func play_layer(track_name: String, layer_names: Array, can_fade := false, fade_time := 3.0):
-	if can_fade == false:
-		fade_time = 0.0
+func play_layer(track_name: String, layer_names: Array, fade_time := 3.0):
 	var track = AudioManager.get_audio_track(track_name)
 	if track != null and AudioManager.current_playback == track:
 		track.play_layer(layer_names, fade_time)
@@ -57,9 +55,7 @@ func play_layer(track_name: String, layer_names: Array, can_fade := false, fade_
 		AudioManager.debug._print("DEBUG: ParallelTrack not found")
 
 
-func stop_layer(track_name: String, layer_names: Array, can_fade := false, fade_time := 3.0):
-	if can_fade == false:
-		fade_time = 0.0
+func stop_layer(track_name: String, layer_names: Array, fade_time := 3.0):
 	var track = AudioManager.get_audio_track(track_name)
 	if track != null and AudioManager.current_playback == track:
 		track.stop_layer(layer_names, fade_time)
