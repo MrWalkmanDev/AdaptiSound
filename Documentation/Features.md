@@ -127,6 +127,7 @@ This method stops the current playback.
 - `can_fade:` type `Bool`, if true, tracks will play with fade in. `false default`
 - `fade_time:` type `Float`, time of fade in. `3.0 default`
 
+
 ### `stop_layer`
 <sub>Only for ABGM</sub>
 
@@ -134,6 +135,23 @@ This method stops the current playback.
 - `layer_names:` type `Array`, names, groups, or indices of trigger layers to stop.
 - `can_fade:` type `Bool`, if true, tracks will play with fade out. `false default`
 - `fade_time:` type `Float`, time of fade out. `3.0 default`
+
+
+### `set_destroy`
+
+![Imgur](https://i.imgur.com/WpUusud.png)
+[Imgur](https://i.imgur.com/ttII2N9.png)
+
+- `state:` if true, the track will be removed from the tree once it stops.
+
+
+### `set_sequence`
+
+![Imgur](https://i.imgur.com/7dYcAhz.png)
+
+- `method:` when the current track ends, the assigned method will be executed.
+
+
 
 ### `stop_all` 
 <sub>For All</sub>
@@ -177,7 +195,7 @@ This method stops the BGS current playback.
 
 ## AdaptiNodes
 
-To add adaptive music to our project we can use the AdaptiNodes. The objective of these nodes is to create a single track that contains several audio tracks and a certain structure to be played.
+To add adaptive music to our project we can use the AdaptiNodes. The objective of these nodes is to create a single track that contains multiples audio tracks and a certain structure to be played.
 
 ### ParallelTrack & ParallelLayer
 
@@ -185,6 +203,10 @@ The main function of `ParallelTrack` is to play multiple tracks at the same time
 To get started, you'll need to add a `ParallelLayer` node to the parent node.
 
 ![Imgur](https://i.imgur.com/DgHDIUu.png)
+
+In the ParallelTrack inspector you can set the volume and pitch of the main track. changing these parameters will affect all layers and their audiostreams.
+
+
 ![Imgur](https://i.imgur.com/Otz3qC7.png)
 
 You can rename the layers so that later it is easier to manage them. Each ParallelLayer can contain multiple tracks, and all tracks will play together when the layer they belong to is activated.
@@ -213,8 +235,6 @@ The objective of this structure is that all the layers of type `Always` are play
 
 ### AdaptiTrack
 
-The `AdaptiveTrack` node was replaced by `AdaptiTrack`, a more complete node with new features.
-
 The main function of `AdaptiTrack` is to reproduce the following structure:
 
 | Intro | Loops | Outro |
@@ -223,26 +243,27 @@ The main function of `AdaptiTrack` is to reproduce the following structure:
 - `Loops:` These tracks will play in a loop, but only one track will play at a time, to change from one loop to another you must call the `change_loop` method.
 - `Outro:` This track will play only once, and can only be interrupted by the `change_loop`, or `stop_music` method. to go from the loops section to the outro you must call `to_outro` method.
 
-![Imgur](https://i.imgur.com/hDHQcdX.png)
+![Imgur](https://i.imgur.com/CdRJhgS.png)
 
-AdaptiTrack properties
+**AdaptiTrack properties:**
+
 - `intro_file:` here you must add the audio file that will be played as `Intro`. you can leave it empty and playback will start directly with the first loop.
 - `outro_file:` here you need to add the audio file to be played as `Outro`. You can leave it empty and the playback will stop when calling `to_outro` method.
 - `outro_to_loop:` type `Bool`, Enables switching of the Outro to the Loop section.
 - `volume_db:` type `Float`, Sets the volume of the track. All layers will be affected by this parameter.
 - `pitch_scale:` type `Float`, Sets the pitch scale of the track. All layers will be affected by this parameter.
-- `show_measure_count:` type `Bool`, If true, show measure count system in the output.
+- `show_measure_count:` type `Bool`, If true, show measure count system in the output panel.
 - `loops:` To add a loop you will need to follow some additional steps:
 
 Each loop can contain multiple layers, so it will work like a ParallelTrack. And additionally, the loop can also randomly play each layer in sequence by setting the `random_sequence` property.
 
 ![Imgur](https://i.imgur.com/7RFqEQ4.png)
 
-Loops are resources of `LoopResource` class, you can create a new one as seen in the image above.
+Loops are resources of `LoopResource` class.
 
 ![Imgur](https://i.imgur.com/NIJHMjc.png)
 
-In `Music Layers` you can choose the number of layers your loop plays. Each layer is a `LayerResource` class resource, and as with loops, you'll need to create one.
+In `Music Layers` you can choose the number of layers your loop plays. Each layer is a `LayerResource` class.
 
 The layer properties are:
 
@@ -269,11 +290,50 @@ The loops have a beat and bar counting system. The following properties make use
 
 (An easy way to get it is to multiply the total number of bars x metric)
 
-- `keys_loop_in_measure:` in this property you can assign keys to specific measures/bar, when the `change_loop` method is called the track will be changed ***only when the track enters one of these keys(measures/bar)***.
-- `keys_end_in_measure:` in this property you can assign keys to specific measures/bar, when the `to_outro` method is called the track will be changed ***only when the track enters one of these keys(measures/bar)***.
+- `keys_loop_in_measure:` type `String`, in this property you can assign keys to specific measures/bar, when the `change_loop` method is called the track will be changed ***only when the track enters one of these keys(measures/bar)***. Write the bar numbers separated by a "," without spaces. (1,2,3,4)
+- `keys_end_in_measure:` type `String`, in this property you can assign keys to specific measures/bar, when the `to_outro` method is called the track will be changed ***only when the track enters one of these keys(measures/bar)***. Write the bar numbers separated by a "," without spaces. (1,2,3,4)
 
 If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
 
+## Other Methods in AudioManager
+
+### `add_track`
+
+![Imgur](https://i.imgur.com/oGFV4Zb.png)
+
+- `sound_name:` name of the track to be added to the `AudioManager` scene.
+
+### `remove_track`
+
+![Imgur](https://i.imgur.com/sIOlaPB.png)
+
+- `track_name:` name of the track to be remove from the tree.
 
 ## Setters & Getters
+
+### AudioManager
+
+`get_audio_track`
+
+![Imgur](https://i.imgur.com/SKK2gwq.png)
+
+![Imgur](https://i.imgur.com/9wIGJdC.png)
+
+- `sound_name:` track name to get. (If you want to get the current playback, you can access the `current_playback` variable, or `current_bgs_playback` of `AudioManager`)
+
+### AdaptiNode, BGM and BGS Tracks
+
+`set_volume_db`
+`set_pitch_scale`
+`set_bus`
+
+![Imgur](https://i.imgur.com/yGRdUGp.png)
+
+`get_volume_db`
+`get_pitch_scale`
+`get_bus`
+
+![Imgur](https://i.imgur.com/VQ1baR6.png)
+
+
 
