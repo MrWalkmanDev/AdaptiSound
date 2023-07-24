@@ -324,7 +324,8 @@ If the above properties are not defined, then the track will instantly switch to
 
 - `sound_name:` track name to get. (If you want to get the current playback, you can access the `current_playback` variable, or `current_bgs_playback` of `AudioManager`)
 
-### AdaptiNode, BGM and BGS Tracks
+### Audio Tracks
+<sub>for all type tracks</sub>
 
 `set_volume_db`
 `set_pitch_scale`
