@@ -140,7 +140,8 @@ This method stops the current playback.
 ### `set_destroy`
 
 ![Imgur](https://i.imgur.com/WpUusud.png)
-[Imgur](https://i.imgur.com/ttII2N9.png)
+
+![Imgur](https://i.imgur.com/ttII2N9.png)
 
 - `state:` if true, the track will be removed from the tree once it stops.
 
@@ -148,6 +149,8 @@ This method stops the current playback.
 ### `set_sequence`
 
 ![Imgur](https://i.imgur.com/7dYcAhz.png)
+
+![Imgur](https://i.imgur.com/QiIkHTI.png)
 
 - `method:` when the current track ends, the assigned method will be executed.
 
