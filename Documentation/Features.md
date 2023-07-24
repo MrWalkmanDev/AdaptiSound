@@ -124,7 +124,7 @@ This method stops the current playback.
 
 - `track_name:` type `String`, name of the track that contains the layers to play.
 - `layer_names:` type `Array`, names, groups, or indices of trigger layers to play.
-- `fade_time:` type `Float`, time of fade in. `3.0 default`
+- `fade_time:` type `Float`, time of fade in. `2.0 default`
 
 
 ### `stop_layer`
@@ -132,7 +132,7 @@ This method stops the current playback.
 
 - `track_name:` type `String`, name of the track that contains the layers to stop.
 - `layer_names:` type `Array`, names, groups, or indices of trigger layers to stop.
-- `fade_time:` type `Float`, time of fade out. `3.0 default`
+- `fade_time:` type `Float`, time of fade out. `2.0 default`
 
 
 ### `set_destroy`
