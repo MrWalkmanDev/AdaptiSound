@@ -120,11 +120,10 @@ This method stops the current playback.
 ### `play_layer`
 <sub>Only for ABGM</sub>
 
-![Imgur](https://i.imgur.com/Fmz0ZTI.png)
+![Imgur](https://i.imgur.com/PIKlNKU.png)
 
 - `track_name:` type `String`, name of the track that contains the layers to play.
 - `layer_names:` type `Array`, names, groups, or indices of trigger layers to play.
-- `can_fade:` type `Bool`, if true, tracks will play with fade in. `false default`
 - `fade_time:` type `Float`, time of fade in. `3.0 default`
 
 
@@ -133,7 +132,6 @@ This method stops the current playback.
 
 - `track_name:` type `String`, name of the track that contains the layers to stop.
 - `layer_names:` type `Array`, names, groups, or indices of trigger layers to stop.
-- `can_fade:` type `Bool`, if true, tracks will play with fade out. `false default`
 - `fade_time:` type `Float`, time of fade out. `3.0 default`
 
 
