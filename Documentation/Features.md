@@ -310,6 +310,36 @@ If the above properties are not defined, then the track will instantly switch to
 
 - `track_name:` name of the track to be remove from the tree.
 
+### `add_bus`
+
+![Imgur](https://i.imgur.com/1itXEeC.png)
+
+- `bus_name:` assigns the name of the audio bus.
+
+### `get_track_bus_name`
+
+![Imgur](https://i.imgur.com/YYdGpjh.png)
+
+gets the bus name of the assigned track
+
+### `get_track_bus_index`
+
+![Imgur](https://i.imgur.com/6FGnVXF.png)
+
+gets the bus index of the assigned track
+
+### `get_track_bus_volume_db`
+
+![Imgur](https://i.imgur.com/MLo4jiO.png)
+
+gets the bus volume_db of the assigned track
+
+### `set_bus_volume_db`
+
+![Imgur](https://i.imgur.com/hTi8Xhp.png)
+
+sets the volume of the bus. need bus index.
+
 ## Setters & Getters
 
 ### AudioManager
