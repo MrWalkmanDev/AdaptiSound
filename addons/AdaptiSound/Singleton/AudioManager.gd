@@ -240,7 +240,7 @@ func play_sound(sound_name: String, fade_in: = 0.5, fade_out:= 1.5):
 
 ## Stop current BGS track
 func stop_sound(can_fade := false, fade_time := 1.5):
-	BGS.stop_soud(can_fade, fade_time)
+	BGS.stop_sound(can_fade, fade_time)
 	
 ## Mute or unmute current BGS track layer
 func mute_bgs_layer(track_name: String, layer_names: Array, mute_state: bool, fade_time := 2.0):

@@ -78,7 +78,7 @@ text = "BGM Directory"
 [node name="BGM" type="LineEdit" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "res://DEMO/Audio/Music/BGM/"
+text = "res://DEMO/Audio/Music/BGM"
 
 [node name="bgm_files" type="Button" parent="Margin/MainH/MainV/Grid/Directories/GridContainer"]
 layout_mode = 2
@@ -141,7 +141,6 @@ layout_mode = 2
 offset_left = 155.0
 offset_right = 334.0
 offset_bottom = 31.0
-disabled = true
 text = "ABGS Support"
 icon = ExtResource("2_iliwq")
 clip_text = true

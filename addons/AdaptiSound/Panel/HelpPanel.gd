@@ -71,7 +71,10 @@ func _on_bgs_files_pressed():
 	var dic = file_browser.files_load(main.bgs.text, main.bgs_extensions)
 	if dic != null:
 		for i in dic:
-			item_list.add_item(i, ICON)
+			if dic[i] is PackedScene:
+				item_list.add_item(i, adaptive_ico)
+			else:
+				item_list.add_item(i, ICON)
 
 func _on_item_list_item_selected(index):
 	var item_name = item_list.get_item_text(index)

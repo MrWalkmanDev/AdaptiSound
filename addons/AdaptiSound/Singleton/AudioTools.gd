@@ -28,9 +28,17 @@ func add_track(sound_name : String, track_data : Dictionary):
 		var type = track_data["type"]
 		if type == "ABGM":
 			audio_stream = track_data["file"].instantiate()
-		else:
+			
+		elif type == "BGM":
 			audio_stream = AUDIO.instantiate()
 			audio_stream.stream = track_data["file"]
+		
+		elif type == "BGS":
+			if track_data["file"] is PackedScene:
+				audio_stream = track_data["file"].instantiate()
+			else:
+				audio_stream = AUDIO.instantiate()
+				audio_stream.stream = track_data["file"]
 			
 		track_data["container"].add_child(audio_stream)
 		audio_stream.name = sound_name
