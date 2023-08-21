@@ -1,0 +1,56 @@
+[gd_scene load_steps=13 format=3 uid="uid://dp0popfrk4c2"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/AdaptiTrack.gd" id="1_ab1d5"]
+[ext_resource type="AudioStream" uid="uid://dc3q4gejerkax" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example1/Forest.ogg" id="2_padsm"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/LayerResource.gd" id="3_fr0us"]
+[ext_resource type="AudioStream" uid="uid://cvwl3d8x2j1ce" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example1/Desert.ogg" id="4_tlcql"]
+[ext_resource type="AudioStream" uid="uid://1bd3hyf3l5cc" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example1/Freeze.ogg" id="5_papto"]
+[ext_resource type="AudioStream" uid="uid://da4i5og6vd58a" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example1/Volcano.ogg" id="6_kan08"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/LoopResource.gd" id="7_x0nip"]
+
+[sub_resource type="Resource" id="Resource_4wavn"]
+script = ExtResource("3_fr0us")
+audio_stream = ExtResource("2_padsm")
+layer_name = "Forest"
+mute = true
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_xq6kk"]
+script = ExtResource("3_fr0us")
+audio_stream = ExtResource("4_tlcql")
+layer_name = "Desert"
+mute = true
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_p3a8o"]
+script = ExtResource("3_fr0us")
+audio_stream = ExtResource("5_papto")
+layer_name = "Freeze"
+mute = true
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_mchcm"]
+script = ExtResource("3_fr0us")
+audio_stream = ExtResource("6_kan08")
+layer_name = "Volcano"
+mute = true
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_cri8s"]
+script = ExtResource("7_x0nip")
+layers = Array[ExtResource("3_fr0us")]([SubResource("Resource_4wavn"), SubResource("Resource_xq6kk"), SubResource("Resource_p3a8o"), SubResource("Resource_mchcm")])
+random_sequence = false
+first_playback_idx = -1
+bpm = 90.0
+metric = 3
+total_beat_count = 24
+keys_loop_in_measure = ""
+keys_end_in_measure = ""
+
+[node name="AdaptiParallel" type="Node"]
+script = ExtResource("1_ab1d5")
+loops = Array[ExtResource("7_x0nip")]([SubResource("Resource_cri8s")])

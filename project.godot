@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="AdaptiSound Alpha v0.1"
-run/main_scene="res://DEMO/Scenes/Main.tscn"
+run/main_scene="res://addons/AdaptiSound/DEMO/Scenes/Main.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://addons/AdaptiSound/DEMO/icon.svg"
+
+[audio]
+
+buses/default_bus_layout="res://addons/AdaptiSound/DEMO/default_bus_layout.tres"
 
 [autoload]
 

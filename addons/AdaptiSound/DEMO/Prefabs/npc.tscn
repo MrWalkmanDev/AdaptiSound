@@ -1,0 +1,89 @@
+[gd_scene load_steps=10 format=3 uid="uid://bf4r850n7i2wx"]
+
+[ext_resource type="Texture2D" uid="uid://cdtdbngux2oj8" path="res://addons/AdaptiSound/DEMO/Assets/slime_.png" id="1_f3v4t"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/DEMO/Prefabs/npc.gd" id="2_5rj7n"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h08x2"]
+atlas = ExtResource("1_f3v4t")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d01fk"]
+atlas = ExtResource("1_f3v4t")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rt2fm"]
+atlas = ExtResource("1_f3v4t")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aeu0w"]
+atlas = ExtResource("1_f3v4t")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_371m5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h08x2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d01fk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rt2fm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aeu0w")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dt5pb"]
+radius = 26.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_413fs"]
+radius = 7.0
+height = 18.0
+
+[node name="NPC" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_371m5")
+animation = &"new_animation"
+autoplay = "new_animation"
+frame_progress = 0.72646
+flip_h = true
+script = ExtResource("2_5rj7n")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 7)
+shape = SubResource("CircleShape2D_dt5pb")
+
+[node name="Panel" type="Panel" parent="."]
+visible = false
+offset_left = -20.0
+offset_top = -34.0
+offset_right = 20.0
+offset_bottom = -6.0
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 8
+text = "Help Me!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="interact" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="interact"]
+position = Vector2(0, 6)
+shape = SubResource("CapsuleShape2D_413fs")
+debug_color = Color(0.737255, 0.466667, 0, 0.105882)
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="mouse_entered" from="interact" to="." method="_on_interact_mouse_entered"]
+[connection signal="mouse_exited" from="interact" to="." method="_on_interact_mouse_exited"]

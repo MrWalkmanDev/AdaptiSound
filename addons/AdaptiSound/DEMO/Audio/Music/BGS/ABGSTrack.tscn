@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://fv448gi8uni5"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelTrack.gd" id="1_8u5hj"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelLayer.gd" id="2_bhheh"]
+[ext_resource type="AudioStream" uid="uid://b0p5bk4idlm0v" path="res://addons/AdaptiSound/DEMO/Audio/Music/BGS/Wind.wav" id="3_w4ue4"]
+[ext_resource type="AudioStream" uid="uid://k8gwt7bdlqaj" path="res://addons/AdaptiSound/DEMO/Audio/Music/BGS/Forest.wav" id="4_jvvt7"]
+[ext_resource type="AudioStream" uid="uid://cglq1s28qfsnm" path="res://addons/AdaptiSound/DEMO/Audio/Music/BGS/Rain.wav" id="5_w0pco"]
+
+[node name="ABGSTrack" type="Node"]
+script = ExtResource("1_8u5hj")
+
+[node name="Wind" type="Node" parent="."]
+script = ExtResource("2_bhheh")
+audio_streams = Array[AudioStream]([ExtResource("3_w4ue4")])
+
+[node name="Forest" type="Node" parent="."]
+script = ExtResource("2_bhheh")
+audio_streams = Array[AudioStream]([ExtResource("4_jvvt7")])
+layer_on = false
+
+[node name="Rain" type="Node" parent="."]
+script = ExtResource("2_bhheh")
+audio_streams = Array[AudioStream]([ExtResource("5_w0pco")])
+layer_on = false

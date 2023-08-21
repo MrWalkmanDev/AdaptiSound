@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://bvewk5v10m8ep"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/DEMO/Scenes/BGM_Example/lvl_1.gd" id="1_cbdyk"]
+[ext_resource type="PackedScene" uid="uid://76l40qd6janp" path="res://addons/AdaptiSound/DEMO/Prefabs/Player/player_2.tscn" id="2_sd3cf"]
+[ext_resource type="TileSet" uid="uid://btq4osc5a0ysd" path="res://addons/AdaptiSound/DEMO/Scenes/BGM_Example/lvl_1.tres" id="3_p7cj8"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/DEMO/Scenes/BGM_Example/exit.gd" id="8_s3o0t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xcwnc"]
+size = Vector2(20, 95.8829)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xs6vx"]
+size = Vector2(20, 137)
+
+[node name="Lvl1" type="Node2D"]
+script = ExtResource("1_cbdyk")
+
+[node name="Player2" parent="." instance=ExtResource("2_sd3cf")]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource("3_p7cj8")
+format = 2
+layer_0/tile_data = PackedInt32Array(786432, 196608, 5, 851968, 196608, 6, 786433, 196608, 5, 851969, 196608, 6, 786434, 196608, 5, 851970, 196608, 6, 786435, 196608, 5, 851971, 196608, 6, 786436, 196608, 5, 851972, 196608, 6, 786437, 196608, 5, 851973, 196608, 6, 786438, 196608, 5, 851974, 196608, 6, 786439, 196608, 5, 851975, 196608, 6, 786440, 196608, 5, 851976, 196608, 6, 786441, 196608, 5, 851977, 196608, 6, 786442, 196608, 5, 851978, 196608, 6, 786443, 196608, 5, 851979, 196608, 6, 786444, 196608, 5, 851980, 196608, 6, 786445, 196608, 5, 851981, 196608, 6, 786446, 196608, 5, 851982, 196608, 6, 786447, 196608, 5, 851983, 196608, 6, 786448, 196608, 5, 851984, 196608, 6, 786449, 196608, 5, 851985, 196608, 6, 786450, 196608, 5, 851986, 196608, 6, 786451, 196608, 5, 851987, 196608, 6, 786452, 196608, 5, 851988, 196608, 6, 786453, 196608, 5, 851989, 196608, 6, 786454, 196608, 5, 851990, 196608, 6, 786455, 196608, 5, 851991, 196608, 6, 786456, 196608, 5, 851992, 196608, 6, 851967, 196608, 5, 917503, 196608, 6, 851966, 196608, 5, 917502, 196608, 6)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="TileMap"]
+position = Vector2(-6, 196)
+scale = Vector2(1.07051, 2.28218)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TileMap/StaticBody2D"]
+position = Vector2(0, -37.9414)
+shape = SubResource("RectangleShape2D_xcwnc")
+
+[node name="exit" type="Area2D" parent="."]
+position = Vector2(372, 196)
+script = ExtResource("8_s3o0t")
+
+[node name="Label" type="Label" parent="exit"]
+offset_left = -23.0
+offset_top = -90.0
+offset_right = 17.0
+offset_bottom = -64.0
+text = "EXIT"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="exit"]
+position = Vector2(0, -58.5)
+shape = SubResource("RectangleShape2D_xs6vx")
+
+[connection signal="body_entered" from="exit" to="exit" method="_on_body_entered"]

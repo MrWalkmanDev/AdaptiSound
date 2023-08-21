@@ -1,0 +1,56 @@
+[gd_scene load_steps=9 format=3 uid="uid://76l40qd6janp"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/DEMO/Prefabs/Player/Player2.gd" id="1_64iy3"]
+[ext_resource type="Texture2D" uid="uid://bp7jy2xdwydr2" path="res://addons/AdaptiSound/DEMO/Assets/fPlayer_ [human].png" id="2_vnm8m"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ges7v"]
+atlas = ExtResource("2_vnm8m")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_esuet"]
+atlas = ExtResource("2_vnm8m")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q5cq5"]
+atlas = ExtResource("2_vnm8m")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cgra2"]
+atlas = ExtResource("2_vnm8m")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_62qpe"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ges7v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_esuet")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q5cq5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cgra2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_354rb"]
+radius = 5.0
+height = 14.0
+
+[node name="Player2" type="CharacterBody2D" groups=["Player"]]
+position = Vector2(20, 87)
+script = ExtResource("1_64iy3")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_62qpe")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5)
+shape = SubResource("CapsuleShape2D_354rb")

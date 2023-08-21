@@ -266,6 +266,7 @@ func on_mute_layers(layers_names : Array, mute_state : bool, fade_time : float, 
 				layer.on_fade_out(fade_time, false)
 			else:
 				layer.on_fade_in(volume_db, fade_time)
+			layer.on_mute = mute_state
 	
 	## Selected target layers ##
 	for i in layers_names:
@@ -404,9 +405,11 @@ func play_loop(loop_index : int, fade_time : float):
 			if loops[loop_index].layers[i].mute:
 				loops_audio_streams[loop_index][i].stop_tween()
 				loops_audio_streams[loop_index][i].volume_db = -50.0
+				loops_audio_streams[loop_index][i].on_mute = true # Mute Layer
 			else:
 				loops_audio_streams[loop_index][i].volume_db = volume_db
 				loops_audio_streams[loop_index][i].on_fade_in(volume_db, fade_time)
+				loops_audio_streams[loop_index][i].on_mute = false
 				
 				
 			loops_audio_streams[loop_index][i].play()

@@ -1,0 +1,56 @@
+[gd_scene load_steps=13 format=3 uid="uid://4snlb3j30txt"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/AdaptiTrack.gd" id="1_mnmqk"]
+[ext_resource type="AudioStream" uid="uid://ddak1rjhuq5im" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example3/ParallelBase.ogg" id="2_pcs6s"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/LayerResource.gd" id="3_ayva8"]
+[ext_resource type="AudioStream" uid="uid://decjyvrdfiwv6" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example3/ParallelStaccato.ogg" id="4_1gbm2"]
+[ext_resource type="AudioStream" uid="uid://b477q3bgtf4fh" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example3/ParalleTopBase.ogg" id="5_wjmcx"]
+[ext_resource type="AudioStream" uid="uid://cs2bal7gvrtgi" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example3/ParalleTop.ogg" id="6_hpv2p"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/LoopResource.gd" id="7_5vfwd"]
+
+[sub_resource type="Resource" id="Resource_i7dfr"]
+script = ExtResource("3_ayva8")
+audio_stream = ExtResource("2_pcs6s")
+layer_name = "Base"
+mute = false
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_ok0sc"]
+script = ExtResource("3_ayva8")
+audio_stream = ExtResource("4_1gbm2")
+layer_name = "Staccato"
+mute = true
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_en1xf"]
+script = ExtResource("3_ayva8")
+audio_stream = ExtResource("5_wjmcx")
+layer_name = "TopBase"
+mute = true
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_svinp"]
+script = ExtResource("3_ayva8")
+audio_stream = ExtResource("6_hpv2p")
+layer_name = "Top"
+mute = true
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_ipuop"]
+script = ExtResource("7_5vfwd")
+layers = Array[ExtResource("3_ayva8")]([SubResource("Resource_i7dfr"), SubResource("Resource_ok0sc"), SubResource("Resource_en1xf"), SubResource("Resource_svinp")])
+random_sequence = false
+first_playback_idx = -1
+bpm = 120.0
+metric = 4
+total_beat_count = 0
+keys_loop_in_measure = ""
+keys_end_in_measure = ""
+
+[node name="BossTheme" type="Node"]
+script = ExtResource("1_mnmqk")
+loops = Array[ExtResource("7_5vfwd")]([SubResource("Resource_ipuop")])

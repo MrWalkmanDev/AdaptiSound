@@ -1,0 +1,31 @@
+[gd_scene load_steps=7 format=3 uid="uid://ivndsg2oxm0j"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelTrack.gd" id="1_blg3s"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelLayer.gd" id="2_617om"]
+[ext_resource type="AudioStream" uid="uid://dc3q4gejerkax" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example1/Forest.ogg" id="3_d7fai"]
+[ext_resource type="AudioStream" uid="uid://cvwl3d8x2j1ce" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example1/Desert.ogg" id="3_i5er1"]
+[ext_resource type="AudioStream" uid="uid://1bd3hyf3l5cc" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example1/Freeze.ogg" id="5_l4jrj"]
+[ext_resource type="AudioStream" uid="uid://da4i5og6vd58a" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example1/Volcano.ogg" id="6_nrq5o"]
+
+[node name="Parallel(Example)" type="Node"]
+script = ExtResource("1_blg3s")
+
+[node name="Forest" type="Node" parent="."]
+script = ExtResource("2_617om")
+audio_streams = Array[AudioStream]([ExtResource("3_d7fai")])
+layer_on = false
+
+[node name="Desert" type="Node" parent="."]
+script = ExtResource("2_617om")
+audio_streams = Array[AudioStream]([ExtResource("3_i5er1")])
+layer_on = false
+
+[node name="Freeze" type="Node" parent="."]
+script = ExtResource("2_617om")
+audio_streams = Array[AudioStream]([ExtResource("5_l4jrj")])
+layer_on = false
+
+[node name="Volcano" type="Node" parent="."]
+script = ExtResource("2_617om")
+audio_streams = Array[AudioStream]([ExtResource("6_nrq5o")])
+layer_on = false

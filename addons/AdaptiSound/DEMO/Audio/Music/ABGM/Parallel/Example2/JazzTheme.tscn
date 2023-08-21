@@ -1,0 +1,32 @@
+[gd_scene load_steps=7 format=3 uid="uid://ducwngtcqgjhb"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelTrack.gd" id="1_al7l5"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/ParallelTrack/ParallelLayer.gd" id="2_rsyl5"]
+[ext_resource type="AudioStream" uid="uid://cm44cc3vurmn3" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example2/JazzBase.ogg" id="3_b4jc2"]
+[ext_resource type="AudioStream" uid="uid://dblkbb8r4it6g" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example2/JazzOrgan.ogg" id="4_7hxrg"]
+[ext_resource type="AudioStream" uid="uid://i0dn2j1yoy10" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example2/JazzMelody.ogg" id="5_goprs"]
+[ext_resource type="AudioStream" uid="uid://b8agfivmhnfvq" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example2/SW001_8-Bit-Games-163_Pickup_Coin.wav" id="6_exaw5"]
+
+[node name="JazzTheme" type="Node"]
+script = ExtResource("1_al7l5")
+
+[node name="Base" type="Node" parent="."]
+script = ExtResource("2_rsyl5")
+audio_streams = Array[AudioStream]([ExtResource("3_b4jc2")])
+
+[node name="Organ" type="Node" parent="."]
+script = ExtResource("2_rsyl5")
+audio_streams = Array[AudioStream]([ExtResource("4_7hxrg")])
+layer_on = false
+
+[node name="Melody" type="Node" parent="."]
+script = ExtResource("2_rsyl5")
+audio_streams = Array[AudioStream]([ExtResource("5_goprs")])
+layer_on = false
+
+[node name="Trigger" type="Node" parent="."]
+script = ExtResource("2_rsyl5")
+playing_type = "Trigger"
+audio_streams = Array[AudioStream]([ExtResource("6_exaw5")])
+layer_on = false
+loop = false

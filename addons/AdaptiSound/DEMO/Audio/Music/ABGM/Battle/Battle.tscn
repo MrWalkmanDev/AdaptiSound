@@ -1,0 +1,54 @@
+[gd_scene load_steps=12 format=3 uid="uid://b8q84bndlx3fw"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/AdaptiTrack.gd" id="1_6gs1d"]
+[ext_resource type="AudioStream" uid="uid://deo87tguctvp4" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Battle/Battle_Intro.ogg" id="2_b61rj"]
+[ext_resource type="AudioStream" uid="uid://ybc5gexcpam6" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Battle/Battle_Loop.ogg" id="3_fv1fg"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/LayerResource.gd" id="4_lotum"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/LoopResource.gd" id="5_dwyit"]
+[ext_resource type="AudioStream" uid="uid://cmshx8e7yf4r" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Battle/Battle_Loop_2.ogg" id="6_m8ui5"]
+[ext_resource type="AudioStream" uid="uid://cu5i7wu7ywgly" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Battle/Battle_Outro.ogg" id="7_dva4p"]
+
+[sub_resource type="Resource" id="Resource_fceu2"]
+script = ExtResource("4_lotum")
+audio_stream = ExtResource("3_fv1fg")
+layer_name = "Loop1"
+mute = false
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_7plei"]
+script = ExtResource("5_dwyit")
+layers = Array[ExtResource("4_lotum")]([SubResource("Resource_fceu2")])
+random_sequence = false
+first_playback_idx = -1
+bpm = 100.0
+metric = 2
+total_beat_count = 16
+keys_loop_in_measure = "1,2,3,4,5,6,7,8"
+keys_end_in_measure = "1,2,3,4,5,6,7,8"
+
+[sub_resource type="Resource" id="Resource_lc7wn"]
+script = ExtResource("4_lotum")
+audio_stream = ExtResource("6_m8ui5")
+layer_name = "Loop2"
+mute = false
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_u4k6q"]
+script = ExtResource("5_dwyit")
+layers = Array[ExtResource("4_lotum")]([SubResource("Resource_lc7wn")])
+random_sequence = false
+first_playback_idx = -1
+bpm = 100.0
+metric = 2
+total_beat_count = 16
+keys_loop_in_measure = "1,2,3,4,5,6,7,8"
+keys_end_in_measure = "1,2,3,4,5,6,7,8"
+
+[node name="Battle" type="Node"]
+script = ExtResource("1_6gs1d")
+intro_file = ExtResource("2_b61rj")
+loops = Array[ExtResource("5_dwyit")]([SubResource("Resource_7plei"), SubResource("Resource_u4k6q")])
+outro_file = ExtResource("7_dva4p")
+outro_to_loop = true

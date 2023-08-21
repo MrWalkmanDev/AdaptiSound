@@ -1,0 +1,94 @@
+[gd_scene load_steps=19 format=3 uid="uid://cbvh1glpydtkk"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/AdaptiTrack.gd" id="1_147iu"]
+[ext_resource type="AudioStream" uid="uid://deo87tguctvp4" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Battle/Battle_Intro.ogg" id="2_ssare"]
+[ext_resource type="AudioStream" uid="uid://ybc5gexcpam6" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Battle/Battle_Loop.ogg" id="3_3lcmj"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/LayerResource.gd" id="4_xku28"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AdaptiTrack/LoopResource.gd" id="5_na585"]
+[ext_resource type="AudioStream" uid="uid://cmshx8e7yf4r" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Battle/Battle_Loop_2.ogg" id="6_gfxig"]
+[ext_resource type="AudioStream" uid="uid://cm44cc3vurmn3" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example2/JazzBase.ogg" id="7_3qb6a"]
+[ext_resource type="AudioStream" uid="uid://dblkbb8r4it6g" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example2/JazzOrgan.ogg" id="8_4oeox"]
+[ext_resource type="AudioStream" uid="uid://i0dn2j1yoy10" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example2/JazzMelody.ogg" id="9_gknmf"]
+[ext_resource type="AudioStream" uid="uid://cu5i7wu7ywgly" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Battle/Battle_Outro.ogg" id="10_04six"]
+
+[sub_resource type="Resource" id="Resource_lial3"]
+script = ExtResource("4_xku28")
+audio_stream = ExtResource("3_3lcmj")
+layer_name = "Layer1"
+mute = false
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_jw2qi"]
+script = ExtResource("5_na585")
+layers = Array[ExtResource("4_xku28")]([SubResource("Resource_lial3")])
+random_sequence = false
+first_playback_idx = -1
+bpm = 100.0
+metric = 2
+total_beat_count = 16
+keys_loop_in_measure = "1,2,3,4,5,6,7,8"
+keys_end_in_measure = "1,2,3,4,5,6,7,8"
+
+[sub_resource type="Resource" id="Resource_t02du"]
+script = ExtResource("4_xku28")
+audio_stream = ExtResource("6_gfxig")
+layer_name = "Loop2"
+mute = false
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_ejphx"]
+script = ExtResource("5_na585")
+layers = Array[ExtResource("4_xku28")]([SubResource("Resource_t02du")])
+random_sequence = false
+first_playback_idx = -1
+bpm = 100.0
+metric = 2
+total_beat_count = 16
+keys_loop_in_measure = "1,2,3,4,5,6,7,8"
+keys_end_in_measure = "1,2,3,4,5,6,7,8"
+
+[sub_resource type="Resource" id="Resource_ir5ho"]
+script = ExtResource("4_xku28")
+audio_stream = ExtResource("7_3qb6a")
+layer_name = "Base"
+mute = false
+loop = true
+groups = Array[String](["group"])
+
+[sub_resource type="Resource" id="Resource_7wsyn"]
+script = ExtResource("4_xku28")
+audio_stream = ExtResource("8_4oeox")
+layer_name = "Organ"
+mute = true
+loop = true
+groups = Array[String](["group"])
+
+[sub_resource type="Resource" id="Resource_hyk2r"]
+script = ExtResource("4_xku28")
+audio_stream = ExtResource("9_gknmf")
+layer_name = "Melody"
+mute = true
+loop = true
+groups = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_d6wqk"]
+script = ExtResource("5_na585")
+layers = Array[ExtResource("4_xku28")]([SubResource("Resource_ir5ho"), SubResource("Resource_7wsyn"), SubResource("Resource_hyk2r")])
+random_sequence = false
+first_playback_idx = -1
+bpm = 120.0
+metric = 4
+total_beat_count = 16
+keys_loop_in_measure = "1,2,3,4,5,6,7,8"
+keys_end_in_measure = "1,2,3,4,5,6,7,8"
+
+[node name="AdaptiTrack" type="Node"]
+script = ExtResource("1_147iu")
+intro_file = ExtResource("2_ssare")
+loops = Array[ExtResource("5_na585")]([SubResource("Resource_jw2qi"), SubResource("Resource_ejphx"), SubResource("Resource_d6wqk")])
+outro_file = ExtResource("10_04six")
+outro_to_loop = null
+volume_db = null
+pitch_scale = null

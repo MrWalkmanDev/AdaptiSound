@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctncw0nm38rkg"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/DEMO/Scenes/BGS_Scene.gd" id="1_vu8sd"]
+
+[node name="BGS_Scene" type="CanvasLayer"]
+script = ExtResource("1_vu8sd")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 384.0
+offset_bottom = 216.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/CenterContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Play"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Layer1" type="CheckButton" parent="Control/CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Layer 1"
+
+[node name="Layer2" type="CheckButton" parent="Control/CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Layer 2"
+
+[node name="Layer3" type="CheckButton" parent="Control/CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Layer 3"
+
+[node name="Stop" type="Button" parent="Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Stop
+"
+
+[connection signal="pressed" from="Control/CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="toggled" from="Control/CenterContainer/VBoxContainer/HBoxContainer/Layer1" to="." method="_on_layer_1_toggled"]
+[connection signal="toggled" from="Control/CenterContainer/VBoxContainer/HBoxContainer/Layer2" to="." method="_on_layer_2_toggled"]
+[connection signal="toggled" from="Control/CenterContainer/VBoxContainer/HBoxContainer/Layer3" to="." method="_on_layer_3_toggled"]
+[connection signal="pressed" from="Control/CenterContainer/VBoxContainer/Stop" to="." method="_on_stop_pressed"]
