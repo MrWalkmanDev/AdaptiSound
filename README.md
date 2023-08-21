@@ -8,7 +8,7 @@ AdaptiSound will help you implement music in your videogame. Explore the world o
 Your creativity is the limit!
 
 
-## 🎵 AdaptiSound v0.3 ![](https://camo.githubusercontent.com/d8177663f486ebdd812419dbf9fe4f8e750c01f2026590e5994ee31bbf7a8123/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f476f646f742d76342e302d253233343738636266)
+## 🎵 AdaptiSound v0.3.1 ![](https://camo.githubusercontent.com/d8177663f486ebdd812419dbf9fe4f8e750c01f2026590e5994ee31bbf7a8123/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f476f646f742d76342e302d253233343738636266)
 ### ⚙ Installation
 1.- Download the ZIP file.
 
