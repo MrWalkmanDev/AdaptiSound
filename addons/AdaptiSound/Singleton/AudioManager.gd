@@ -135,7 +135,7 @@ func reset_music(fade_out := 0.0, fade_in := 0.0):
 			current_playback.stop()
 			#current_playback.play()
 		else:
-			current_playback.on_stop()
+			current_playback.on_stop(fade_out)
 			#current_playback.on_play()
 		tools.check_fade(track, fade_in, true)
 	else:
