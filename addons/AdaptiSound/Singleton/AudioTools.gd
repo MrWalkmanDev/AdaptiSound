@@ -14,7 +14,7 @@ func check_fade(node, fade_time, type: bool, skip_intro := false, loop_index := 
 	else:
 		if node is AudioStreamPlayer:
 			node.on_fade_out(fade_time)
-			node.stop()
+			#node.stop()
 		else:
 			node.on_stop(fade_time)
 
