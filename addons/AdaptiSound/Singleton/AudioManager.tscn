@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://addons/AdaptiSound/Singleton/AudioManager.gd" id="1_st6ic"]
 
 [node name="AudioManager" type="Node"]
+process_mode = 3
 script = ExtResource("1_st6ic")
-debugging = true
 
 [node name="Adaptive_BGM" type="Node" parent="."]
 
