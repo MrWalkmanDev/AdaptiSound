@@ -27,6 +27,6 @@ If you want to know more about installing plugins you can read the [Godot docs p
 ### 📃Credits
 - Made by [Isaías Arrué R.](https://github.com/MrWalkmanDev) ( [Mr. Walkman](https://mr-walkman.itch.io) )
 - DEMO art assets by [AnalogStudios](https://analogstudios.itch.io)
-- DEMO music by [Isaías Arrué R.](https://www.instagram.com/colorwave.music/)
+- DEMO music by [Isaías Arrué R.](https://colorwavestudios.cl/portfolio/)
 
 [MIT License](https://github.com/MrWalkmanDev/AdaptiSound/blob/main/LICENSE)
