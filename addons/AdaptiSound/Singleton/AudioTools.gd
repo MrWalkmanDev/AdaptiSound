@@ -8,6 +8,10 @@ func check_fade(node, fade_time, type: bool, skip_intro := false, loop_index := 
 	if type:
 		if node is AudioStreamPlayer:
 			node.on_fade_in(0.0, fade_time)
+			## Al cambiar de pista no suena la nueva pista porque su volumen_db es -40.0
+			## Considerar agregar nueva variable target_volume?, 
+			## o simplemente dejar que el usuario use un fade_in personalizado.
+			##node.on_fade_in(node.volume_db, fade_time)
 			node.play()
 		else:
 			node.on_play(fade_time, skip_intro, loop_index)

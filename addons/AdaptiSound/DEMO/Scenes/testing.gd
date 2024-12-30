@@ -5,9 +5,9 @@ func _ready():
 
 
 func _on_play_pressed():
-	AudioManager.add_track("Battle").set_volume_db(-60.0)
-	AudioManager.play_music("Battle")
+	#AudioManager.add_track("JazzBase").set_volume_db(0.0)
+	AudioManager.play_music("JazzBase")
 
 
 func _on_stop_pressed():
-	AudioManager.play_music("JazzBase")
+	AudioManager.play_music("Battle")
