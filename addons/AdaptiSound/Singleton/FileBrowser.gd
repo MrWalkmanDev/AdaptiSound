@@ -11,7 +11,8 @@ func files_load(path, extension):
 		
 	var sounds = {}
 	var dir = DirAccess.open(path)
-	print("open_path:",path)
+	#if !Engine.is_editor_hint():
+	#	AudioManager.debug._print("open_path: " + path)
 
 	if dir:
 		dir.list_dir_begin()
@@ -77,7 +78,6 @@ func preload_adaptive_tracks(path):
 				tracks.merge(sub_sounds)
 			
 			file_name = dir.get_next()
-		
 		return tracks
 		
 	else:

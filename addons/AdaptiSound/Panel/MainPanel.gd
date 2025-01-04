@@ -3,41 +3,79 @@ extends Control
 
 const SAVE_PATH := "res://addons/AdaptiSound/Panel/Data.json"
 
-@onready var abgm := $Margin/MainH/MainV/Grid/Directories/GridContainer/ABGM
-@onready var bgm := $Margin/MainH/MainV/Grid/Directories/GridContainer/BGM
-@onready var bgs := $Margin/MainH/MainV/Grid/Directories/GridContainer/BGS
-@onready var debbug_button = $Margin/MainH/MainV/Grid/Directories/GridContainer/Debbug
+@onready var _process_mode = %ProcessMode
 
-@onready var bgm_bus = $Margin/MainH/MainV/Grid/Extensions/Hbox/Buses/bgmBus
-@onready var abgm_bus = $Margin/MainH/MainV/Grid/Extensions/Hbox/Buses/abgmBus
-@onready var bgs_bus = $Margin/MainH/MainV/Grid/Extensions/Hbox/Buses/bgsBus
+## Directories LineEdits ##
+@onready var bgm := %BGM
+@onready var abgm := %ABGM
+@onready var bgs := %BGS
+@onready var debug_button = %Debbug
 
-@onready var wav_ext = $Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/wav
-@onready var ogg_ext = $Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/ogg
-@onready var mp3_ext = $Margin/MainH/MainV/Grid/Extensions/Hbox/Extensions/mp3
-@onready var abgs_ext = $Margin/MainH/MainV/Grid/Directories/GridContainer/Debbug/ABGS
+## Directories Containers and Buttons ##
+@onready var bgm_pre :CheckButton= %BGMPre
+@onready var bgm_dir_container := %BGMDir
+@onready var abgm_dir_container := %ABGMDir
+@onready var abgm_pre := %ABGMPre
+@onready var bgs_pre := %BGSPre
+@onready var bgs_dir_container := %BGSDir
 
+## Buses ##
+@onready var bgm_bus = %bgmBus
+@onready var bgs_bus = %bgsBus
+
+## Audio Extensions ##
+@onready var wav_ext = %wav
+@onready var ogg_ext = %ogg
+@onready var mp3_ext = %mp3
+
+## DEBUG ##
 var debbug : bool = false
+
+## DATA ##
 var data
 
-# Extensions # 
+## Extensions ##
 var extensions = []
 var bgs_extensions = []
 
 func _ready():
 	if Engine.is_editor_hint():
+		## Adaptive Background Sounds ##
+		if !bgs_extensions.has("tscn"):
+			bgs_extensions.append("tscn")
+			
+		## Load Data ##
 		data = load_json()
-		abgm.text = data.ABGM
+		if !data:
+			printerr("AdaptiSound Data not found")
+			return
+		
+		bgm_pre.button_pressed = data.bgm_preload
+		abgm_pre.button_pressed = data.abgm_preload
+		bgs_pre.button_pressed = data.bgs_preload
+		
 		bgm.text = data.BGM
+		abgm.text = data.ABGM
 		bgs.text = data.BGS
-		debbug_button.set_pressed(data.debbug)
+		debug_button.set_pressed(data.debbug)
+		_process_mode.select(data.process_mode)
 		debbug = data.debbug
 		
-		bgm_bus.text = data.bgm_bus
-		abgm_bus.text = data.abgm_bus
-		bgs_bus.text = data.bgs_bus
-		
 		set_extension()
+		
+		## AUDIO BUSES ##
+		bgm_bus.clear()
+		bgs_bus.clear()
+		for i in AudioServer.bus_count:
+			bgm_bus.add_item(AudioServer.get_bus_name(i), i)
+			bgs_bus.add_item(AudioServer.get_bus_name(i), i)
+		bgm_bus.selected = data.bgm_bus
+		bgs_bus.selected = data.bgs_bus
+		
+		## Preload Directories ##
+		bgs_dir_container.visible = bgs_pre.button_pressed
+		bgm_dir_container.visible = bgm_pre.button_pressed
+		abgm_dir_container.visible = abgm_pre.button_pressed
 
 func set_extension():
 	if data.extensions.has("wav"):
@@ -60,25 +98,22 @@ func set_extension():
 	else:
 		mp3_ext.set_pressed(false)
 		_on_mp_3_toggled(false)
-		
-	if data.bgs_extensions.has("tscn"):
-		abgs_ext.set_pressed(true)
-		_on_abgs_toggled(true)
-	else:
-		abgs_ext.set_pressed(false)
-		_on_abgs_toggled(false)
+
 
 func save_json() -> void:
 	var data := {
+		"abgm_preload" : abgm_pre.button_pressed,
+		"bgm_preload" : bgm_pre.button_pressed,
+		"bgs_preload" : bgs_pre.button_pressed,
 		"ABGM": abgm.text,
 		"BGM": bgm.text,
 		"BGS": bgs.text,
 		"debbug": debbug,
+		"process_mode": _process_mode.get_selected_id(),
 		"extensions": extensions,
 		"bgs_extensions": bgs_extensions,
-		"abgm_bus": abgm_bus.text,
-		"bgm_bus": bgm_bus.text,
-		"bgs_bus": bgs_bus.text
+		"bgm_bus": bgm_bus.get_selected_id(),
+		"bgs_bus": bgs_bus.get_selected_id()
 	}
 	var json_data := JSON.stringify(data)
 	var file_access := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -131,10 +166,14 @@ func _on_mp_3_toggled(button_pressed):
 			bgs_extensions.erase("mp3")
 
 
-func _on_abgs_toggled(button_pressed):
-	if button_pressed:
-		if !bgs_extensions.has("tscn"):
-			bgs_extensions.append("tscn")
-	else:
-		if bgs_extensions.has("tscn"):
-			bgs_extensions.erase("tscn")
+
+## -------------------------------------------------------------------------------------------------
+## PRELOAD BUTTONS ##
+func _on_bgm_pre_toggled(toggled_on):
+	bgm_dir_container.visible = toggled_on
+
+func _on_bgs_pre_toggled(toggled_on):
+	bgs_dir_container.visible = toggled_on
+
+func _on_abgm_pre_toggled(toggled_on):
+	abgm_dir_container.visible = toggled_on

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2ddwhgq5gcvk"
-path="res://.godot/imported/Layer.png-33c91bed4da31b69c6d9b0152b89a3dd.ctex"
+uid="uid://b70gnjvccrdjd"
+path="res://.godot/imported/play.png-1899f0c77beddf442f5c81721675ac2f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/AdaptiSound/Icons/Layer.png"
-dest_files=["res://.godot/imported/Layer.png-33c91bed4da31b69c6d9b0152b89a3dd.ctex"]
+source_file="res://addons/AdaptiSound/Icons/Others/play.png"
+dest_files=["res://.godot/imported/play.png-1899f0c77beddf442f5c81721675ac2f.ctex"]
 
 [params]
 

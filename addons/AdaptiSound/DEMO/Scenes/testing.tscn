@@ -1,9 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://cugu0ppkowgy3"]
+[gd_scene load_steps=4 format=3 uid="uid://cugu0ppkowgy3"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/DEMO/Scenes/testing.gd" id="1_dceou"]
+[ext_resource type="AudioStream" uid="uid://cm44cc3vurmn3" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example2/JazzBase.ogg" id="2_nvd0o"]
+[ext_resource type="AudioStream" uid="uid://cglq1s28qfsnm" path="res://addons/AdaptiSound/DEMO/Audio/Music/BGS/Rain.wav" id="3_erups"]
 
 [node name="Testing" type="Node2D"]
 script = ExtResource("1_dceou")
+audio = ExtResource("2_nvd0o")
+sfx = ExtResource("3_erups")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -30,9 +34,15 @@ layout_mode = 2
 layout_mode = 2
 text = "PLAY"
 
+[node name="Play2" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Play2
+"
+
 [node name="Stop" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer"]
 layout_mode = 2
 text = "STOP"
 
 [connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/Play2" to="." method="_on_play_2_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/Stop" to="." method="_on_stop_pressed"]

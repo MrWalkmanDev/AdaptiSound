@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ngi4so8tuuqd"
-path="res://.godot/imported/Parallel.png-9cfc978501fc5f01699b6bc7e31c3db0.ctex"
+uid="uid://cmyjhd4ubm3sl"
+path="res://.godot/imported/stop.png-9b53c912360b3247b8ce3f97de6d7df0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/AdaptiSound/Icons/Parallel.png"
-dest_files=["res://.godot/imported/Parallel.png-9cfc978501fc5f01699b6bc7e31c3db0.ctex"]
+source_file="res://addons/AdaptiSound/Icons/Others/stop.png"
+dest_files=["res://.godot/imported/stop.png-9b53c912360b3247b8ce3f97de6d7df0.ctex"]
 
 [params]
 

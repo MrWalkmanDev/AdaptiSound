@@ -1,7 +1,11 @@
 extends Node
 
-func play_sound(sound_name: String, volume_db := 0.0, fade_in: = 0.5,
-	fade_out:= 1.5, skip_intro := false, loop_index := 0):
+## BGS METHODS ##
+## All methods for playback global background sounds
+
+## -------------------------------------------------------------------------------------------------
+## Play background sound effect
+func play_sound(sound_name: String, fade_in: = 0.5, fade_out:= 1.5):
 	
 	## Get data of track
 	var track_data = AudioManager.get_track_data(sound_name)
@@ -22,31 +26,30 @@ func play_sound(sound_name: String, volume_db := 0.0, fade_in: = 0.5,
 	
 	## Stop Current Track
 	if AudioManager.current_bgs_playback != null:
-		AudioManager.tools.check_fade(AudioManager.current_bgs_playback, fade_out, false)
+		AudioManager.tools.check_fade_out(AudioManager.current_bgs_playback, fade_out, false)
 	
 	## Play New Track
-	audio_stream.volume_db = volume_db
-	AudioManager.tools.check_fade(audio_stream, fade_in, true, volume_db)
+	AudioManager.tools.check_fade_in(audio_stream, fade_in, true)
 	AudioManager.current_bgs_playback = audio_stream
 	
 	return audio_stream
 
 
-func stop_sound(can_fade := false, fade_time := 1.5):
+## -------------------------------------------------------------------------------------------------
+## Stops background sound effect
+func stop_sound(fade_time := 0.0):
 	var track
-	if can_fade == false:
-		fade_time = 0.0
-		
 	if AudioManager.current_bgs_playback != null:
 		track = AudioManager.current_bgs_playback
-		AudioManager.tools.check_fade(AudioManager.current_bgs_playback, fade_time, false)
+		AudioManager.tools.check_fade_out(AudioManager.current_bgs_playback, fade_time, false)
 	
-	AudioManager.current_bgs_playback = null ## Problemas con el Fade out
+	AudioManager.current_bgs_playback = null
 	return track
 
 
+## -------------------------------------------------------------------------------------------------
+## Mute and unmute layers from background sound effect Synchronized track
 func mute_bgs_layer(track_name: String, layer_names: Array, mute_state: bool, fade_time := 2.0):
-		
 	var track = AudioManager.get_audio_track(track_name)
 	if track != null and AudioManager.current_bgs_playback == track and track is AdaptiNode:
 		track.on_mute_layers(layer_names, mute_state, fade_time, -1)

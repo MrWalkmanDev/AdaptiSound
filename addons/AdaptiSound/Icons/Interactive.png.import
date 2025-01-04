@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://k5m2otikwhcd"
-path="res://.godot/imported/icon.svg-cde933146da36dd7445e22dce479795a.ctex"
+uid="uid://cfl2pmvsr1iru"
+path="res://.godot/imported/Interactive.png-e14a501d6a3d6b7e7dbcef5ba2e8c34b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/AdaptiSound/DEMO/icon.svg"
-dest_files=["res://.godot/imported/icon.svg-cde933146da36dd7445e22dce479795a.ctex"]
+source_file="res://addons/AdaptiSound/Icons/Interactive.png"
+dest_files=["res://.godot/imported/Interactive.png-e14a501d6a3d6b7e7dbcef5ba2e8c34b.ctex"]
 
 [params]
 
@@ -32,6 +32,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

@@ -89,6 +89,3 @@ script = ExtResource("1_147iu")
 intro_file = ExtResource("2_ssare")
 loops = Array[ExtResource("5_na585")]([SubResource("Resource_jw2qi"), SubResource("Resource_ejphx"), SubResource("Resource_d6wqk")])
 outro_file = ExtResource("10_04six")
-outro_to_loop = null
-volume_db = null
-pitch_scale = null

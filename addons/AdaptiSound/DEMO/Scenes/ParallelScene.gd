@@ -20,7 +20,7 @@ func _on_check_button_toggled(button_pressed):
 	AudioManager.mute_layer(track_name, [], !button_pressed)
 
 func _on_stop_pressed():
-	AudioManager.stop_music(true)
+	AudioManager.stop_music(1.0)
 
 
 func _on_trigger_pressed():

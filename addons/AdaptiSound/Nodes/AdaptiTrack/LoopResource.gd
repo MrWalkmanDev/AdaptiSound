@@ -1,6 +1,5 @@
 @tool
 extends Resource
-
 class_name LoopResource
 
 @export_group("Music Layers")

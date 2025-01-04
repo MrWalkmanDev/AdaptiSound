@@ -1,0 +1,45 @@
+[gd_scene load_steps=9 format=3 uid="uid://c64bdwfil21a2"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioInteractivePlayer/AudioInteractivePlayer.gd" id="1_3ldn5"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioInteractivePlayer/AdaptiClipResource.gd" id="2_5itnh"]
+[ext_resource type="AudioStream" uid="uid://ddak1rjhuq5im" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example3/ParallelBase.ogg" id="3_1c2ob"]
+[ext_resource type="AudioStream" uid="uid://decjyvrdfiwv6" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example3/ParallelStaccato.ogg" id="4_7u2ux"]
+[ext_resource type="AudioStream" uid="uid://cs2bal7gvrtgi" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example3/ParalleTop.ogg" id="5_k83u4"]
+
+[sub_resource type="Resource" id="Resource_mnoog"]
+resource_name = "Clip"
+script = ExtResource("2_5itnh")
+clip_name = &"clip1"
+clip = ExtResource("3_1c2ob")
+advance_type = 1
+_next_clip = "Clip 1"
+
+[sub_resource type="Resource" id="Resource_rjjut"]
+resource_name = "Clip"
+script = ExtResource("2_5itnh")
+clip_name = &"clip2"
+clip = ExtResource("4_7u2ux")
+advance_type = 0
+_next_clip = "Clip 2"
+_next_clip = "Clip 2"
+
+[sub_resource type="Resource" id="Resource_ck0xv"]
+resource_name = "Clip"
+script = ExtResource("2_5itnh")
+clip_name = &"clip3"
+clip = ExtResource("5_k83u4")
+advance_type = 0
+_next_clip = "Clip 0"
+_next_clip = "Clip 0"
+
+[node name="Theme" type="Node"]
+script = ExtResource("1_3ldn5")
+clips = Array[ExtResource("2_5itnh")]([SubResource("Resource_mnoog"), SubResource("Resource_rjjut"), SubResource("Resource_ck0xv")])
+editor_preview = true
+_target_clip = "Clip 0"
+_play = false
+_stop = false
+volume_db = 0.0
+pitch_scale = 1.0
+time_fade_in = 1.0
+time_fade_out = 1.5

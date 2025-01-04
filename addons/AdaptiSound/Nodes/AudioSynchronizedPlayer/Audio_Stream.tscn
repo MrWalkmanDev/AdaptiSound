@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cr6bibf555w5h"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioSynchronizedPlayer/Audio_Stream.gd" id="1_43c7j"]
+
+[node name="AudioStream" type="AudioStreamPlayer"]
+script = ExtResource("1_43c7j")

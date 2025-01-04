@@ -6,8 +6,6 @@
 process_mode = 3
 script = ExtResource("1_st6ic")
 
-[node name="Adaptive_BGM" type="Node" parent="."]
-
 [node name="Background_Music" type="Node" parent="."]
 
 [node name="Background_Sounds" type="Node" parent="."]

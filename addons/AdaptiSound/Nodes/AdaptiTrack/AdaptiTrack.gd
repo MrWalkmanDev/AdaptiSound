@@ -1,10 +1,24 @@
 @tool 
 extends AdaptiNode
+class_name AdaptiTrack
 
 signal measure
 signal end_track
 
-const AUDIOPLAYER = preload("res://addons/AdaptiSound/Nodes/ParallelTrack/Audio_Stream.tscn")
+
+### IDEA PARA HACER FUNCIONAR EL SISTEMA EN EL EDITOR
+#const audio = preload("res://addons/AdaptiSound/DEMO/Audio/Music/BGM/JazzBase.ogg")
+#@export var on_playing :bool = false : set = set_on_playing
+##@export var audiostream : AdaptiAudioStreamPlayer
+#func set_on_playing(value):
+	#on_playing = value
+	##audiostream.stream = intro_file
+	##intro_player = audiostream
+	##on_play(1.0, 0.0)
+	##if !intro_file is AudioStreamWAV and intro_file != null:
+	##	intro_file.set_loop(value)
+	#intro_player.playing = value
+###
 
 @export_group("Intro Section")
 ## This track is played only once, when calling the [b]play_music()[/b] function.
@@ -13,6 +27,9 @@ const AUDIOPLAYER = preload("res://addons/AdaptiSound/Nodes/ParallelTrack/Audio_
 @export_group("Loops Section")
 ## These are the tracks that can be looped. The first one will play automatically after the Intro.
 @export var loops : Array[LoopResource] : set = set_custom_res, get = get_custom_res
+## If true, loops use the measure count system for transitions in tempo (bpm)
+## Remember set parameters in LoopReource/MeasureCountSystem
+@export var measure_count_system : bool = true
 
 @export_group("Outro Section")
 ## This track is played only once when calling the [b]end_music()[/b] function.
@@ -26,15 +43,17 @@ const AUDIOPLAYER = preload("res://addons/AdaptiSound/Nodes/ParallelTrack/Audio_
 ## Variables ##
 ###############
 
-var current_playback : AudioStreamPlayer
+## AdaptiAudioStreamPlayers
+var current_playback : AdaptiAudioStreamPlayer
+var intro_player : AdaptiAudioStreamPlayer
+var outro_player : AdaptiAudioStreamPlayer
 
-var intro_player
-var outro_player
+var can_change_track : bool = false
+var can_end_track : bool = false
+var skip_intro : bool = false
 
-var can_change_track = false
-var can_end_track = false
-
-# Tracking the beat and song position
+## -------------------------------------------------------------------------------------------------
+## Tracking the beat and song position
 var song_position = 0.0
 var song_position_in_beats = 1
 var sec_per_beat : float = 0.0
@@ -47,29 +66,37 @@ var _beat = 0
 var beat_measure_count = 1
 var measures = 1
 
-# Loop Variables
-var first_loop_playing : int = 0
+## -------------------------------------------------------------------------------------------------
+## Loop Variables 
+var first_loop_playing : int = 0 : set = set_first_loop, get = get_first_loop
 var loop_target : int = 0
 var loops_audio_streams = {}
 var loop_keys_measure = []
 var end_keys_measure = []
 
-# Fades
+## -------------------------------------------------------------------------------------------------
+## Fades
 var fade_out_loop = 1.5
 var fade_in_loop = 0.5
 
-# Random Sequence Track
+## -------------------------------------------------------------------------------------------------
+## Random Sequence Track Mode
 var rng = RandomNumberGenerator.new()
 
 
-
+## -------------------------------------------------------------------------------------------------
+## Initialization
 func _enter_tree():
 	if Engine.is_editor_hint():
+		#intro_player = AUDIOPLAYER.instantiate()
+		#intro_file = audio
+		#intro_player.stream = intro_file
+		#add_child(intro_player)
 		return
 		
 	rng.randomize()
 	
-	intro_player = AUDIOPLAYER.instantiate()
+	intro_player = AudioManager.AUDIOPLAYER.instantiate()
 	intro_player.set_bus(bus)
 	intro_player.loop = false
 	intro_player.stream = intro_file
@@ -77,7 +104,7 @@ func _enter_tree():
 	add_child(intro_player)
 	intro_player.connect("finished", intro_finished)
 	
-	outro_player = AUDIOPLAYER.instantiate()
+	outro_player = AudioManager.AUDIOPLAYER.instantiate()
 	outro_player.set_bus(bus)
 	outro_player.loop = false
 	outro_player.stream = outro_file
@@ -103,7 +130,7 @@ func _enter_tree():
 		for layer in i.layers:
 			if layer.audio_stream != null:
 				## For AudioStream Loops ##
-				var audio_stream = AUDIOPLAYER.instantiate()
+				var audio_stream = AudioManager.AUDIOPLAYER.instantiate()
 				audio_stream.loop = layer.loop
 				audio_stream.set_bus(bus)
 				audio_stream.name = layer.layer_name
@@ -124,29 +151,45 @@ func _enter_tree():
 	set_pitch_scale(pitch_scale)
 	set_volume_db(volume_db)
 
+
+## -------------------------------------------------------------------------------------------------
+## Assign the first loop to plays
+func set_first_loop(value:int) -> AdaptiTrack:
+	first_loop_playing = value
+	return self
+	
+func get_first_loop() -> int:
+	return first_loop_playing
+
+## If true, the track plays begin with a loop_index
+func set_skip_intro(value:bool) -> AdaptiTrack:
+	skip_intro = value
+	return self
+
+## -------------------------------------------------------------------------------------------------
 ######################
 ## PLAYBACK OPTIONS ##
 ######################
 
-func on_play(fade_in : float, skip_intro := false, loop_index := 0):
+## Play asigned track
+func on_play(fade_in : float, vol_db := 0.0):
 	intro_player.volume_db = volume_db
+	volume_db = vol_db
 	
 	if skip_intro:
-		change_playback(loops_audio_streams[loop_index][first_loop_playing])
-		change_track(loop_index, 0.0, fade_in)
+		change_playback(loops_audio_streams[first_loop_playing][0])
+		change_track(first_loop_playing, 0.0, fade_in)
 		AudioManager.debug._print("DEBUG: Track without intro")
 		return
-	
+		
 	for i in get_children():
 		if i != intro_player:
 			i.on_fade_out(1.5)
 	
 	## Check if index is correct ##
-	if loop_index > loops_audio_streams.size() - 1:
+	if first_loop_playing > loops_audio_streams.size() - 1:
 		AudioManager.debug._print("DEBUG: Not found loop index")
 		return
-	
-	first_loop_playing = loop_index
 	
 	## Check if there is Intro ##
 	if intro_file != null:
@@ -154,19 +197,21 @@ func on_play(fade_in : float, skip_intro := false, loop_index := 0):
 			intro_player.connect("finished", intro_finished)
 			
 		if fade_in != 0.0:
-			intro_player.on_fade_in(volume_db, fade_in)
+			intro_player.on_fade_in(vol_db, fade_in)
 		else:
-			intro_player.volume_db = volume_db
+			intro_player.volume_db = vol_db
 			
 		intro_player.play()
 		change_playback(intro_player)
 	else:
-		change_playback(loops_audio_streams[loop_index][first_loop_playing])
-		change_track(loop_index, 0.0, fade_in)
+		change_playback(loops_audio_streams[first_loop_playing][0])
+		change_track(first_loop_playing, 0.0, fade_in)
 		AudioManager.debug._print("DEBUG: Track without intro")
 
 
-func on_change_loop(loop_index : int, fade_out : float, fade_in : float):
+## -------------------------------------------------------------------------------------------------
+## Change between loops
+func on_change_loop(loop_index : int, fade_in : float, fade_out : float):
 	## Check if index is correct ##
 	if loop_index > (loops_audio_streams.size() - 1):
 		AudioManager.debug._print("DEBUG: Not found loop index")
@@ -208,15 +253,19 @@ func on_change_loop(loop_index : int, fade_out : float, fade_in : float):
 	## Check keys in loop ##
 	var current_loop_idx : int = get_loop_index(current_playback)
 	
-	if loops[current_loop_idx].keys_loop_in_measure != "":
-		loop_target = loop_index
-		can_change_track = true
-		AudioManager.debug._print("DEBUG: Prepare loop change")
-	
+	if measure_count_system:
+		if loops[current_loop_idx].keys_loop_in_measure != "":
+			loop_target = loop_index
+			can_change_track = true
+			AudioManager.debug._print("DEBUG: Prepare loop change")
+		else:
+			change_track(loop_index, fade_out, fade_in)
 	else:
 		change_track(loop_index, fade_out, fade_in)
 
 
+## -------------------------------------------------------------------------------------------------
+## Change loop section to Outro section
 func on_outro(fade_out, fade_in):
 	## Check if current_playback is loop ##
 	if current_playback == intro_player or current_playback == outro_player:
@@ -239,14 +288,18 @@ func on_outro(fade_out, fade_in):
 		outro_player.connect("finished", on_stop.bind(0.0))
 	
 	## Check end keys ##
-	if loops[current_loop_index].keys_end_in_measure != "":
-		can_end_track = true
-		AudioManager.debug._print("DEBUG: Prepare to outro change")
-		
+	if measure_count_system:
+		if loops[current_loop_index].keys_end_in_measure != "":
+			can_end_track = true
+			AudioManager.debug._print("DEBUG: Prepare to outro change")
+		else:
+			change_outro(current_loop_index, fade_out, fade_in)
 	else:
 		change_outro(current_loop_index, fade_out, fade_in)
 
 
+## -------------------------------------------------------------------------------------------------
+## Mute and unmute layers for a loops with paralel tracks
 func on_mute_layers(layers_names : Array, mute_state : bool, fade_time : float, loop_target := -1):
 	## Check if current_playback is loop ##
 	if current_playback == outro_player or current_playback == intro_player:
@@ -301,7 +354,10 @@ func on_mute_layers(layers_names : Array, mute_state : bool, fade_time : float, 
 					layer.on_mute = mute_state
 
 
-func on_stop(fade_out : float):
+## -------------------------------------------------------------------------------------------------
+## Stops the entire track
+func on_stop(fade_out : float, can_destroy:= false):
+	destroy = can_destroy
 	## Disconnect signals ## 
 	if intro_player.is_connected("finished", intro_finished):
 		intro_player.disconnect("finished", intro_finished)
@@ -318,30 +374,28 @@ func on_stop(fade_out : float):
 	
 	current_playback = null
 	
-	#emit_signal("end_track") ## Maybe not necesary
-	
 	## If AudioManager not current playback ##
 	if AudioManager.current_playback == self:
 		AudioManager.current_playback = null
 		
 		
-func play_layer(layer_names : Array, fade_time := 2.0):
-	var loop_index = get_loop_index(current_playback)
-	if loop_index != -1:
-		play_loop(loop_index, fade_time)
-	
-func stop_layer(layer_names : Array, fade_time := 2.0):
-	if current_playback != intro_player or current_playback != outro_player:
-		on_mute_layers(layer_names, true, fade_time)
+#func play_layer(layer_names : Array, fade_time := 2.0):
+	#var loop_index = get_loop_index(current_playback)
+	#if loop_index != -1:
+		#play_loop(loop_index, fade_time)
+	#
+#func stop_layer(layer_names : Array, fade_time := 2.0):
+	#if current_playback != intro_player or current_playback != outro_player:
+		#on_mute_layers(layer_names, true, fade_time)
 
 
+## -------------------------------------------------------------------------------------------------
+####################
+## PLAYBACK TOOLS ##
+####################
 
-	####################
-	## PLAYBACK TOOLS ##
-	####################
 
-
-func change_track(loop_index : int, fade_out  : float, fade_in : float):
+func change_track(loop_index : int, fade_out : float, fade_in : float):
 	## Check if current_playback is loop ##
 	if current_playback == intro_player:
 		AudioManager.debug._print("DEBUG: No loop playing")
@@ -387,11 +441,6 @@ func play_loop(loop_index : int, fade_time : float):
 				if layer_playback_idx > (loops[loop_index].layers.size() - 1):
 					layer_playback_idx = 0
 					
-		#for i in loops_audio_streams[loop_index]:
-		#	if i != loops_audio_streams[loop_index][layer_playback_idx]:
-		#		i.on_mute = true
-		
-		#loops_audio_streams[loop_index][layer_playback_idx].on_mute = false
 		loops_audio_streams[loop_index][layer_playback_idx].volume_db = volume_db
 		loops_audio_streams[loop_index][layer_playback_idx].on_fade_in(volume_db, fade_time)
 		loops_audio_streams[loop_index][layer_playback_idx].play()
@@ -420,7 +469,6 @@ func play_loop(loop_index : int, fade_time : float):
 func change_outro(current_loop_index : int, fade_out : float, fade_in : float):
 	can_end_track = false
 	if outro_player == null:
-		#AudioManager.debug._print("DEBUG: No outro file, use stop_music")
 		on_stop(fade_out)
 		return
 		
@@ -441,6 +489,8 @@ func change_outro(current_loop_index : int, fade_out : float, fade_in : float):
 	change_playback(outro_player)
 	
 	
+## -------------------------------------------------------------------------------------------------
+## SEQUENCE SYSTEM ##
 func set_sequence(method):
 	sequence = true
 	method_sequence = method
@@ -451,6 +501,8 @@ func change_layer_random_sequence(audio_stream):
 	change_track(loop_index, 0.0, 0.0)
 
 
+## -------------------------------------------------------------------------------------------------
+## Set new beat system on new current playback
 func change_playback(playback):
 	current_playback = playback
 	if playback != intro_player and playback != outro_player:
@@ -485,18 +537,26 @@ func reset_beat_parameters(loop_index : int):
 func _process(delta):
 	if Engine.is_editor_hint():
 		return
-		
-		
-	check_track_is_playing()
+	if process_callback == 0:
+		check_track_is_playing()
+		if measure_count_system:
+			beat_process(delta)
 	
+func _physics_process(delta):
+	if Engine.is_editor_hint():
+		return
+	if process_callback == 1:
+		check_track_is_playing()
+		if measure_count_system:
+			beat_process(delta)
+	
+func beat_process(delta):
 	## Beat Count ##
 	if loops != []:
 		## Check if is loop ##
 		if current_playback != intro_player and current_playback != outro_player:
 			if current_playback != null and current_playback.playing:
 				var current_loop_index = get_loop_index(current_playback)
-				#song_position = loops_audio_streams[current_loop_index].get_playback_position()\
-				#+ AudioServer.get_time_since_last_mix()
 				song_position = current_playback.get_playback_position()\
 				+ AudioServer.get_time_since_last_mix()
 				
