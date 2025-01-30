@@ -1,24 +1,12 @@
 @tool 
 extends AdaptiNode
-class_name AdaptiTrack
+## This node combines the functionality of an InteractivePlayer and SynchronizedPlayer, 
+## while providing a specific structure and more features.[br]
+## This node can typically be used to compose very specific tracks with more complex functionality.
 
 signal measure
 signal end_track
 
-
-### IDEA PARA HACER FUNCIONAR EL SISTEMA EN EL EDITOR
-#const audio = preload("res://addons/AdaptiSound/DEMO/Audio/Music/BGM/JazzBase.ogg")
-#@export var on_playing :bool = false : set = set_on_playing
-##@export var audiostream : AdaptiAudioStreamPlayer
-#func set_on_playing(value):
-	#on_playing = value
-	##audiostream.stream = intro_file
-	##intro_player = audiostream
-	##on_play(1.0, 0.0)
-	##if !intro_file is AudioStreamWAV and intro_file != null:
-	##	intro_file.set_loop(value)
-	#intro_player.playing = value
-###
 
 @export_group("Intro Section")
 ## This track is played only once, when calling the [b]play_music()[/b] function.
@@ -88,10 +76,6 @@ var rng = RandomNumberGenerator.new()
 ## Initialization
 func _enter_tree():
 	if Engine.is_editor_hint():
-		#intro_player = AUDIOPLAYER.instantiate()
-		#intro_file = audio
-		#intro_player.stream = intro_file
-		#add_child(intro_player)
 		return
 		
 	rng.randomize()
@@ -154,7 +138,7 @@ func _enter_tree():
 
 ## -------------------------------------------------------------------------------------------------
 ## Assign the first loop to plays
-func set_first_loop(value:int) -> AdaptiTrack:
+func set_first_loop(value:int) -> AdaptiNode:
 	first_loop_playing = value
 	return self
 	
@@ -162,7 +146,7 @@ func get_first_loop() -> int:
 	return first_loop_playing
 
 ## If true, the track plays begin with a loop_index
-func set_skip_intro(value:bool) -> AdaptiTrack:
+func set_skip_intro(value:bool) -> AdaptiNode:
 	skip_intro = value
 	return self
 

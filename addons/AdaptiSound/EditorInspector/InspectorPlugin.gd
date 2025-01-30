@@ -4,7 +4,7 @@ const PLAY_PROPERTY = preload("res://addons/AdaptiSound/EditorInspector/Interact
 const STOP_PROPERTY = preload("res://addons/AdaptiSound/EditorInspector/InteractivePlayer/StopProperty.gd")
 
 func _can_handle(object):
-	return object is AudioInteractivePlayer or AudioParallelPlayer
+	return object is AdaptiNode
 	
 #func _parse_begin(object):
 	### begining inspector

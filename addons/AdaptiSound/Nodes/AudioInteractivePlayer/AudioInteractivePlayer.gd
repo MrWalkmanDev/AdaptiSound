@@ -1,6 +1,5 @@
 @tool
 extends AdaptiNode
-class_name AudioInteractivePlayer
 ## This node allows you to store multiple audio clips that can be set to play in
 ## different ways but only one at a time. [br]
 ## [b]It has an editor preview[/b], and you can control the fade in and fade out
@@ -156,11 +155,14 @@ func create_audio_players():
 		if i.clip_name:
 			audio.name = i.clip_name
 		### AUTO-ADVANCE ###
-		if i.advance_type:
-			audio.loop = false
-			audio.set_sequence(auto_advance.bind(i))
-		else:
-			audio.loop = true
+		match i.advance_type:
+			0:
+				audio.set_loop(true)
+			1:
+				audio.loop = false
+				audio.set_sequence(auto_advance.bind(i))
+			2:
+				audio.set_loop(false)
 		
 		if !i.is_connected("clip_resource_changed", set_clip_resource):
 			i.connect("clip_resource_changed", set_clip_resource)

@@ -1,0 +1,187 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwfxrgfsmemwg"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/DEMO/Scenes/DemoScene.gd" id="1_k2r6n"]
+
+[node name="DemoScene" type="Node2D"]
+script = ExtResource("1_k2r6n")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.184314, 0.203922, 0.219608, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -108.0
+offset_right = 576.0
+offset_bottom = 320.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/CenterContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 64
+
+[node name="Track1" type="CenterContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Track1_container" type="VBoxContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PlayTrack1" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1/Track1_container"]
+layout_mode = 2
+text = "Play"
+
+[node name="Play_clip0" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1/Track1_container"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Play clip 0"
+
+[node name="Play_clip1" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1/Track1_container"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Play clip 1"
+
+[node name="Play_clip2" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1/Track1_container"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Play clip 2"
+
+[node name="Play_clip3" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1/Track1_container"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Play clip 3"
+
+[node name="Track2" type="CenterContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track2"]
+layout_mode = 2
+
+[node name="Play_track2" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track2/VBoxContainer"]
+layout_mode = 2
+text = "Play"
+
+[node name="Layer1_track2" type="CheckButton" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Layer1"
+
+[node name="Layer2_track2" type="CheckButton" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Layer2"
+
+[node name="Layer3_track2" type="CheckButton" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Layer3"
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer"]
+layout_mode = 2
+
+[node name="Tittle" type="Label" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Combined Track"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Play" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Play Track 1"
+
+[node name="Loops" type="HBoxContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Loop1" type="VBoxContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops"]
+layout_mode = 2
+
+[node name="Loop1" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop1"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Loop1"
+
+[node name="Loop2" type="VBoxContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops"]
+layout_mode = 2
+
+[node name="Loop2" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Loop2"
+
+[node name="Loop3" type="VBoxContainer" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops"]
+layout_mode = 2
+
+[node name="Loop3" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop3"]
+layout_mode = 2
+text = "Loop3"
+
+[node name="Layer1" type="CheckButton" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop3"]
+layout_mode = 2
+text = "Layer1"
+
+[node name="Layer2" type="CheckButton" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop3"]
+layout_mode = 2
+text = "Layer2"
+
+[node name="Layer3" type="CheckButton" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop3"]
+layout_mode = 2
+text = "Layer3"
+
+[node name="Outro" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Outro"
+
+[node name="Stop" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Stop
+"
+
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1/Track1_container/PlayTrack1" to="." method="_on_play_track_1_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1/Track1_container/Play_clip0" to="." method="_on_play_clip_0_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1/Track1_container/Play_clip1" to="." method="_on_play_clip_1_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1/Track1_container/Play_clip2" to="." method="_on_play_clip_2_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track1/Track1_container/Play_clip3" to="." method="_on_play_clip_3_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track2/VBoxContainer/Play_track2" to="." method="_on_play_track_2_pressed"]
+[connection signal="toggled" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track2/VBoxContainer/Layer1_track2" to="." method="_on_layer_1_track_2_toggled"]
+[connection signal="toggled" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track2/VBoxContainer/Layer2_track2" to="." method="_on_layer_2_track_2_toggled"]
+[connection signal="toggled" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/Track2/VBoxContainer/Layer3_track2" to="." method="_on_layer_3_track_2_toggled"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop1/Loop1" to="." method="_on_loop_1_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop2/Loop2" to="." method="_on_loop_2_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop3/Loop3" to="." method="_on_loop_3_pressed"]
+[connection signal="toggled" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop3/Layer1" to="." method="_on_layer_1_toggled"]
+[connection signal="toggled" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop3/Layer2" to="." method="_on_layer_2_toggled"]
+[connection signal="toggled" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Loops/Loop3/Layer3" to="." method="_on_layer_3_toggled"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/HBoxContainer/CenterContainer/VBoxContainer/Outro" to="." method="_on_outro_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/Stop" to="." method="_on_stop_track_1_pressed"]

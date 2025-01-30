@@ -1,0 +1,65 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgstew7ca3vc8"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/EditorInspector/InteractivePlayer/beat_system_editor.gd" id="1_cdoum"]
+[ext_resource type="Texture2D" uid="uid://b70gnjvccrdjd" path="res://addons/AdaptiSound/Icons/Others/play.png" id="2_n1nhw"]
+[ext_resource type="Texture2D" uid="uid://cmyjhd4ubm3sl" path="res://addons/AdaptiSound/Icons/Others/stop.png" id="3_2jd0p"]
+
+[node name="BeatSystemEditor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cdoum")
+
+[node name="HBoxContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SpinBox" type="SpinBox" parent="HBoxContainer/VBoxContainer/GridContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+suffix = "bpm"
+
+[node name="SpinBox2" type="SpinBox" parent="HBoxContainer/VBoxContainer/GridContainer/VBoxContainer"]
+layout_mode = 2
+value = 15.0
+suffix = "per bar"
+
+[node name="HSlider" type="HSlider" parent="HBoxContainer/VBoxContainer/GridContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/CenterContainer"]
+layout_mode = 2
+
+[node name="Play" type="Button" parent="HBoxContainer/VBoxContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("2_n1nhw")
+
+[node name="Stop" type="Button" parent="HBoxContainer/VBoxContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("3_2jd0p")
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/CenterContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]

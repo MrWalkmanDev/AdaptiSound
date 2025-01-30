@@ -1,6 +1,5 @@
 @tool
 extends AdaptiNode
-class_name AudioParallelPlayer
 ## This node allows you to store multiple audio clips that will all play at the same time, 
 ## creating synchronization between all the clips. [br]
 ## [b]It has an editor preview[/b], and you can set muted and unmuted layers,
@@ -33,9 +32,19 @@ var fade_time : float = 1.0
 ## Dictionary that stores AdaptiAudioStreamPlayer along with their resource data.
 var audio_players : Dictionary = {}
 
+## If enabled, the beat counting system will be active, 
+## and changes can be synced to other tracks at specific bars.
+var beat_system_enable : bool = true :
+	set(value):
+		beat_system_enable = value
+		notify_property_list_changed()
+
+## Beat System Resource
+var beat_system : BeatSystemResource
 
 ## BEAT SYSTEM ##
 func _validate_property(property):
+	## EDITOR PLAYBACK ##
 	if property.name == "_play" and !editor_preview:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 		
@@ -49,6 +58,10 @@ func _validate_property(property):
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 		
 	if property.name == "pitch_scale" and !editor_preview:
+		property.usage = PROPERTY_USAGE_NO_EDITOR
+	
+	## BEAT SYSTEM ##
+	if property.name == "beat_system" and !beat_system_enable:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 
 func _get_property_list():
@@ -96,6 +109,19 @@ func _get_property_list():
 		"hint_string" : "0.0, 10.0, 0.1"
 	})
 	
+	properties.append({
+		"name" : "beat_system_enable",
+		"type" : TYPE_BOOL,
+		"hint" : PROPERTY_HINT_NONE,
+	})
+	
+	properties.append({
+		"name" : "beat_system",
+		"type" : TYPE_OBJECT,
+		"hint" : PROPERTY_HINT_RESOURCE_TYPE,
+		"hint_string" : "BeatSystemResource"
+	})
+	
 	return properties
 	
 func _array_to_string(arr:Array[AdaptiLayerResource], separator:=",") -> String:
@@ -112,6 +138,8 @@ var groups = {}
 ## -----------------------------------------------------------------------------
 func _enter_tree():
 	create_audio_players()
+	if beat_system == null:
+		beat_system = BeatSystemResource.new()
 	
 func _exit_tree():
 	stop()
@@ -240,6 +268,25 @@ func on_mute_layers(layers_names : Array, mute_state : bool, fade_time:=1.0, loo
 					node.on_fade_in(volume_db, fade_time)
 
 
+## -----------------------------------------------------------------------------
+#################
+## BEAT SYSTEM ##
+#################
+func _process(delta):
+	if process_callback == 0:
+		check_track_is_playing()
+		if beat_system_enable and audio_players.size() != 0:
+			if playing:
+				beat_system.beat_process(delta, get_child(0))
+			else:
+				beat_system.can_first_beat = true
+	
+func _physics_process(delta):
+	if process_callback == 1:
+		check_track_is_playing()
+		if beat_system_enable and audio_players.size() != 0:
+			if playing:
+				beat_system.beat_process(delta, get_child(0))
 
 ## -----------------------------------------------------------------------------
 #########################
@@ -289,4 +336,6 @@ func set_mute_layer(value, res):
 
 func set_clip_resource(clip, res):
 	var idx = layers.find(res)
-	get_children()[idx].stream = clip
+	var track = get_children()[idx]
+	track.stream = clip
+	track.set_loop(true)

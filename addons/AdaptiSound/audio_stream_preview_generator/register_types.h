@@ -1,0 +1,4 @@
+#include "modules/register_module_types.h"
+
+void initialize_audio_stream_preview_generator_module(ModuleInitializationLevel p_level);
+void uninitialize_audio_stream_preview_generator_module(ModuleInitializationLevel p_level);

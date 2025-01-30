@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cugu0ppkowgy3"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/DEMO/Scenes/testing.gd" id="1_dceou"]
-[ext_resource type="AudioStream" uid="uid://cm44cc3vurmn3" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Parallel/Example2/JazzBase.ogg" id="2_nvd0o"]
+[ext_resource type="AudioStream" uid="uid://cm44cc3vurmn3" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Swing/JazzBase.ogg" id="2_nvd0o"]
 [ext_resource type="AudioStream" uid="uid://cglq1s28qfsnm" path="res://addons/AdaptiSound/DEMO/Audio/Music/BGS/Rain.wav" id="3_erups"]
 
 [node name="Testing" type="Node2D"]
