@@ -177,3 +177,19 @@ func _on_bgs_pre_toggled(toggled_on):
 
 func _on_abgm_pre_toggled(toggled_on):
 	abgm_dir_container.visible = toggled_on
+
+
+## -------------------------------------------------------------------------------------------------
+## BUSSES ##
+func _on_bus_update_pressed():
+	bgm_bus.clear()
+	for i in AudioServer.bus_count:
+		bgm_bus.add_item(AudioServer.get_bus_name(i), i)
+	bgm_bus.selected = data.bgm_bus
+
+
+func _on_sfx_bus_update_pressed():
+	bgs_bus.clear()
+	for i in AudioServer.bus_count:
+		bgs_bus.add_item(AudioServer.get_bus_name(i), i)
+	bgs_bus.selected = data.bgs_bus

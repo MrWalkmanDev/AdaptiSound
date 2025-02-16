@@ -7,7 +7,8 @@ const ENEMY = preload("res://addons/AdaptiSound/DEMO/Prefabs/skeleton.tscn")
 var music_zone = "Forest"
 var combat = false
 
-var parallel_track_name : String = "AdaptiParallel"
+var parallel_track_name : String = "example_1"
+var combat_track_name : String = "example_2"
 
 func _ready():
 	AudioManager.play_music(parallel_track_name)
@@ -32,24 +33,24 @@ func _process(_delta):
 		
 func on_combat():
 	## Without Intro
-	AudioManager.create_audio_track("Battle").set_skip_intro(true)
-	AudioManager.play_music("Battle", 0.0, 0.5)
+	AudioManager.create_audio_track(combat_track_name).set_skip_intro(true)
+	AudioManager.play_music(combat_track_name, 0.0, 0.5)
 	
 	## With Intro
 	##AudioManager.play_music("Battle")                         
 	
 	## Create Battle track and change to loop if plays Outro ##
-	AudioManager.change_loop("Battle", 0, true)
+	AudioManager.change_loop(combat_track_name, 0, true)
 
 func off_combat():
 	## Set method in sequence after outro plsying ##
 	AudioManager.set_sequence(back_to_main_theme)
-	AudioManager.to_outro("Battle", 0.0, 0.0)
+	AudioManager.to_outro(combat_track_name, 0.0, 0.0)
 	
 	
 func back_to_main_theme():
 	AudioManager.play_music(parallel_track_name)
-	AudioManager.mute_layer(parallel_track_name, [music_zone], false, 0.5)
+	AudioManager.mute_layer(parallel_track_name, music_zone, false, 0.5)
 	
 func _on_button_pressed():
 	var instance = ENEMY.instantiate()
@@ -62,26 +63,26 @@ func _on_button_pressed():
 
 func _on_forest_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_layer(parallel_track_name, [], true, 0.5)
-		AudioManager.mute_layer(parallel_track_name, ["Forest"], false, 0.5)
+		AudioManager.mute_all_layers(parallel_track_name, true, 0.5)
+		AudioManager.mute_layer(parallel_track_name, "Forest", false, 0.5)
 		music_zone = "Forest"
 
 func _on_ice_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_layer(parallel_track_name, [], true, 0.5)
-		AudioManager.mute_layer(parallel_track_name, ["Freeze"], false, 0.5)
+		AudioManager.mute_all_layers(parallel_track_name, true, 0.5)
+		AudioManager.mute_layer(parallel_track_name, "Freeze", false, 0.5)
 		music_zone = "Freeze"
 
 func _on_desert_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_layer(parallel_track_name, [], true, 0.5)
-		AudioManager.mute_layer(parallel_track_name, ["Desert"], false, 0.5)
+		AudioManager.mute_all_layers(parallel_track_name, true, 0.5)
+		AudioManager.mute_layer(parallel_track_name, "Desert", false, 0.5)
 		music_zone = "Desert"
 
 func _on_volvano_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_layer(parallel_track_name, [], true)
-		AudioManager.mute_layer(parallel_track_name, ["Volcano"], false, 0.5)
+		AudioManager.mute_all_layers(parallel_track_name, true)
+		AudioManager.mute_layer(parallel_track_name, "Volcano", false, 0.5)
 		music_zone = "Volcano"
 
 

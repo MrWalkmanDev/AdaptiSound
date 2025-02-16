@@ -284,7 +284,7 @@ func on_outro(fade_out, fade_in):
 
 ## -------------------------------------------------------------------------------------------------
 ## Mute and unmute layers for a loops with paralel tracks
-func on_mute_layers(layers_names : Array, mute_state : bool, fade_time : float, loop_target := -1):
+func on_mute_layers(layer, mute_state : bool, fade_time : float, loop_target := -1):
 	## Check if current_playback is loop ##
 	if current_playback == outro_player or current_playback == intro_player:
 		AudioManager.debug._print("DEBUG: No loop playing")
@@ -296,46 +296,56 @@ func on_mute_layers(layers_names : Array, mute_state : bool, fade_time : float, 
 		loop_index = get_loop_index(current_playback)
 		
 	
-	## All layers mute or unmute ##
-	if layers_names == []:
-		for layer in loops_audio_streams[loop_index]:
-			if mute_state:
-				layer.on_fade_out(fade_time, false)
-			else:
-				layer.on_fade_in(volume_db, fade_time)
-			layer.on_mute = mute_state
-	
 	## Selected target layers ##
-	for i in layers_names:
-		if typeof(i) == TYPE_INT:
-			if i > loops[loop_index].layers.size() - 1:
-				AudioManager.debug._print("DEBUG: Invalid layer index")
-				return
+	#for i in layers_names:
+	if typeof(layer) == TYPE_INT:
+		if layer > loops[loop_index].layers.size() - 1:
+			AudioManager.debug._print("DEBUG: Invalid layer index")
+			return
+		else:
+			var layer_audio_stream = loops_audio_streams[loop_index][layer]
+			if mute_state:
+				layer_audio_stream.on_fade_out(fade_time, false)
 			else:
-				var layer = loops_audio_streams[loop_index][i]
+				layer_audio_stream.on_fade_in(volume_db, fade_time)
+			layer_audio_stream.on_mute = mute_state
+			
+	if typeof(layer) == TYPE_STRING:
+		for layer_audio_stream in loops_audio_streams[loop_index]:
+			## Layer Groups ##
+			if layer_audio_stream.groups.has(layer):
 				if mute_state:
-					layer.on_fade_out(fade_time, false)
+					layer_audio_stream.on_fade_out(fade_time, false)
 				else:
-					layer.on_fade_in(volume_db, fade_time)
-				layer.on_mute = mute_state
-				
-		if typeof(i) == TYPE_STRING:
-			for layer in loops_audio_streams[loop_index]:
-				## Layer Groups ##
-				if layer.groups.has(i):
-					if mute_state:
-						layer.on_fade_out(fade_time, false)
-					else:
-						layer.on_fade_in(volume_db, fade_time)
-					layer.on_mute = mute_state
-						
-				## Layer Names ##
-				if layer.name == i:
-					if mute_state:
-						layer.on_fade_out(fade_time, false)
-					else:
-						layer.on_fade_in(volume_db, fade_time)
-					layer.on_mute = mute_state
+					layer_audio_stream.on_fade_in(volume_db, fade_time)
+				layer_audio_stream.on_mute = mute_state
+					
+			## Layer Names ##
+			if layer_audio_stream.name == layer:
+				if mute_state:
+					layer_audio_stream.on_fade_out(fade_time, false)
+				else:
+					layer_audio_stream.on_fade_in(volume_db, fade_time)
+				layer_audio_stream.on_mute = mute_state
+
+func mute_all_layers(mute_state : bool, fade_time : float, loop_target := -1):
+	## Check if current_playback is loop ##
+	if current_playback == outro_player or current_playback == intro_player:
+		AudioManager.debug._print("DEBUG: No loop playing")
+		return
+	
+	## Mute Process ##
+	var loop_index = loop_target
+	if loop_index == -1:
+		loop_index = get_loop_index(current_playback)
+		
+	## All layers mute or unmute ##
+	for layer_audio_stream in loops_audio_streams[loop_index]:
+		if mute_state:
+			layer_audio_stream.on_fade_out(fade_time, false)
+		else:
+			layer_audio_stream.on_fade_in(volume_db, fade_time)
+		layer_audio_stream.on_mute = mute_state
 
 
 ## -------------------------------------------------------------------------------------------------
@@ -559,7 +569,7 @@ func report_beat(current_loop_index : int):
 		beat_measure_count = 1
 		measures = 1
 		
-		if show_measure_count:
+		if beat_system_debug:
 			AudioManager.debug._print("DEBUG: Measure count: " + str(measures) + "Loop")
 		
 		change_track_by_key(current_loop_index)
@@ -578,7 +588,7 @@ func report_beat(current_loop_index : int):
 			change_track_by_key(current_loop_index)
 			emit_signal("measure")
 			
-			if show_measure_count:
+			if beat_system_debug:
 				AudioManager.debug._print("DEBUG: Measure count: " + str(measures))
 		
 		last_reported_beat = song_position_in_beats

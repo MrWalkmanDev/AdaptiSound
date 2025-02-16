@@ -29,11 +29,11 @@ func _enter_tree():
 	add_autoload_singleton("AudioManager", "res://addons/AdaptiSound/Singleton/AudioManager.tscn")
 	
 	# Add nodes #
-	add_custom_type("AudioInteractivePlayer", "Node", interactive_player, interactive_icon)
+	add_custom_type("AudioInteractivePlaylist", "Node", interactive_player, interactive_icon)
 	
-	add_custom_type("AudioCombinedPlayer", "Node", adaptitrack, adaptive_track_icon)
+	add_custom_type("AudioCombined", "Node", adaptitrack, adaptive_track_icon)
 	
-	add_custom_type("AudioSynchronizedPlayer", "Node", synchronized_player, parallel_track_icon)
+	add_custom_type("AudioSynchronized", "Node", synchronized_player, parallel_track_icon)
 	
 	## Inspector Plugin ##
 	inspector_plugin = INSPECTOR.new()
@@ -49,9 +49,9 @@ func _enter_tree():
 	
 func _exit_tree():
 	remove_autoload_singleton("AudioManager")
-	remove_custom_type("AudioCombinedPlayer")
-	remove_custom_type("AudioSynchronizedPlayer")
-	remove_custom_type("AudioInteractivePlayer")
+	remove_custom_type("AudioCombined")
+	remove_custom_type("AudioSynchronized")
+	remove_custom_type("AudioInteractivePlaylist")
 	
 	if main_instance:
 		#remove_control_from_bottom_panel(beat_panel)

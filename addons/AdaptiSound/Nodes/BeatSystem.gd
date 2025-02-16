@@ -2,13 +2,13 @@
 extends Resource
 class_name BeatSystemResource
 
-signal bar_changed
-signal loop_begin
+signal BarChanged(value)
+signal LoopBegin
 
 @export var bpm : int = 120 : set = set_bpm
 #@export var total_beat_count : int = 16
 @export var beats_per_bar : int = 4
-@export var show_bar_count : bool = true
+
 
 var song_position = 0.0
 var song_position_in_beats = 1
@@ -43,10 +43,7 @@ func report_beat():
 		beat_measure_count = 1
 		measures = 1
 		
-		loop_begin.emit()
-		
-		if show_bar_count:
-			print("BeatSystem: Measure count: " + str(measures) + " Loop Begin")
+		LoopBegin.emit()
 		
 		#change_track_by_key(current_loop_index)
 	if _beat < song_position_in_beats:
@@ -62,10 +59,7 @@ func report_beat():
 			beat_measure_count = 1
 			can_first_beat = true
 			#change_track_by_key(current_loop_index)
-			bar_changed.emit()
-			
-			if show_bar_count:
-				print("BeatSystem: Measure count: " + str(measures))
+			BarChanged.emit(measures)
 		
 		last_reported_beat = song_position_in_beats
 

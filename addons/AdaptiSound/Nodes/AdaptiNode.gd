@@ -8,8 +8,8 @@ class_name AdaptiNode
 
 @export_subgroup("Debug")
 ## Show measure count system
-@export var show_measure_count : bool = true
-
+@export var beat_system_debug : bool = true
+@export var editor_debug : bool = true
 
 
 ## -------------------------------------------------------------------------------------------------
@@ -127,3 +127,14 @@ func get_stream_playing():
 		else:
 			return i.get_stream_playing()
 	return null
+
+
+
+## DEBUG ##
+func _print(message:String):
+	if Engine.is_editor_hint():
+		if editor_debug:
+			print("TrackName: " + name + " | " + str(message))
+	else:
+		if AudioManager.debugging:
+			print("TrackName: " + name + " | " + str(message))

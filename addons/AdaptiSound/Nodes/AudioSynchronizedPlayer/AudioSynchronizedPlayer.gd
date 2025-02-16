@@ -5,6 +5,16 @@ extends AdaptiNode
 ## [b]It has an editor preview[/b], and you can set muted and unmuted layers,
 ## with a transition time if you want.
 
+## -----------------------------------------------------------------------------
+## Beat System Signals
+signal BarChanged(value)
+signal LoopBegin
+
+# -----------------------------------------------------------------------------
+#Playback Signals
+#signal TrackPlaying
+#signal TrackStopped
+
 
 ## Contains the audio clips that will behave as layers of the same synchronized track.
 @export var layers : Array[AdaptiLayerResource]: set = set_custom_res
@@ -140,7 +150,22 @@ func _enter_tree():
 	create_audio_players()
 	if beat_system == null:
 		beat_system = BeatSystemResource.new()
+	if !beat_system.BarChanged.is_connected(bar_signal_emit):
+		beat_system.BarChanged.connect(bar_signal_emit)
+	if !beat_system.LoopBegin.is_connected(loop_begin_emit):
+		beat_system.LoopBegin.connect(loop_begin_emit)
+		
+## BEAT SYSTEM SIGNALS
+func bar_signal_emit(value):
+	if beat_system_debug:
+		print("BeatSystem: Measure count: " + str(value))
+	BarChanged.emit(value)
+func loop_begin_emit():
+	if beat_system_debug:
+		print("BeatSystem: Measure count: " + str(1) + " Loop Begin")
+	LoopBegin.emit()
 	
+## -----------------------------------------------------------------------------
 func _exit_tree():
 	stop()
 	
@@ -189,13 +214,13 @@ func create_audio_players():
 func play(vol_db:=0.0, fade_in:=0.0):
 	var childs = get_children()
 	if childs.size() == 0:
-		print("DEBUG: No clips in AudioInteractivePlayer")
+		_print("No clips in AudioInteractivePlayer")
 		return
 		
 	volume_db = vol_db
 	if Engine.is_editor_hint() and editor_preview:
 		if playing:
-			print("DEBUG: Clip already playing")
+			_print("Clip already playing")
 			return
 		_play_method(vol_db, fade_in)
 	else:
@@ -230,43 +255,40 @@ func on_stop(fade_time := 0.0, can_destroy := false):
 
 ## -----------------------------------------------------------------------------
 ## Main method to mute and unmute audio layers
-func on_mute_layers(layers_names : Array, mute_state : bool, fade_time:=1.0, loop_target:=-1):
-	if layers_names == []:
-		for i:AdaptiAudioStreamPlayer in get_children():
+func on_mute_layers(layer, mute_state : bool, fade_time:=1.0, loop_target:=-1):
+	if typeof(layer) == TYPE_INT:
+		if layer > get_child_count() - 1:
+			AudioManager.debug._print("DEBUG: Layer not found")
+		else:
+			var node = get_children()[layer]
 			if mute_state:
-				i.on_fade_out(fade_time, false)
+				node.on_fade_out(fade_time, false)
 			else:
-				i.on_fade_in(volume_db, fade_time)
-			i.on_mute = mute_state
-			
-	
-	for i in layers_names:
-		if typeof(i) == TYPE_INT:
-			if i > get_child_count() - 1:
-				AudioManager.debug._print("DEBUG: Layer not found")
-			else:
-				var node = get_children()[i]
+				node.on_fade_in(volume_db, fade_time)
+			node.on_mute = mute_state
+				
+	if typeof(layer) == TYPE_STRING:
+		if groups.has(layer):
+			for n in groups[layer]:
 				if mute_state:
-					node.on_fade_out(fade_time, false)
+					n.on_fade_out(fade_time, false)
 				else:
-					node.on_fade_in(volume_db, fade_time)
-				node.on_mute = mute_state
-					
-		if typeof(i) == TYPE_STRING:
-			if groups.has(i):
-				for n in groups[i]:
-					if mute_state:
-						n.on_fade_out(fade_time, false)
-					else:
-						n.on_fade_in(volume_db, fade_time)
-					n.on_mute = mute_state
+					n.on_fade_in(volume_db, fade_time)
+				n.on_mute = mute_state
+		else:
+			var node = audio_players[layer]
+			if mute_state:
+				node.on_fade_out(fade_time, false)
 			else:
-				var node = audio_players[i]
-				if mute_state:
-					node.on_fade_out(fade_time, false)
-				else:
-					node.on_fade_in(volume_db, fade_time)
+				node.on_fade_in(volume_db, fade_time)
 
+func mute_all_layers(mute_state : bool, fade_time:=1.0, loop_target:=-1):
+	for i:AdaptiAudioStreamPlayer in get_children():
+		if mute_state:
+			i.on_fade_out(fade_time, false)
+		else:
+			i.on_fade_in(volume_db, fade_time)
+		i.on_mute = mute_state
 
 ## -----------------------------------------------------------------------------
 #################
@@ -321,6 +343,7 @@ func set_custom_res(value):
 	for i in layers.size():
 		if not layers[i]:
 			layers[i] = AdaptiLayerResource.new()
+			layers[i].layer_name = "Layer " + str(i)
 			layers[i].resource_name = "Layer " + str(i)
 			layers[i].connect("layer_resource_changed", set_clip_resource)
 			layers[i].connect("mute_layer_changed", set_mute_layer)

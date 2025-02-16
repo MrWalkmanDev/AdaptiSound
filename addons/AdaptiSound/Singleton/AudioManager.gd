@@ -279,8 +279,8 @@ func stop_all(fade_time := 0.0, can_destroy := true):
 ########################################
 
 ## Change between clips by index (Int) or name (String)
-func change_clip(sound_name, loop_by_index, fade_in := 0.0, fade_out := 0.0):
-	ABGM_methods.change_loop(sound_name, loop_by_index, fade_out, fade_in)
+func change_clip(sound_name, clip_by_index, fade_in := 0.0, fade_out := 0.0):
+	ABGM_methods.change_loop(sound_name, clip_by_index, fade_out, fade_in)
 
 #####################################
 ## CombinedPlayer Playback Methods ##
@@ -313,11 +313,14 @@ func set_destroy(state : bool):
 ## SynchronizedPlayer Playback Methods ##
 #########################################
 
-## Mute and Unmute diferent layers in the current_playback.
-func mute_layer(track_name: String, layer_names: Array, mute_state: bool, 
+## Mute or Unmute diferent layers in the current_playback.
+func mute_layer(track_name: String, layer, mute_state: bool, 
 	fade_time := 2.0, loop_target := -1):
-	ABGM_methods.mute_layer(track_name, layer_names, mute_state, fade_time, loop_target)
+	ABGM_methods.mute_layer(track_name, layer, mute_state, fade_time, loop_target)
 
+## Mute or Unmute all layers in the current_playback
+func mute_all_layers(track_name: String, mute_state: bool, fade_time := 2.0, loop_target := -1):
+	ABGM_methods.mute_all_layers(track_name, mute_state, fade_time, loop_target)
 
 
 ## -------------------------------------------------------------------------------------------------

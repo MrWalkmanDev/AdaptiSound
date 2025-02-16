@@ -1,42 +1,35 @@
-[gd_scene load_steps=11 format=3 uid="uid://cf6lbth1at6al"]
+[gd_scene load_steps=8 format=3 uid="uid://cf6lbth1at6al"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioSynchronizedPlayer/AudioSynchronizedPlayer.gd" id="1_8lff8"]
 [ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioSynchronizedPlayer/AdaptiLayerResource.gd" id="2_xp0pj"]
-[ext_resource type="AudioStream" uid="uid://cm44cc3vurmn3" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Swing/JazzBase.ogg" id="3_n4pes"]
-[ext_resource type="AudioStream" uid="uid://dblkbb8r4it6g" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Swing/JazzOrgan.ogg" id="4_5617y"]
-[ext_resource type="AudioStream" uid="uid://i0dn2j1yoy10" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Swing/JazzMelody.ogg" id="5_dhql1"]
 [ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/BeatSystem.gd" id="6_h1d4g"]
 
-[sub_resource type="Resource" id="Resource_sa86y"]
+[sub_resource type="Resource" id="Resource_t01iv"]
 resource_name = "Layer 0"
 script = ExtResource("2_xp0pj")
-layer_name = &""
-clip = ExtResource("3_n4pes")
+layer_name = &"Layer 0"
 mute = false
 
-[sub_resource type="Resource" id="Resource_44kcv"]
+[sub_resource type="Resource" id="Resource_rw83j"]
 resource_name = "Layer 1"
 script = ExtResource("2_xp0pj")
-layer_name = &""
-clip = ExtResource("4_5617y")
-mute = true
+layer_name = &"Layer 1"
+mute = false
 
-[sub_resource type="Resource" id="Resource_orkak"]
+[sub_resource type="Resource" id="Resource_wabh0"]
 resource_name = "Layer 2"
 script = ExtResource("2_xp0pj")
-layer_name = &""
-clip = ExtResource("5_dhql1")
-mute = true
+layer_name = &"Layer 2"
+mute = false
 
 [sub_resource type="Resource" id="Resource_jpha6"]
 script = ExtResource("6_h1d4g")
 bpm = 120
 beats_per_bar = 4
-show_bar_count = false
 
 [node name="Swing" type="Node"]
 script = ExtResource("1_8lff8")
-layers = Array[ExtResource("2_xp0pj")]([SubResource("Resource_sa86y"), SubResource("Resource_44kcv"), SubResource("Resource_orkak")])
+layers = Array[ExtResource("2_xp0pj")]([SubResource("Resource_t01iv"), SubResource("Resource_rw83j"), SubResource("Resource_wabh0")])
 editor_preview = true
 _play = false
 _stop = false

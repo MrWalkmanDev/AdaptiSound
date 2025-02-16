@@ -6,16 +6,38 @@ extends AdaptiNode
 ## times of transitions.
 
 
+signal ClipChanged(clip_resource:AdaptiClipResource)
+
+
 ## Contains the audio clips to be played.
 @export var clips : Array[AdaptiClipResource]: set = set_custom_res
 
+## The first clip to play at the start
+var initial_clip:String="Clip 0":
+	get:
+		return initial_clip
+	set(value):
+		initial_clip = value
+		
+		
+## If true, all tracks are set to random auto-advance
+var shuffle_playback : bool = false:
+	set(value):
+		if value == true:
+			for i in clips:
+				i.advance_type = 1
+		#else:
+			#for i in clips:
+				#i.advance_type = 0
+		shuffle_playback = value
+
 
 ## Clip that will be played once the play button is pressed
-var _target_clip:String="Clip 0":
+var _editor_target_clip:String="Clip 0":
 	get:
-		return _target_clip
+		return _editor_target_clip
 	set(value):
-		_target_clip = value
+		_editor_target_clip = value
 
 ## If true, the editor can play tracks with the expected behavior.
 var editor_preview : bool = true : set = set_on_playing
@@ -39,7 +61,8 @@ var time_fade_out : float = 1.5
 var audio_players : Dictionary = {}
 ## Saves the currently playing clip
 var current_playback : AdaptiAudioStreamPlayer = null
-
+## Saves the currently playing clip resource
+var current_playback_resource : AdaptiClipResource = null
 
 
 ## BEAT SYSTEM ##
@@ -50,7 +73,7 @@ func _validate_property(property):
 	if property.name == "_stop" and !editor_preview:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 	
-	if property.name == "_target_clip" and !editor_preview:
+	if property.name == "_editor_target_clip" and !editor_preview:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 	
 	if property.name == "time_fade_in" and !editor_preview:
@@ -68,7 +91,27 @@ func _validate_property(property):
 func _get_property_list():
 	var properties = []
 	
+	properties.append({
+		"name" : "initial_clip",
+		"type" : TYPE_STRING,
+		"hint" : PROPERTY_HINT_ENUM,
+		"hint_string" : _array_to_string(clips)
+	})
+	
+	properties.append({
+		"name" : "shuffle_playback",
+		"type" : TYPE_BOOL,
+		"hint" : PROPERTY_HINT_NONE,
+	})
+	
+	
 	## EDITOR TOOL ##
+	properties.append({
+		"name": "Editor Preview",
+		"type": TYPE_NIL, 
+		"usage": PROPERTY_USAGE_CATEGORY
+	})
+	
 	properties.append({
 		"name" : "editor_preview",
 		"type" : TYPE_BOOL,
@@ -76,7 +119,7 @@ func _get_property_list():
 	})
 	
 	properties.append({
-		"name" : "_target_clip",
+		"name" : "_editor_target_clip",
 		"type" : TYPE_STRING,
 		"hint" : PROPERTY_HINT_ENUM,
 		"hint_string" : _array_to_string(clips)
@@ -138,6 +181,7 @@ func _array_to_string(arr:Array[AdaptiClipResource], separator:=",") -> String:
 ## INITIALIZATION
 func _enter_tree():
 	current_playback = null
+	current_playback_resource = null
 	create_audio_players()
 	
 func _exit_tree():
@@ -154,6 +198,7 @@ func create_audio_players():
 		audio.stream = i.clip
 		if i.clip_name:
 			audio.name = i.clip_name
+			
 		### AUTO-ADVANCE ###
 		match i.advance_type:
 			0:
@@ -183,33 +228,41 @@ func create_audio_players():
 ######################
 
 ## Play and switch to target audio track ##
-func play(clip_name:=_target_clip, vol_db:=0.0, fade_in:=0.0, fade_out:=0.0):
+func play(clip_name:=_editor_target_clip, vol_db:=0.0, fade_in:=0.0, fade_out:=0.0):
 	var childs = get_children()
 	if childs.size() == 0:
-		print("DEBUG: No clips in AudioInteractivePlayer")
+		print("No clips in AudioInteractivePlayer")
 		return
 		
 	volume_db = vol_db
-	if Engine.is_editor_hint() and editor_preview:
-		var idx = int(_target_clip)
+	if Engine.is_editor_hint():# and editor_preview:
+		var idx = int(_editor_target_clip)
 		var track = childs[idx]
 		_play_method(track, volume_db, time_fade_in, time_fade_out)
 	else:
-		if !audio_players.has(clip_name):
-			print("DEBUG: Clip with name: " + clip_name + " not found")
+		if !audio_players.has(initial_clip):
+			print("Clip with name: " + initial_clip + " not found")
 			return
-		var track = audio_players[clip_name]
+		var track = audio_players[initial_clip]
 		_play_method(track, vol_db, fade_in, fade_out)
 		
 func _play_method(_track:AdaptiAudioStreamPlayer, vol_db:=0.0, fade_in:=0.0, fade_out:=0.0):
 	if playing and _track == current_playback:
-		print("DEBUG: Clip already playing")
+		print("Clip already playing")
 		return
 	if current_playback != null:
 		current_playback.on_fade_out(fade_out)
 	_track.on_fade_in(vol_db, fade_in)
 	_track.play()
 	current_playback = _track
+	
+	## Clip Changed Signal
+	var childs = get_children()
+	var idx = childs.find(_track)
+	var clip_resource = clips[idx]
+	ClipChanged.emit(clip_resource)
+	current_playback_resource = clip_resource
+	
 
 ## Stop all tracks
 func stop(fade_out_time:=0.0):
@@ -218,16 +271,16 @@ func stop(fade_out_time:=0.0):
 		i.on_fade_out(fade_out_time)
 		
 	current_playback = null
-
+	current_playback_resource = null
 
 ## -----------------------------------------------------------------------------
 ## Play track from AudioManager
 func on_play(fade_in_time:=0.0, vol_db:=0.0):
 	var childs = get_children()
 	if childs.size() == 0:
-		print("DEBUG: No clips in AudioInteractivePlayer")
+		print("No clips in AudioInteractivePlayer")
 		return
-	var idx = int(_target_clip)
+	var idx = int(initial_clip)
 	var track = childs[idx]
 	volume_db = vol_db
 	_play_method(track, vol_db, fade_in_time)
@@ -256,9 +309,9 @@ func on_change_loop(loop_by_index, fade_in_time, fade_out_time):
 func set_on_play(value):
 	_play = value
 	var childs = get_children()
-	var idx = int(_target_clip)
+	var idx = int(_editor_target_clip)
 	if _play:
-		play(_target_clip, volume_db)
+		play(_editor_target_clip, volume_db)
 		_play = false
 		
 func set_volume_db(value : float):
@@ -283,6 +336,7 @@ func set_custom_res(value):
 		if not clips[i]:
 			clips[i] = AdaptiClipResource.new()
 			clips[i].resource_name = "Clip " + str(i)
+			clips[i].clip_name = "Clip " + str(i)
 			clips[i].connect("clip_resource_changed", set_clip_resource)
 			clips[i].connect("auto_advance_changed", set_auto_advance)
 			clips[i].total_clips = clips
@@ -309,14 +363,33 @@ func set_auto_advance(value, res):
 				track.set_sequence(auto_advance.bind(res))
 		2:
 			track.set_loop(false)
-
 		
 			
 func auto_advance(caller_res:AdaptiClipResource):
-	print("Auto-advance to " + caller_res._next_clip)
+	if !Engine.is_editor_hint():
+		if AudioManager.current_playback != self:
+			## Auto-advance cancelled
+			return
+	
 	var childs = get_children()
-	var idx = int(caller_res._next_clip)
+	var idx
+	if shuffle_playback:
+		randomize()
+		var prev_idx = clips.find(caller_res)
+		idx = randi_range(0, clips.size()-1)
+		if idx == prev_idx:
+			idx += 1
+			if idx > clips.size()-1:
+				idx = 0
+			
+		_print("Auto-advance to " + clips[idx].clip_name)
+	else:
+		idx = int(caller_res._next_clip)
+		_print("Auto-advance to " + caller_res._next_clip)
+
 	var track = childs[idx]
 	track.volume_db = volume_db
 	track.play()
 	current_playback = track
+	current_playback_resource = clips[idx]
+	ClipChanged.emit(clips[idx])

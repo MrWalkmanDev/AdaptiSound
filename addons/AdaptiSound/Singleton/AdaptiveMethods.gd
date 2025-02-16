@@ -29,12 +29,21 @@ func to_outro(sound_name : String, fade_in := 0.7, fade_out := 1.0):
 ## Synchronized Methods ##
 ##########################
 
-## Mute and Unmute diferent layers for BGM Synchronized tracks.
-func mute_layer(track_name: String, layer_names: Array, 
+## Mute or Unmute diferent layers for BGM Synchronized tracks.
+func mute_layer(track_name: String, layer, 
 	mute_state : bool, fade_time := 2.0, loop_target := -1):
 		
 	var track = AudioManager.get_audio_track(track_name)
 	if track != null and AudioManager.current_playback == track and track is AdaptiNode:
-		track.on_mute_layers(layer_names, mute_state, fade_time, loop_target)
+		track.on_mute_layers(layer, mute_state, fade_time, loop_target)
+	else:
+		AudioManager.debug._print("DEBUG: " + track_name + " not found")
+
+
+## Mute or Unmute all layers for BGM Synchronized tracks.
+func mute_all_layers(track_name: String, mute_state : bool, fade_time := 2.0, loop_target := -1):
+	var track = AudioManager.get_audio_track(track_name)
+	if track != null and AudioManager.current_playback == track and track is AdaptiNode:
+		track.mute_all_layers(mute_state, fade_time, loop_target)
 	else:
 		AudioManager.debug._print("DEBUG: " + track_name + " not found")

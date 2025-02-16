@@ -1,8 +1,46 @@
-[gd_scene load_steps=4 format=3 uid="uid://cugu0ppkowgy3"]
+[gd_scene load_steps=14 format=3 uid="uid://cugu0ppkowgy3"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/DEMO/Scenes/testing.gd" id="1_dceou"]
 [ext_resource type="AudioStream" uid="uid://cm44cc3vurmn3" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Swing/JazzBase.ogg" id="2_nvd0o"]
 [ext_resource type="AudioStream" uid="uid://cglq1s28qfsnm" path="res://addons/AdaptiSound/DEMO/Audio/Music/BGS/Rain.wav" id="3_erups"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioInteractivePlayer/AudioInteractivePlayer.gd" id="4_i6at8"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioInteractivePlayer/AdaptiClipResource.gd" id="5_ay0xt"]
+[ext_resource type="AudioStream" uid="uid://qunc47yno8ex" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Sequence/sequence1.ogg" id="6_7q17i"]
+[ext_resource type="AudioStream" uid="uid://cnlns4sgaxjc7" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Sequence/sequence2.ogg" id="7_gh0gn"]
+[ext_resource type="AudioStream" uid="uid://c3m6gyqr5kpo5" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Sequence/sequence3.ogg" id="8_sx5hf"]
+[ext_resource type="AudioStream" uid="uid://csp0qsgrm1i54" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Sequence/sequence4.ogg" id="9_ox4xj"]
+
+[sub_resource type="Resource" id="Resource_b3pfp"]
+resource_name = "Clip 0"
+script = ExtResource("5_ay0xt")
+clip_name = &"Clip 0"
+clip = ExtResource("6_7q17i")
+advance_type = 1
+_next_clip = "Clip 1"
+
+[sub_resource type="Resource" id="Resource_4nda8"]
+resource_name = "Clip 1"
+script = ExtResource("5_ay0xt")
+clip_name = &"Clip 1"
+clip = ExtResource("7_gh0gn")
+advance_type = 1
+_next_clip = ""
+
+[sub_resource type="Resource" id="Resource_jbakj"]
+resource_name = "Clip 2"
+script = ExtResource("5_ay0xt")
+clip_name = &"Clip 2"
+clip = ExtResource("8_sx5hf")
+advance_type = 1
+_next_clip = ""
+
+[sub_resource type="Resource" id="Resource_chgjm"]
+resource_name = "Clip 3"
+script = ExtResource("5_ay0xt")
+clip_name = &"Clip 3"
+clip = ExtResource("9_ox4xj")
+advance_type = 1
+_next_clip = ""
 
 [node name="Testing" type="Node2D"]
 script = ExtResource("1_dceou")
@@ -42,6 +80,20 @@ text = "Play2
 [node name="Stop" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer"]
 layout_mode = 2
 text = "STOP"
+
+[node name="RandomPlaylist" type="Node" parent="."]
+script = ExtResource("4_i6at8")
+clips = Array[ExtResource("5_ay0xt")]([SubResource("Resource_b3pfp"), SubResource("Resource_4nda8"), SubResource("Resource_jbakj"), SubResource("Resource_chgjm")])
+initial_clip = "Clip 0"
+shuffle_playback = true
+editor_preview = true
+_editor_target_clip = "Clip 0"
+_play = false
+_stop = false
+volume_db = 0.0
+pitch_scale = 1.0
+time_fade_in = 0.947
+time_fade_out = 1.243
 
 [connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/CenterContainer/VBoxContainer/Play2" to="." method="_on_play_2_pressed"]
