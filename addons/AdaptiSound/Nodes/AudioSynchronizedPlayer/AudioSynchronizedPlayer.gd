@@ -355,7 +355,7 @@ func set_custom_res(value):
 func set_mute_layer(value, res):
 	var idx = layers.find(res)
 	var track = get_children()[idx]
-	on_mute_layers([idx], value, fade_time)
+	on_mute_layers(idx, value, fade_time)
 
 func set_clip_resource(clip, res):
 	var idx = layers.find(res)
