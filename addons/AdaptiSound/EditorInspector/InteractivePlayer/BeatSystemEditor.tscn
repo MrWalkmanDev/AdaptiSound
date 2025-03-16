@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cgstew7ca3vc8"]
+[gd_scene load_steps=5 format=3 uid="uid://cgstew7ca3vc8"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/EditorInspector/InteractivePlayer/beat_system_editor.gd" id="1_cdoum"]
-[ext_resource type="Texture2D" uid="uid://b70gnjvccrdjd" path="res://addons/AdaptiSound/Icons/Others/play.png" id="2_n1nhw"]
 [ext_resource type="Texture2D" uid="uid://cmyjhd4ubm3sl" path="res://addons/AdaptiSound/Icons/Others/stop.png" id="3_2jd0p"]
+[ext_resource type="Texture2D" uid="uid://bouo5dl1wkopg" path="res://addons/AdaptiSound/Icons/Others/Pause.png" id="4_7h4pl"]
+[ext_resource type="Texture2D" uid="uid://cgykn7welevhq" path="res://addons/AdaptiSound/Icons/Others/Next.png" id="6_ncfej"]
 
 [node name="BeatSystemEditor" type="Control"]
 layout_mode = 3
@@ -13,53 +14,190 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_cdoum")
 
-[node name="HBoxContainer" type="ScrollContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-horizontal_scroll_mode = 0
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_right = 64
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Audio Editor Preview"
+horizontal_alignment = 1
+
+[node name="General" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Options" type="GridContainer" parent="MarginContainer/VBoxContainer/General"]
+layout_mode = 2
+size_flags_horizontal = 3
 columns = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/GridContainer"]
+[node name="VolLab" type="Label" parent="MarginContainer/VBoxContainer/General/Options"]
+layout_mode = 2
+text = "Volume db"
+
+[node name="Volume" type="HSlider" parent="MarginContainer/VBoxContainer/General/Options"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 0
+min_value = -80.0
+max_value = 24.0
+step = 0.01
+scrollable = false
 
-[node name="SpinBox" type="SpinBox" parent="HBoxContainer/VBoxContainer/GridContainer/VBoxContainer"]
+[node name="VolValue" type="SpinBox" parent="MarginContainer/VBoxContainer/General/Options"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+min_value = -80.0
+max_value = 24.0
+step = 0.1
+alignment = 1
+
+[node name="PitchLab" type="Label" parent="MarginContainer/VBoxContainer/General/Options"]
+layout_mode = 2
+text = "Ptch scale"
+
+[node name="Pitch" type="HSlider" parent="MarginContainer/VBoxContainer/General/Options"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+focus_mode = 0
+min_value = 0.01
+max_value = 4.0
+step = 0.01
+value = 1.0
+
+[node name="PitchValue" type="SpinBox" parent="MarginContainer/VBoxContainer/General/Options"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+min_value = 0.01
+max_value = 4.0
+step = 0.01
+value = 1.0
+alignment = 1
+
+[node name="Fades" type="GridContainer" parent="MarginContainer/VBoxContainer/General"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 3
+
+[node name="FadeInLab" type="Label" parent="MarginContainer/VBoxContainer/General/Fades"]
+layout_mode = 2
+text = "Fade In Time"
+
+[node name="FadeIn" type="HSlider" parent="MarginContainer/VBoxContainer/General/Fades"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+focus_mode = 0
+max_value = 10.0
+step = 0.1
+
+[node name="FadeInValue" type="SpinBox" parent="MarginContainer/VBoxContainer/General/Fades"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+max_value = 10.0
+step = 0.1
+alignment = 1
+
+[node name="FadeOutLab" type="Label" parent="MarginContainer/VBoxContainer/General/Fades"]
+layout_mode = 2
+text = "Fade Out Time"
+
+[node name="FadeOut" type="HSlider" parent="MarginContainer/VBoxContainer/General/Fades"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+focus_mode = 0
+max_value = 10.0
+step = 0.1
+
+[node name="FadeOutValue" type="SpinBox" parent="MarginContainer/VBoxContainer/General/Fades"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+max_value = 10.0
+step = 0.1
+alignment = 1
+
+[node name="Update" type="Button" parent="MarginContainer/VBoxContainer/General"]
+layout_mode = 2
+focus_mode = 0
+text = "Update Panel"
+
+[node name="CheckButton" type="CheckButton" parent="MarginContainer/VBoxContainer/General"]
+visible = false
+layout_mode = 2
+text = "Grid"
+
+[node name="ClipSlots" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ClipSlots" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ClipSlots"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PlaybackButtons" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
-suffix = "bpm"
 
-[node name="SpinBox2" type="SpinBox" parent="HBoxContainer/VBoxContainer/GridContainer/VBoxContainer"]
+[node name="Pause" type="Button" parent="MarginContainer/VBoxContainer/PlaybackButtons"]
+custom_minimum_size = Vector2(48, 32)
 layout_mode = 2
-value = 15.0
-suffix = "per bar"
+icon = ExtResource("4_7h4pl")
+icon_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="HBoxContainer/VBoxContainer/GridContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/CenterContainer"]
-layout_mode = 2
-
-[node name="Play" type="Button" parent="HBoxContainer/VBoxContainer/CenterContainer/HBoxContainer"]
-layout_mode = 2
-icon = ExtResource("2_n1nhw")
-
-[node name="Stop" type="Button" parent="HBoxContainer/VBoxContainer/CenterContainer/HBoxContainer"]
+[node name="Stop" type="Button" parent="MarginContainer/VBoxContainer/PlaybackButtons"]
+custom_minimum_size = Vector2(48, 32)
 layout_mode = 2
 icon = ExtResource("3_2jd0p")
+icon_alignment = 1
 
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/CenterContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
+[node name="ChangeClip" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+alignment = 1
+
+[node name="ChangeTrack" type="Button" parent="MarginContainer/VBoxContainer/ChangeClip"]
+layout_mode = 2
+text = "Change to"
+icon = ExtResource("6_ncfej")
+icon_alignment = 2
+
+[node name="NextClip" type="OptionButton" parent="MarginContainer/VBoxContainer/ChangeClip"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Options/Volume" to="." method="_on_volume_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Options/VolValue" to="." method="_on_vol_value_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Options/Pitch" to="." method="_on_pitch_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Options/PitchValue" to="." method="_on_pitch_value_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Fades/FadeIn" to="." method="_on_fade_in_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Fades/FadeInValue" to="." method="_on_fade_in_value_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Fades/FadeOut" to="." method="_on_fade_out_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Fades/FadeOutValue" to="." method="_on_fade_out_value_value_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/General/Update" to="." method="_on_update_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/PlaybackButtons/Pause" to="." method="_on_pause_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/PlaybackButtons/Stop" to="." method="_on_stop_pressed"]

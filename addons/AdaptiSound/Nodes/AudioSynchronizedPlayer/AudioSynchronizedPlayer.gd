@@ -1,5 +1,6 @@
 @tool
 extends AdaptiNode
+class_name AudioSynchronizedPlayer
 ## This node allows you to store multiple audio clips that will all play at the same time, 
 ## creating synchronization between all the clips. [br]
 ## [b]It has an editor preview[/b], and you can set muted and unmuted layers,
@@ -309,7 +310,9 @@ func _physics_process(delta):
 		if beat_system_enable and audio_players.size() != 0:
 			if playing:
 				beat_system.beat_process(delta, get_child(0))
-
+			else:
+				beat_system.can_first_beat = true
+			
 ## -----------------------------------------------------------------------------
 #########################
 ## SETTERS AND GETTERS ##

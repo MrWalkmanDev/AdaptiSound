@@ -32,6 +32,10 @@ var total_clips : Array[AdaptiClipResource]:
 		total_clips = value
 		notify_property_list_changed()
 		
+@export var bpm : int = 120
+@export var beats_per_bar : int = 4
+@export var key_bars : Array[int] = []
+		
 func _validate_property(property):
 	if property.name == "_next_clip" and advance_type != 1:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
@@ -51,7 +55,7 @@ func _get_property_list():
 func _array_to_string(arr:Array[AdaptiClipResource], separator:=",") -> String:
 	var string = ""
 	for i in arr:
-		string += "Clip " + str(arr.find(i)) + separator
+		string += i.clip_name + separator
 	return string
 
 #func set_clip_name(value:String):

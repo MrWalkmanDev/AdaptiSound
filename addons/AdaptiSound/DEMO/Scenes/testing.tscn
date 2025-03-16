@@ -86,6 +86,7 @@ script = ExtResource("4_i6at8")
 clips = Array[ExtResource("5_ay0xt")]([SubResource("Resource_b3pfp"), SubResource("Resource_4nda8"), SubResource("Resource_jbakj"), SubResource("Resource_chgjm")])
 initial_clip = "Clip 0"
 shuffle_playback = true
+beat_system_enable = true
 editor_preview = true
 _editor_target_clip = "Clip 0"
 _play = false

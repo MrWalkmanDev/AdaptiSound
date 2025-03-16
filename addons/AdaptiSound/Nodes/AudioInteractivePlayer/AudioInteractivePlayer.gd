@@ -1,5 +1,6 @@
 @tool
 extends AdaptiNode
+class_name AudioInteractivePlayer
 ## This node allows you to store multiple audio clips that can be set to play in
 ## different ways but only one at a time. [br]
 ## [b]It has an editor preview[/b], and you can control the fade in and fade out
@@ -7,6 +8,8 @@ extends AdaptiNode
 
 
 signal ClipChanged(clip_resource:AdaptiClipResource)
+signal BarChanged(value)
+signal LoopBegin
 
 
 ## Contains the audio clips to be played.
@@ -33,18 +36,25 @@ var shuffle_playback : bool = false:
 
 
 ## Clip that will be played once the play button is pressed
-var _editor_target_clip:String="Clip 0":
-	get:
-		return _editor_target_clip
-	set(value):
-		_editor_target_clip = value
+#var _editor_target_clip:String="Clip 0":
+	#get:
+		#return _editor_target_clip
+	#set(value):
+		#_editor_target_clip = value
 
 ## If true, the editor can play tracks with the expected behavior.
 var editor_preview : bool = true : set = set_on_playing
 
 ## Plays the selected clip, also executes the transition between clips.[br]
 ## Select a different clip than the one currently playing in [b]target_clip[/b], and press this button.
-var _play : bool = false : set = set_on_play
+#var _play : bool = false :
+	#set(value):
+		#_play = value
+		#var childs = get_children()
+		#var idx = int(_editor_target_clip)
+		#if _play:
+			#play(_editor_target_clip, volume_db)
+			#_play = false
 
 ## Stops the clip that is playing
 var _stop : bool = false:
@@ -66,15 +76,28 @@ var current_playback_resource : AdaptiClipResource = null
 
 
 ## BEAT SYSTEM ##
+## If enabled, the beat counting system will be active, 
+## and changes can be synced to other tracks at specific bars.
+var beat_system_enable : bool = true:
+	set(value):
+		beat_system_enable = value
+		notify_property_list_changed()
+
+## Beat System Resource
+var beat_system : BeatSystemResource
+var key_change_active : bool = false
+var next_clip_res : AdaptiClipResource = null
+
+
 func _validate_property(property):
-	if property.name == "_play" and !editor_preview:
-		property.usage = PROPERTY_USAGE_NO_EDITOR
+	#if property.name == "_play" and !editor_preview:
+	#	property.usage = PROPERTY_USAGE_NO_EDITOR
 		
 	if property.name == "_stop" and !editor_preview:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 	
-	if property.name == "_editor_target_clip" and !editor_preview:
-		property.usage = PROPERTY_USAGE_NO_EDITOR
+	#if property.name == "_editor_target_clip" and !editor_preview:
+	#	property.usage = PROPERTY_USAGE_NO_EDITOR
 	
 	if property.name == "time_fade_in" and !editor_preview:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
@@ -104,6 +127,12 @@ func _get_property_list():
 		"hint" : PROPERTY_HINT_NONE,
 	})
 	
+	properties.append({
+		"name" : "beat_system_enable",
+		"type" : TYPE_BOOL,
+		"hint" : PROPERTY_HINT_NONE,
+	})
+	
 	
 	## EDITOR TOOL ##
 	properties.append({
@@ -118,19 +147,19 @@ func _get_property_list():
 		"hint" : PROPERTY_HINT_NONE
 	})
 	
-	properties.append({
-		"name" : "_editor_target_clip",
-		"type" : TYPE_STRING,
-		"hint" : PROPERTY_HINT_ENUM,
-		"hint_string" : _array_to_string(clips)
-	})
+	#properties.append({
+		#"name" : "_editor_target_clip",
+		#"type" : TYPE_STRING,
+		#"hint" : PROPERTY_HINT_ENUM,
+		#"hint_string" : _array_to_string(clips)
+	#})
 	
 	## PLAYBACK PROPERTYS ##
-	properties.append({
-		"name" : "_play",
-		"type" : TYPE_BOOL,
-		"hint" : PROPERTY_HINT_NONE
-	})
+	#properties.append({
+		#"name" : "_play",
+		#"type" : TYPE_BOOL,
+		#"hint" : PROPERTY_HINT_NONE
+	#})
 	
 	properties.append({
 		"name" : "_stop",
@@ -182,7 +211,27 @@ func _array_to_string(arr:Array[AdaptiClipResource], separator:=",") -> String:
 func _enter_tree():
 	current_playback = null
 	current_playback_resource = null
+	key_change_active = false
 	create_audio_players()
+	initialize_beat_system()
+	
+func initialize_beat_system():
+	if beat_system == null:
+		beat_system = BeatSystemResource.new()
+	if !beat_system.BarChanged.is_connected(bar_signal_emit):
+		beat_system.BarChanged.connect(bar_signal_emit)
+	if !beat_system.LoopBegin.is_connected(loop_begin_emit):
+		beat_system.LoopBegin.connect(loop_begin_emit)
+		
+	if clips.size() != 0:
+		var idx = int(initial_clip)
+		var clip_res = clips[idx]
+		update_beat_settings(clip_res)
+	
+func update_beat_settings(clip_res:AdaptiClipResource):
+	beat_system.bpm = clip_res.bpm
+	beat_system.beats_per_bar = clip_res.beats_per_bar
+	
 	
 func _exit_tree():
 	stop()
@@ -222,13 +271,61 @@ func create_audio_players():
 		#audio.owner = get_tree().edited_scene_root # DEBUG
 
 
+
+## -----------------------------------------------------------------------------
+## BEAT SYSTEM SIGNALS
+func bar_signal_emit(value):
+	if beat_system_debug:
+		print("BeatSystem: Measure count: " + str(value))
+	if key_change_active:
+		if current_playback_resource.key_bars.find(value) != -1:
+			if Engine.is_editor_hint():
+				#_editor_target_clip = "Clip %s" %clips.find(next_clip_res)
+				play(next_clip_res.clip_name)
+				clear_key_changes()
+			else:
+				on_change_loop(next_clip_res.clip_name, time_fade_in, time_fade_out)
+				clear_key_changes()
+	BarChanged.emit(value)
+	
+func loop_begin_emit():
+	bar_signal_emit(1)
+	LoopBegin.emit()
+	
+func clear_key_changes():
+	key_change_active = false
+	next_clip_res = null
+	
+	
+## -----------------------------------------------------------------------------
+#################
+## BEAT SYSTEM ##
+#################
+func _process(delta):
+	if process_callback == 0:
+		check_track_is_playing()
+		if beat_system_enable and audio_players.size() != 0:
+			if playing:
+				beat_system.beat_process(delta, current_playback)
+			else:
+				beat_system.can_first_beat = true
+	
+func _physics_process(delta):
+	if process_callback == 1:
+		check_track_is_playing()
+		if beat_system_enable and audio_players.size() != 0:
+			if playing:
+				beat_system.beat_process(delta, current_playback)
+			else:
+				beat_system.can_first_beat = true
+
 ## -----------------------------------------------------------------------------
 ######################
 ## PLAYBACK METHODS ##
 ######################
 
 ## Play and switch to target audio track ##
-func play(clip_name:=_editor_target_clip, vol_db:=0.0, fade_in:=0.0, fade_out:=0.0):
+func play(clip_name:=initial_clip, vol_db:=0.0, fade_in:=0.0, fade_out:=0.0):
 	var childs = get_children()
 	if childs.size() == 0:
 		print("No clips in AudioInteractivePlayer")
@@ -236,8 +333,10 @@ func play(clip_name:=_editor_target_clip, vol_db:=0.0, fade_in:=0.0, fade_out:=0
 		
 	volume_db = vol_db
 	if Engine.is_editor_hint():# and editor_preview:
-		var idx = int(_editor_target_clip)
-		var track = childs[idx]
+		if !audio_players.has(clip_name):
+			print("Clip with name: " + clip_name + " not found")
+			return
+		var track = audio_players[clip_name]
 		_play_method(track, volume_db, time_fade_in, time_fade_out)
 	else:
 		if !audio_players.has(initial_clip):
@@ -262,7 +361,7 @@ func _play_method(_track:AdaptiAudioStreamPlayer, vol_db:=0.0, fade_in:=0.0, fad
 	var clip_resource = clips[idx]
 	ClipChanged.emit(clip_resource)
 	current_playback_resource = clip_resource
-	
+	update_beat_settings(current_playback_resource)
 
 ## Stop all tracks
 func stop(fade_out_time:=0.0):
@@ -272,6 +371,7 @@ func stop(fade_out_time:=0.0):
 		
 	current_playback = null
 	current_playback_resource = null
+	clear_key_changes()
 
 ## -----------------------------------------------------------------------------
 ## Play track from AudioManager
@@ -289,6 +389,7 @@ func on_stop(fade_time:=0.0, _can_destroy:=false):
 	destroy = _can_destroy
 	if current_playback != null:
 		current_playback.on_fade_out(fade_time)
+	clear_key_changes()
 
 ## Switch clip from AudioManager
 func on_change_loop(loop_by_index, fade_in_time, fade_out_time):
@@ -305,14 +406,6 @@ func on_change_loop(loop_by_index, fade_in_time, fade_out_time):
 #########################
 ## SETTERS AND GETTERS ##
 #########################
-
-func set_on_play(value):
-	_play = value
-	var childs = get_children()
-	var idx = int(_editor_target_clip)
-	if _play:
-		play(_editor_target_clip, volume_db)
-		_play = false
 		
 func set_volume_db(value : float):
 	volume_db = value
@@ -323,6 +416,27 @@ func set_volume_db(value : float):
 ## -----------------------------------------------------------------------------
 ## EDITOR
 ## Editor Playing ##
+func beat_editor_play(clip_name, audio_position:float):
+	var audio_stream :AdaptiAudioStreamPlayer = audio_players[clip_name]
+	if playing and audio_stream == current_playback:
+		print("Clip already playing")
+		return
+	if current_playback != null:
+		current_playback.on_fade_out(0.0)
+	audio_stream.on_fade_in(0.0, 0.0)
+	if audio_position < 0.0:
+		audio_position = 0.0
+	audio_stream.play(audio_position)
+	current_playback = audio_stream
+	
+	## Clip Changed Signal
+	var childs = get_children()
+	var idx = childs.find(audio_stream)
+	var clip_resource = clips[idx]
+	ClipChanged.emit(clip_resource)
+	current_playback_resource = clip_resource
+	update_beat_settings(current_playback_resource)
+
 func set_on_playing(value):
 	editor_preview = value
 	if !editor_preview:
@@ -372,8 +486,9 @@ func auto_advance(caller_res:AdaptiClipResource):
 			return
 	
 	var childs = get_children()
-	var idx
+	var track
 	if shuffle_playback:
+		var idx
 		randomize()
 		var prev_idx = clips.find(caller_res)
 		idx = randi_range(0, clips.size()-1)
@@ -381,15 +496,25 @@ func auto_advance(caller_res:AdaptiClipResource):
 			idx += 1
 			if idx > clips.size()-1:
 				idx = 0
-			
+		track = audio_players[audio_players.keys()[idx]]
 		_print("Auto-advance to " + clips[idx].clip_name)
 	else:
-		idx = int(caller_res._next_clip)
+		#idx = int(caller_res._next_clip)
+		track = audio_players[caller_res._next_clip]
 		_print("Auto-advance to " + caller_res._next_clip)
-
-	var track = childs[idx]
+	
+	
 	track.volume_db = volume_db
 	track.play()
 	current_playback = track
-	current_playback_resource = clips[idx]
-	ClipChanged.emit(clips[idx])
+	current_playback_resource = clips[childs.find(track)]
+	ClipChanged.emit(clips[childs.find(track)])
+
+
+
+### ###
+func get_audio_stream_player(clip_name:String) -> AudioStreamPlayer:
+	if audio_players.has(clip_name):
+		return audio_players[clip_name]
+	else:
+		return null

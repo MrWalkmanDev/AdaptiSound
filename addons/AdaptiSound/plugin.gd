@@ -24,24 +24,23 @@ var inspector_plugin
 
 var editor_selection = get_editor_interface().get_selection()
 
+
 func _enter_tree():
-	# Add Singleton #
+	## Add Singleton ##
 	add_autoload_singleton("AudioManager", "res://addons/AdaptiSound/Singleton/AudioManager.tscn")
-	
-	# Add nodes #
+
+	## Add nodes ##
 	add_custom_type("AudioInteractivePlaylist", "Node", interactive_player, interactive_icon)
-	
 	add_custom_type("AudioCombined", "Node", adaptitrack, adaptive_track_icon)
-	
 	add_custom_type("AudioSynchronized", "Node", synchronized_player, parallel_track_icon)
 	
 	## Inspector Plugin ##
 	inspector_plugin = INSPECTOR.new()
 	add_inspector_plugin(inspector_plugin)
 	
-	#editor_selection.connect("selection_changed", _on_selection_changed)
-	#beat_panel = BEAT_EDITOR_PANEL.instantiate()
-	#add_control_to_bottom_panel(beat_panel, "Beat System Editor")
+	editor_selection.connect("selection_changed", _on_selection_changed)
+	beat_panel = BEAT_EDITOR_PANEL.instantiate()
+	#add_control_to_bottom_panel(beat_panel, "Audio Editor Preview")
 	
 	## MAIN PANEL ##
 	main_instance = MainPanel.instantiate()
@@ -54,27 +53,27 @@ func _exit_tree():
 	remove_custom_type("AudioInteractivePlaylist")
 	
 	if main_instance:
-		#remove_control_from_bottom_panel(beat_panel)
-		#beat_panel.queue_free()
+		remove_control_from_bottom_panel(beat_panel)
+		beat_panel.queue_free()
 		remove_inspector_plugin(inspector_plugin)
 		remove_control_from_docks(main_instance)
 		main_instance.queue_free()
 
 
-#func _on_selection_changed():
-	#var selected = editor_selection.get_selected_nodes()
-	#if not selected.is_empty():
-		## Always pick first node in selection
-		#var selected_node = selected[0]
-		#if selected_node is AdaptiNode:
-			#beat_panel.initialize_panel(selected_node)
-			##add_control_to_bottom_panel(beat_panel, "Beat System Editor")
+func _on_selection_changed():
+	var selected = editor_selection.get_selected_nodes()
+	if not selected.is_empty():
+		# Always pick first node in selection
+		var selected_node = selected[0]
+		if selected_node is AdaptiNode:
+			beat_panel.initialize_panel(selected_node)
+			add_control_to_bottom_panel(beat_panel, "Audio Editor Preview")
 			#_make_visible(true)
-		#else:
-			##remove_control_from_bottom_panel(beat_panel)
+		else:
+			remove_control_from_bottom_panel(beat_panel)
 			#_make_visible(false)
-	#else:
-		##remove_control_from_bottom_panel(beat_panel)
+	else:
+		remove_control_from_bottom_panel(beat_panel)
 		#_make_visible(false)
 
 
