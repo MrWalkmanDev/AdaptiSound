@@ -29,8 +29,8 @@ var playing : bool = false
 var destroy : bool = false : set = set_destroy, get = get_destroy
 
 ##  If true, the track when stopped will start other track
-var sequence = false
-var method_sequence : Callable
+var callback = false
+var method_callback : Callable
 
 
 ## -------------------------------------------------------------------------------------------------
@@ -46,37 +46,29 @@ func check_track_is_playing():
 	#if sequence or destroy:
 	if get_stream_playing() == null:
 		playing = false
-		if sequence:
-			sequence = false
-			method_sequence.call()
+		if callback:
+			callback = false
+			method_callback.call()
 		if destroy:
 			destroy = false
 			destroy_track()
 	else:
 		playing = true
 				
+
+## -------------------------------------------------------------------------------------------------
 #########################
 ## SETTERS AND GETTERS ##
 #########################
-
-## Volume db
+## Volume db ##
 func set_volume_db(value : float):
 	volume_db = value
-	#for i in get_children():
-		#if i is AudioStreamPlayer:
-			#if i.on_mute == false:
-				#if i.tween:
-					#i.tween.kill()
-				#i.volume_db = volume_db
-		#else:
-			#i.volume_db = volume_db
-		
 	return self
 	
 func get_volume_db():
 	return volume_db
 
-## Pitch Scale
+## Pitch Scale ##
 func set_pitch_scale(value):
 	pitch_scale = value
 	for i in get_children():
@@ -86,7 +78,6 @@ func set_pitch_scale(value):
 
 func get_pitch_scale():
 	return pitch_scale
-	
 	
 ## Audio Bus ##
 func set_bus(value : String):
@@ -106,6 +97,17 @@ func set_bus(value : String):
 func get_bus():
 	return bus
 
+## CALLBACK SYSTEM ##
+func set_callback(method):
+	callback = true
+	method_callback = method
+	
+func get_callback()->bool:
+	return callback
+
+func remove_callback():
+	callback = false
+	method_callback = get_callback
 
 ## DESTROY SYSTEM ##
 func set_destroy(value: bool):
@@ -116,7 +118,6 @@ func get_destroy():
 		
 func destroy_track():
 	queue_free()
-	
 
 ## Get AdaptiAudioStreamPlayers on playing ##
 func get_stream_playing():
@@ -129,7 +130,7 @@ func get_stream_playing():
 	return null
 
 
-
+## -------------------------------------------------------------------------------------------------
 ## DEBUG ##
 func _print(message:String):
 	if Engine.is_editor_hint():

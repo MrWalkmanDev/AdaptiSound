@@ -7,8 +7,8 @@ const ENEMY = preload("res://addons/AdaptiSound/DEMO/Prefabs/skeleton.tscn")
 var music_zone = "Forest"
 var combat = false
 
-var parallel_track_name : String = "example_1"
-var combat_track_name : String = "example_2"
+var parallel_track_name : String = "example_2"
+var combat_track_name : String = "example_1"
 
 func _ready():
 	AudioManager.play_music(parallel_track_name)
@@ -25,32 +25,25 @@ func _process(_delta):
 			combat = false
 			off_combat()
 
-	## Other Way to Sequence a method ##
-	#var track = AudioManager.get_audio_track("Battle")
-	#if track:
-		#if !track.playing:
-			#back_to_main_theme()
-		
+
 func on_combat():
-	## Without Intro
-	AudioManager.create_audio_track(combat_track_name).set_skip_intro(true)
-	AudioManager.play_music(combat_track_name, 0.0, 0.5)
+	## I change the initial track because I don't want an intro.
+	AudioManager.create_audio_track(combat_track_name).set_initial_clip("Loop1")
+	AudioManager.play_music(combat_track_name, 0.0, 0.7, 1.0)
 	
-	## With Intro
-	##AudioManager.play_music("Battle")                         
 	
-	## Create Battle track and change to loop if plays Outro ##
-	AudioManager.change_loop(combat_track_name, 0, true)
+	## Switch to the "Loop1" clip just in case the outro is still playing.
+	## (As if returning to a battle after having already escaped)
+	#AudioManager.remove_callback(combat_track_name)
+	AudioManager.change_clip(combat_track_name, "Loop1", 0.7, 1.0)
 
 func off_combat():
-	## Set method in sequence after outro plsying ##
-	AudioManager.set_sequence(back_to_main_theme)
-	AudioManager.to_outro(combat_track_name, 0.0, 0.0)
+	## Set a callback when the "Outro" clip has finished
+	AudioManager.set_callback(combat_track_name, back_to_main_theme)
 	
-	
-func back_to_main_theme():
-	AudioManager.play_music(parallel_track_name)
-	AudioManager.mute_layer(parallel_track_name, music_zone, false, 0.5)
+	## In this case I don't change can_be_interrupted parameter,
+	## because I do want this audio to be able to switch to another clip while it's playing.
+	AudioManager.change_clip(combat_track_name, "Outro")
 	
 func _on_button_pressed():
 	var instance = ENEMY.instantiate()
@@ -59,30 +52,42 @@ func _on_button_pressed():
 	enemy_container.add_child(instance)
 
 
+func back_to_main_theme():
+	AudioManager.play_music(parallel_track_name)
+	AudioManager.mute_all_layers(true, 0.0)
+	AudioManager.mute_layer(music_zone, false, 1.0)
+	
+
+## -------------------------------------------------------------------------------------------------
+###################
 ## PARALLELTRACK ##
+###################
+
+var fade_out : float = 1.3
+var fade_time : float = 1.0
 
 func _on_forest_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_all_layers(parallel_track_name, true, 0.5)
-		AudioManager.mute_layer(parallel_track_name, "Forest", false, 0.5)
+		AudioManager.mute_all_layers(true, fade_out)
+		AudioManager.mute_layer("Forest", false, fade_time)
 		music_zone = "Forest"
 
 func _on_ice_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_all_layers(parallel_track_name, true, 0.5)
-		AudioManager.mute_layer(parallel_track_name, "Freeze", false, 0.5)
+		AudioManager.mute_all_layers(true, fade_out)
+		AudioManager.mute_layer("Freeze", false, fade_time)
 		music_zone = "Freeze"
 
 func _on_desert_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_all_layers(parallel_track_name, true, 0.5)
-		AudioManager.mute_layer(parallel_track_name, "Desert", false, 0.5)
+		AudioManager.mute_all_layers(true, fade_out)
+		AudioManager.mute_layer("Desert", false, fade_time)
 		music_zone = "Desert"
 
 func _on_volvano_body_entered(body):
 	if body.is_in_group("Player"):
-		AudioManager.mute_all_layers(parallel_track_name, true)
-		AudioManager.mute_layer(parallel_track_name, "Volcano", false, 0.5)
+		AudioManager.mute_all_layers(true, fade_out)
+		AudioManager.mute_layer("Volcano", false, fade_time)
 		music_zone = "Volcano"
 
 
@@ -103,12 +108,3 @@ func with_bus_volume(target_volume):
 	if AudioManager.current_playback != null:
 		var tween = create_tween()
 		tween.tween_method(AudioManager.set_bus_volume_db.bind(index), vol, target_volume, 1.5)
-
-
-
-## -------------------------------------------------------------------------------------------------
-## Change Scene ##s
-func _on_exit_body_entered(body):
-	if body.is_in_group("Player"):
-		get_tree().call_deferred("change_scene_to_file", 
-		"res://addons/AdaptiSound/DEMO/Scenes/AdaptiveScene.tscn")

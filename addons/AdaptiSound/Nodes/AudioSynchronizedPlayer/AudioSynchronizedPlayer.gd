@@ -11,12 +11,10 @@ class_name AudioSynchronizedPlayer
 signal BarChanged(value)
 signal LoopBegin
 
-# -----------------------------------------------------------------------------
-#Playback Signals
-#signal TrackPlaying
-#signal TrackStopped
+## Update Editor Preview ##
+signal layers_array_changed
 
-
+# ------------------------------------------------------------------------------
 ## Contains the audio clips that will behave as layers of the same synchronized track.
 @export var layers : Array[AdaptiLayerResource]: set = set_custom_res
 
@@ -55,22 +53,6 @@ var beat_system : BeatSystemResource
 
 ## BEAT SYSTEM ##
 func _validate_property(property):
-	## EDITOR PLAYBACK ##
-	if property.name == "_play" and !editor_preview:
-		property.usage = PROPERTY_USAGE_NO_EDITOR
-		
-	if property.name == "_stop" and !editor_preview:
-		property.usage = PROPERTY_USAGE_NO_EDITOR
-	
-	if property.name == "fade_time" and !editor_preview:
-		property.usage = PROPERTY_USAGE_NO_EDITOR
-		
-	if property.name == "volume_db" and !editor_preview:
-		property.usage = PROPERTY_USAGE_NO_EDITOR
-		
-	if property.name == "pitch_scale" and !editor_preview:
-		property.usage = PROPERTY_USAGE_NO_EDITOR
-	
 	## BEAT SYSTEM ##
 	if property.name == "beat_system" and !beat_system_enable:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
@@ -156,14 +138,24 @@ func _enter_tree():
 	if !beat_system.LoopBegin.is_connected(loop_begin_emit):
 		beat_system.LoopBegin.connect(loop_begin_emit)
 		
+	enable_process_mode(false)
+	
+func enable_process_mode(value:bool):
+	if process_callback == 0:
+		set_process(value)
+		set_physics_process(false)
+	else:
+		set_physics_process(value)
+		set_process(false)
+		
 ## BEAT SYSTEM SIGNALS
 func bar_signal_emit(value):
 	if beat_system_debug:
-		print("BeatSystem: Measure count: " + str(value))
+		_print("BeatSystem: Measure count: " + str(value))
 	BarChanged.emit(value)
 func loop_begin_emit():
 	if beat_system_debug:
-		print("BeatSystem: Measure count: " + str(1) + " Loop Begin")
+		_print("BeatSystem: Measure count: " + str(1) + " Loop Begin")
 	LoopBegin.emit()
 	
 ## -----------------------------------------------------------------------------
@@ -212,6 +204,31 @@ func create_audio_players():
 ## PLAYBACK METHODS ##
 ######################
 
+func play_from_editor(song_pos:=0.0, vol_db:=0.0, fade_in:=0.0):
+	var childs = get_children()
+	if childs.size() == 0:
+		_print("No clips in AudioInteractivePlayer")
+		return
+		
+	if playing:
+		_print("Clip already playing")
+		return
+		
+	volume_db = vol_db
+	if song_pos < 0.0:
+		song_pos = 0.0
+	
+	if song_pos != 0.0:
+		for i in get_children():
+			if i.on_mute:
+				i.on_fade_in(-80.0, 0.0)
+			else:
+				i.on_fade_in(vol_db, 0.0)
+			i.play(song_pos)
+	else:
+		_play_method(vol_db, fade_in)
+
+
 func play(vol_db:=0.0, fade_in:=0.0):
 	var childs = get_children()
 	if childs.size() == 0:
@@ -256,10 +273,10 @@ func on_stop(fade_time := 0.0, can_destroy := false):
 
 ## -----------------------------------------------------------------------------
 ## Main method to mute and unmute audio layers
-func on_mute_layers(layer, mute_state : bool, fade_time:=1.0, loop_target:=-1):
+func on_mute_layers(layer, mute_state : bool, fade_time:=1.0):
 	if typeof(layer) == TYPE_INT:
 		if layer > get_child_count() - 1:
-			AudioManager.debug._print("DEBUG: Layer not found")
+			_print("Layer index" + str(layer) + " not found")
 		else:
 			var node = get_children()[layer]
 			if mute_state:
@@ -268,22 +285,26 @@ func on_mute_layers(layer, mute_state : bool, fade_time:=1.0, loop_target:=-1):
 				node.on_fade_in(volume_db, fade_time)
 			node.on_mute = mute_state
 				
-	if typeof(layer) == TYPE_STRING:
-		if groups.has(layer):
-			for n in groups[layer]:
-				if mute_state:
-					n.on_fade_out(fade_time, false)
-				else:
-					n.on_fade_in(volume_db, fade_time)
-				n.on_mute = mute_state
+	else:
+		if !audio_players.has(layer):
+			_print("Layer name " + layer + " not found")
+			return
+		#if groups.has(layer):
+			#for n in groups[layer]:
+				#if mute_state:
+					#n.on_fade_out(fade_time, false)
+				#else:
+					#n.on_fade_in(volume_db, fade_time)
+				#n.on_mute = mute_state
+		#else:
+		var node = audio_players[layer]
+		if mute_state:
+			node.on_fade_out(fade_time, false)
 		else:
-			var node = audio_players[layer]
-			if mute_state:
-				node.on_fade_out(fade_time, false)
-			else:
-				node.on_fade_in(volume_db, fade_time)
+			node.on_fade_in(volume_db, fade_time)
+		node.on_mute = mute_state
 
-func mute_all_layers(mute_state : bool, fade_time:=1.0, loop_target:=-1):
+func mute_all_layers(mute_state : bool, fade_time:=1.0):
 	for i:AdaptiAudioStreamPlayer in get_children():
 		if mute_state:
 			i.on_fade_out(fade_time, false)
@@ -296,22 +317,22 @@ func mute_all_layers(mute_state : bool, fade_time:=1.0, loop_target:=-1):
 ## BEAT SYSTEM ##
 #################
 func _process(delta):
-	if process_callback == 0:
-		check_track_is_playing()
-		if beat_system_enable and audio_players.size() != 0:
-			if playing:
-				beat_system.beat_process(delta, get_child(0))
-			else:
-				beat_system.can_first_beat = true
+	#if process_callback == 0:
+	check_track_is_playing()
+	if beat_system_enable and audio_players.size() != 0:
+		if playing:
+			beat_system.beat_process(delta, get_child(0))
+		else:
+			beat_system.can_first_beat = true
 	
 func _physics_process(delta):
-	if process_callback == 1:
-		check_track_is_playing()
-		if beat_system_enable and audio_players.size() != 0:
-			if playing:
-				beat_system.beat_process(delta, get_child(0))
-			else:
-				beat_system.can_first_beat = true
+	#if process_callback == 1:
+	check_track_is_playing()
+	if beat_system_enable and audio_players.size() != 0:
+		if playing:
+			beat_system.beat_process(delta, get_child(0))
+		else:
+			beat_system.can_first_beat = true
 			
 ## -----------------------------------------------------------------------------
 #########################
@@ -329,6 +350,12 @@ func set_volume_db(value : float):
 	for i:AdaptiAudioStreamPlayer in get_children():
 		if !i.on_mute:
 			i.volume_db = value
+			
+func get_audio_stream_player(layer_name:String) -> AdaptiAudioStreamPlayer:
+	if audio_players.size() != 0:
+		return audio_players[layer_name]
+	else:
+		return null
 
 
 ## -----------------------------------------------------------------------------
@@ -352,8 +379,9 @@ func set_custom_res(value):
 			layers[i].connect("mute_layer_changed", set_mute_layer)
 	
 	if Engine.is_editor_hint():
-		create_audio_players()
-		#notify_property_list_changed()
+		layers_array_changed.emit()
+		#create_audio_players()
+		notify_property_list_changed()
 		
 func set_mute_layer(value, res):
 	var idx = layers.find(res)

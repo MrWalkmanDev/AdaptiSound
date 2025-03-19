@@ -12,14 +12,18 @@ var can_change = true
 
 var groups = []
 
-var sequence = false
-var method_sequence : Callable
+var callback = false
+var method_callback : Callable
 
 ## for volume manager
 var on_mute = false
 
 ## for random sequencer
 var random_sequence = false
+
+## Transitions
+#var fade_in_time : float = 0.0
+#var fade_out_time : float = 0.0
 
 
 ## -------------------------------------------------------------------------------------------------
@@ -92,17 +96,24 @@ func on_fade_out(fade_time := 1.5, can_stop := true):
 ## SEQUENCE METHODS ##
 ######################
 
-func set_sequence(method : Callable):
-	sequence = true
-	method_sequence = method
+func set_callback(method : Callable):
+	callback = true
+	method_callback = method
+	
+func get_callback()->bool:
+	return callback
+	
+func remove_callback():
+	callback = false
+	method_callback = get_callback
 	
 func stop_tween():
 	if tween:
 		tween.kill()
 
 func _on_finished():
-	if sequence:
-		method_sequence.call()
+	if callback:
+		method_callback.call()
 	if random_sequence:
 		emit_signal("audio_finished", self)
 

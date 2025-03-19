@@ -31,7 +31,7 @@ func _enter_tree():
 
 	## Add nodes ##
 	add_custom_type("AudioInteractivePlaylist", "Node", interactive_player, interactive_icon)
-	add_custom_type("AudioCombined", "Node", adaptitrack, adaptive_track_icon)
+	#add_custom_type("AudioCombined", "Node", adaptitrack, adaptive_track_icon)
 	add_custom_type("AudioSynchronized", "Node", synchronized_player, parallel_track_icon)
 	
 	## Inspector Plugin ##
@@ -40,7 +40,6 @@ func _enter_tree():
 	
 	editor_selection.connect("selection_changed", _on_selection_changed)
 	beat_panel = BEAT_EDITOR_PANEL.instantiate()
-	#add_control_to_bottom_panel(beat_panel, "Audio Editor Preview")
 	
 	## MAIN PANEL ##
 	main_instance = MainPanel.instantiate()
@@ -48,7 +47,7 @@ func _enter_tree():
 	
 func _exit_tree():
 	remove_autoload_singleton("AudioManager")
-	remove_custom_type("AudioCombined")
+	#remove_custom_type("AudioCombined")
 	remove_custom_type("AudioSynchronized")
 	remove_custom_type("AudioInteractivePlaylist")
 	
@@ -66,9 +65,10 @@ func _on_selection_changed():
 		# Always pick first node in selection
 		var selected_node = selected[0]
 		if selected_node is AdaptiNode:
-			beat_panel.initialize_panel(selected_node)
+			remove_control_from_bottom_panel(beat_panel)
 			add_control_to_bottom_panel(beat_panel, "Audio Editor Preview")
-			#_make_visible(true)
+			beat_panel.initialize_panel(selected_node)
+			#_make_visible(false)
 		else:
 			remove_control_from_bottom_panel(beat_panel)
 			#_make_visible(false)

@@ -1,0 +1,54 @@
+[gd_scene load_steps=13 format=3 uid="uid://b4aiwspgmjle5"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioSynchronizedPlayer/AudioSynchronizedPlayer.gd" id="1_4desa"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioSynchronizedPlayer/AdaptiLayerResource.gd" id="2_wvi7x"]
+[ext_resource type="AudioStream" uid="uid://cvwl3d8x2j1ce" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Example2/Desert.ogg" id="3_arbbk"]
+[ext_resource type="AudioStream" uid="uid://dc3q4gejerkax" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Example2/Forest.ogg" id="4_vd53f"]
+[ext_resource type="AudioStream" uid="uid://1bd3hyf3l5cc" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Example2/Freeze.ogg" id="5_xbt77"]
+[ext_resource type="AudioStream" uid="uid://da4i5og6vd58a" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Example2/Volcano.ogg" id="6_g5785"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/BeatSystem.gd" id="7_8ex8n"]
+
+[sub_resource type="Resource" id="Resource_ir6lu"]
+resource_name = "Layer 1"
+script = ExtResource("2_wvi7x")
+layer_name = &"Forest"
+clip = ExtResource("4_vd53f")
+mute = false
+
+[sub_resource type="Resource" id="Resource_nlmlt"]
+resource_name = "Layer 0"
+script = ExtResource("2_wvi7x")
+layer_name = &"Desert"
+clip = ExtResource("3_arbbk")
+mute = true
+
+[sub_resource type="Resource" id="Resource_0ude7"]
+resource_name = "Layer 2"
+script = ExtResource("2_wvi7x")
+layer_name = &"Freeze"
+clip = ExtResource("5_xbt77")
+mute = true
+
+[sub_resource type="Resource" id="Resource_3joru"]
+resource_name = "Layer 3"
+script = ExtResource("2_wvi7x")
+layer_name = &"Volcano"
+clip = ExtResource("6_g5785")
+mute = true
+
+[sub_resource type="Resource" id="Resource_gn71k"]
+script = ExtResource("7_8ex8n")
+bpm = 120
+beats_per_bar = 4
+
+[node name="Example2" type="Node"]
+script = ExtResource("1_4desa")
+layers = Array[ExtResource("2_wvi7x")]([SubResource("Resource_ir6lu"), SubResource("Resource_nlmlt"), SubResource("Resource_0ude7"), SubResource("Resource_3joru")])
+editor_preview = true
+_play = false
+_stop = false
+volume_db = 0.0
+pitch_scale = 1.0
+fade_time = 1.4
+beat_system_enable = true
+beat_system = SubResource("Resource_gn71k")

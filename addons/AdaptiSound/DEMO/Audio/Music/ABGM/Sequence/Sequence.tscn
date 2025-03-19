@@ -1,0 +1,70 @@
+[gd_scene load_steps=11 format=3 uid="uid://clcan43fdm86"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioInteractivePlayer/AudioInteractivePlayer.gd" id="1_2osft"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioInteractivePlayer/AdaptiClipResource.gd" id="2_ummra"]
+[ext_resource type="AudioStream" uid="uid://qunc47yno8ex" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Sequence/sequence1.ogg" id="3_iwpj1"]
+[ext_resource type="AudioStream" uid="uid://cnlns4sgaxjc7" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Sequence/sequence2.ogg" id="4_t0inw"]
+[ext_resource type="AudioStream" uid="uid://c3m6gyqr5kpo5" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Sequence/sequence3.ogg" id="5_rrd3f"]
+[ext_resource type="AudioStream" uid="uid://csp0qsgrm1i54" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Sequence/sequence4.ogg" id="6_ggkdf"]
+
+[sub_resource type="Resource" id="Resource_4uirg"]
+resource_name = "Clip 0"
+script = ExtResource("2_ummra")
+clip_name = &"Clip1"
+clip = ExtResource("3_iwpj1")
+advance_type = 1
+bpm = 120
+beats_per_bar = 4
+key_bars = Array[int]([])
+can_be_interrupted = true
+_next_clip = "Clip1"
+fade_in_time = null
+fade_out_time = null
+
+[sub_resource type="Resource" id="Resource_qcin8"]
+resource_name = "Clip 1"
+script = ExtResource("2_ummra")
+clip_name = &"Clip2"
+clip = ExtResource("4_t0inw")
+advance_type = 1
+bpm = 120
+beats_per_bar = 4
+key_bars = Array[int]([])
+can_be_interrupted = true
+_next_clip = "Clip1"
+fade_in_time = null
+fade_out_time = null
+
+[sub_resource type="Resource" id="Resource_x73c0"]
+resource_name = "Clip 2"
+script = ExtResource("2_ummra")
+clip_name = &"Clip3"
+clip = ExtResource("5_rrd3f")
+advance_type = 1
+bpm = 120
+beats_per_bar = 4
+key_bars = Array[int]([])
+can_be_interrupted = true
+_next_clip = "Clip1"
+fade_in_time = null
+fade_out_time = null
+
+[sub_resource type="Resource" id="Resource_ji5lt"]
+resource_name = "Clip 3"
+script = ExtResource("2_ummra")
+clip_name = &"Clip4"
+clip = ExtResource("6_ggkdf")
+advance_type = 1
+bpm = 120
+beats_per_bar = 4
+key_bars = Array[int]([])
+can_be_interrupted = true
+_next_clip = "Clip1"
+fade_in_time = null
+fade_out_time = null
+
+[node name="Sequence" type="Node"]
+script = ExtResource("1_2osft")
+clips = Array[ExtResource("2_ummra")]([SubResource("Resource_4uirg"), SubResource("Resource_qcin8"), SubResource("Resource_x73c0"), SubResource("Resource_ji5lt")])
+initial_clip = "Clip1"
+shuffle_playback = true

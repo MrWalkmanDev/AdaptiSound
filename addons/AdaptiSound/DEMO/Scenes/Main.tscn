@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bsoraaphm8r83" path="res://addons/AdaptiSound/DEMO/Assets/Tiles/Simple Fantasy/desert_/desert_ [resources].png" id="12_acngu"]
 [ext_resource type="Texture2D" uid="uid://8yeyh20k4oxe" path="res://addons/AdaptiSound/DEMO/Assets/Tiles/Simple Fantasy/forest_/forest_ [resources].png" id="13_uotdc"]
 [ext_resource type="Texture2D" uid="uid://bb48uu6jgg3ti" path="res://addons/AdaptiSound/DEMO/Assets/Tiles/Simple Fantasy/cave_/cave_ [resources].png" id="14_q03rr"]
-[ext_resource type="PackedScene" path="res://addons/AdaptiSound/DEMO/Prefabs/Player/TopDown.tscn" id="15_vutqf"]
+[ext_resource type="PackedScene" uid="uid://l3qei14v2cge" path="res://addons/AdaptiSound/DEMO/Prefabs/Player/TopDown.tscn" id="15_vutqf"]
 [ext_resource type="PackedScene" uid="uid://bf4r850n7i2wx" path="res://addons/AdaptiSound/DEMO/Prefabs/npc.tscn" id="16_3v5hw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_76f87"]
@@ -1261,6 +1261,5 @@ shape = SubResource("CircleShape2D_maul8")
 [connection signal="body_entered" from="Music_Zones/Desert" to="." method="_on_desert_body_entered"]
 [connection signal="body_entered" from="Music_Zones/Volvano" to="." method="_on_volvano_body_entered"]
 [connection signal="pressed" from="CanvasLayer/Control/Button" to="." method="_on_button_pressed"]
-[connection signal="body_entered" from="Label/Exit" to="." method="_on_exit_body_entered"]
 
 [editable path="Node2D/NPC"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=17 format=3 uid="uid://l3qei14v2cge"]
 
 [ext_resource type="Texture2D" uid="uid://bwku0o84nftic" path="res://addons/AdaptiSound/DEMO/Assets/fPlayer_ [dwarf].png" id="1_gffis"]
 [ext_resource type="Script" path="res://addons/AdaptiSound/DEMO/Prefabs/Player/TopDown.gd" id="1_ucvf1"]

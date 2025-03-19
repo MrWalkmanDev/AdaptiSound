@@ -4,6 +4,7 @@ extends Node
 ## and in parallel one of Background Sound (BGS).
 
 ## -------------------------------------------------------------------------------------------------
+
 const ADAPTIVE_TRACKS = preload("res://addons/AdaptiSound/Singleton/AdaptiveMethods.gd")
 const BGS_TRACKS = preload("res://addons/AdaptiSound/Singleton/BGSMethods.gd")
 const DEBUG = preload("res://addons/AdaptiSound/Singleton/DEBUG.gd")
@@ -76,6 +77,7 @@ var bgs_bus : String
 ## -------------------------------------------------------------------------------------------------
 ## AudioManager Initialization
 func _ready():
+	set_process(false)
 	initialize_manager()
 	
 	## Preload every audio and assign on dictionaries
@@ -122,6 +124,7 @@ func initialize_manager():
 		debug._print("DEBUG: DATA file not found")
 
 
+
 ########################
 ## Audio Load Methods ##
 ########################
@@ -147,16 +150,15 @@ func load_audio_from_filepath(path:String, sound_name:String, category:=BGM):
 		BGS:
 			background_sounds_pool[sound_name] = load(path)
 			
-func remove_audio_from_pool(sound_name:String):
+func remove_audio_from_pool(sound_name:String) -> void:
 	if background_music_pool.has(sound_name):
 		background_music_pool.erase(sound_name)
+	else:
+		debug._print("sound name not found in bgm pool")
 	if background_sounds_pool.has(sound_name):
 		background_sounds_pool.erase(sound_name)
-
-func get_bgs_pool():
-	return background_sounds_pool
-func get_bgm_pool():
-	return background_music_pool
+	else:
+		debug._print("sound name not found in bgs pool")
 	
 	
 ## -------------------------------------------------------------------------------------------------
@@ -197,7 +199,7 @@ func remove_all_audio_tracks():
 ## These are the global playback methods that will work for both audio categories: BGM and BGS.
 
 ## Play music or change current playback
-func play_music(sound_name: String, vol_db:= 0.0, fade_in: = 0.0, fade_out:= 0.0):
+func play_music(sound_name: String, vol_db:= 0.0, fade_in:=0.0, fade_out:=0.0):
 		
 	## Get data of track
 	var track_data = get_track_data(sound_name)
@@ -215,6 +217,7 @@ func play_music(sound_name: String, vol_db:= 0.0, fade_in: = 0.0, fade_out:= 0.0
 	if current_playback == audio_stream:
 		debug._print("DEBUG: Track already playing")
 		return audio_stream
+	
 	
 	## Stop Current Track
 	if current_playback != null:
@@ -261,6 +264,8 @@ func stop_music(fade_out := 0.0, can_destroy := true):
 
 ## -------------------------------------------------------------------------------------------------
 ## Stop all global audios (ABGM, BGM and BGS)
+## NOTE: When using the stop_all method, all tracks will be queue_free
+## unless specified in the second parameter of stop_all method
 func stop_all(fade_time := 0.0, can_destroy := true):
 	var audio_containers = [bgm_container, bgs_container]
 	for container in audio_containers:
@@ -279,33 +284,29 @@ func stop_all(fade_time := 0.0, can_destroy := true):
 ########################################
 
 ## Change between clips by index (Int) or name (String)
-func change_clip(sound_name, clip_by_index, fade_in := 0.0, fade_out := 0.0):
-	ABGM_methods.change_loop(sound_name, clip_by_index, fade_out, fade_in)
+## It only runs on the current_playback
+func change_clip(sound_name:String, clip_by_name_or_index, fade_in:=0.0, fade_out:=0.0)->void:
+	ABGM_methods.change_clip(sound_name, clip_by_name_or_index, fade_in, fade_out)
+	
+## Sets the starting clip for the specified track.
+func set_initial_clip(track_name:String, clip_name:String)->AudioInteractivePlayer:
+	var track = get_audio_track(track_name)
+	if track:
+		if track is AudioInteractivePlayer:
+			track.set_initial_clip(clip_name)
+		else:
+			debug._print("AudioManager: Cannot change initial_clip on a node other than AudioInteractivePlaylist.")
+	return track
 
-#####################################
-## CombinedPlayer Playback Methods ##
-#####################################
-
-## Change between loops by loop_index
-func change_loop(sound_name, loop_by_index, fade_in := 0.0, fade_out := 0.0):
-	ABGM_methods.change_loop(sound_name, loop_by_index, fade_out, fade_in)
-
-## Change from the Loop section to Outro section
-func to_outro(sound_name : String, fade_in := 0.0, fade_out := 0.0):
-	return ABGM_methods.to_outro(sound_name, fade_out, fade_in)
-
-## Set a custom method to execute after current_playback stops
-## For example, you can pass AudioManager.set_sequence(custom_method),
-## When current_playback stops, custom_method will be started. 
-## In this custom method, you can play another track
-func set_sequence(method : Callable):
-	if current_playback != null:
-		current_playback.set_sequence(method)
-
-## If true, current_playback is queue_free once to stopped.
-func set_destroy(state : bool):
-	if current_playback != null:
-		current_playback.set_destroy(state)
+## Sets whether the clip can be interrupted by the change_clip or not
+func set_can_be_interrupted(track_name:String, clip_name:String, value:bool)->AudioInteractivePlayer:
+	var track = get_audio_track(track_name)
+	if track:
+		if track is AudioInteractivePlayer:
+			track.set_can_be_interrupted(clip_name, value)
+		else:
+			debug._print("AudioManager: Cannot change can_be_interrupted on a node other than AudioInteractivePlaylist.")
+	return track
 
 
 ## -------------------------------------------------------------------------------------------------
@@ -314,13 +315,12 @@ func set_destroy(state : bool):
 #########################################
 
 ## Mute or Unmute diferent layers in the current_playback.
-func mute_layer(track_name: String, layer, mute_state: bool, 
-	fade_time := 2.0, loop_target := -1):
-	ABGM_methods.mute_layer(track_name, layer, mute_state, fade_time, loop_target)
+func mute_layer(layer, mute_state: bool, fade_time := 2.0):
+	ABGM_methods.mute_layer(current_playback, layer, mute_state, fade_time)
 
 ## Mute or Unmute all layers in the current_playback
-func mute_all_layers(track_name: String, mute_state: bool, fade_time := 2.0, loop_target := -1):
-	ABGM_methods.mute_all_layers(track_name, mute_state, fade_time, loop_target)
+func mute_all_layers(mute_state: bool, fade_time := 2.0):
+	ABGM_methods.mute_all_layers(current_playback, mute_state, fade_time)
 
 
 ## -------------------------------------------------------------------------------------------------
@@ -329,23 +329,59 @@ func mute_all_layers(track_name: String, mute_state: bool, fade_time := 2.0, loo
 ##########################
 
 ## Play BGS track or change for another one
-func play_sound(sound_name: String, fade_in: = 0.5, fade_out:= 1.5):
-	return BGS_methods.play_sound(sound_name, fade_in, fade_out)
+func play_sound(sound_name: String, vol_db:=0.0, fade_in: = 0.5, fade_out:= 1.5):
+	return BGS_methods.play_sound(sound_name, vol_db, fade_in, fade_out)
 
 ## Stop current BGS track
 func stop_sound(fade_time := 0.0):
 	BGS_methods.stop_sound(fade_time)
 	
 ## Mute or unmute current BGS track layer
-func mute_bgs_layer(track_name: String, layer_names: Array, mute_state: bool, fade_time := 2.0):
-	BGS_methods.mute_bgs_layer(track_name, layer_names, mute_state, fade_time)
+func mute_bgs_layer(layer_name, mute_state: bool, fade_time := 2.0):
+	BGS_methods.mute_bgs_layer(current_bgs_playback, layer_name, mute_state, fade_time)
 
+## Mute or Unmute all layers in the current_bgs_playback
+func mute_bgs_all_layers(mute_state: bool, fade_time := 2.0):
+	ABGM_methods.mute_all_layers(current_bgs_playback, mute_state, fade_time)
+
+
+## -------------------------------------------------------------------------------------------------
+#####################
+## General Methods ##
+#####################
+
+## Set a custom method to execute after specific track stops
+## For example, you can pass AudioManager.set_sequence(name, custom_method),
+## When track "name" stops, custom_method will be started. 
+## In this custom method, you can play another track for example
+func set_callback(track_name:String, method:Callable):
+	var track = get_audio_track(track_name)
+	if track:
+		track.set_callback(method)
+
+## removes the callback method on the specific track
+func remove_callback(track_name:String):
+	var track = get_audio_track(track_name)
+	if track:
+		track.remove_callback()
+
+## If true, specific track is queue_free once to stopped.
+func set_destroy(track_name:String, state:bool):
+	var track = get_audio_track(track_name)
+	if track != null:
+		track.set_destroy(state)
 
 
 ## -------------------------------------------------------------------------------------------------
 #########################
 ## SETTERS AND GETTERS ##
 #########################
+
+## Get Audio Pools ##
+func get_bgs_pool():
+	return background_sounds_pool
+func get_bgm_pool():
+	return background_music_pool
 
 ## Get track info for use on add_track
 func get_track_data(sound_name : String):

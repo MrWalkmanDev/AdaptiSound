@@ -1,42 +1,73 @@
-[gd_scene load_steps=7 format=3 uid="uid://bn4iqaw0lxe8p"]
+[gd_scene load_steps=11 format=3 uid="uid://bn4iqaw0lxe8p"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioInteractivePlayer/AudioInteractivePlayer.gd" id="1_gywrq"]
 [ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioInteractivePlayer/AdaptiClipResource.gd" id="2_boahv"]
 [ext_resource type="AudioStream" uid="uid://deo87tguctvp4" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Example1/Battle_Intro.ogg" id="3_p7d0i"]
 [ext_resource type="AudioStream" uid="uid://ybc5gexcpam6" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Example1/Battle_Loop.ogg" id="4_3f7gr"]
+[ext_resource type="AudioStream" uid="uid://cmshx8e7yf4r" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Example1/Battle_Loop_2.ogg" id="5_kqaib"]
+[ext_resource type="AudioStream" uid="uid://cu5i7wu7ywgly" path="res://addons/AdaptiSound/DEMO/Audio/Music/ABGM/Example1/Battle_Outro.ogg" id="6_jwyrv"]
 
 [sub_resource type="Resource" id="Resource_hf15k"]
 resource_name = "Clip 0"
 script = ExtResource("2_boahv")
-clip_name = &"Clip 0"
+clip_name = &"Intro"
 clip = ExtResource("3_p7d0i")
 advance_type = 1
 bpm = 100
-beats_per_bar = 4
+beats_per_bar = 1
 key_bars = Array[int]([])
-_next_clip = "XD"
+can_be_interrupted = false
+_next_clip = "Loop1"
+fade_in_time = null
+fade_out_time = null
 
 [sub_resource type="Resource" id="Resource_dyeju"]
 resource_name = "Clip 1"
 script = ExtResource("2_boahv")
-clip_name = &"XD"
+clip_name = &"Loop1"
 clip = ExtResource("4_3f7gr")
 advance_type = 0
-_next_clip = ""
+_next_clip = "Loop1"
+bpm = 100
+beats_per_bar = 2
+key_bars = Array[int]([1, 2, 3, 4, 5, 6, 7, 8, 9])
+can_be_interrupted = true
+_next_clip = "Loop1"
+fade_in_time = null
+fade_out_time = null
+
+[sub_resource type="Resource" id="Resource_0aepj"]
+resource_name = "Clip 2"
+script = ExtResource("2_boahv")
+clip_name = &"Loop2"
+clip = ExtResource("5_kqaib")
+advance_type = 0
+_next_clip = "Intro"
+bpm = 100
+beats_per_bar = 2
+key_bars = Array[int]([1, 2, 3, 8, 9, 4, 5, 6, 7])
+can_be_interrupted = true
+_next_clip = "Intro"
+fade_in_time = null
+fade_out_time = null
+
+[sub_resource type="Resource" id="Resource_fs8d1"]
+resource_name = "Clip 3"
+script = ExtResource("2_boahv")
+clip_name = &"Outro"
+clip = ExtResource("6_jwyrv")
+advance_type = 2
+_next_clip = "Intro"
 bpm = 100
 beats_per_bar = 4
 key_bars = Array[int]([])
-_next_clip = ""
+can_be_interrupted = true
+_next_clip = "Intro"
+fade_in_time = null
+fade_out_time = null
 
 [node name="BattleExample" type="Node"]
 script = ExtResource("1_gywrq")
-clips = Array[ExtResource("2_boahv")]([SubResource("Resource_hf15k"), SubResource("Resource_dyeju")])
-initial_clip = "Clip 0"
+clips = Array[ExtResource("2_boahv")]([SubResource("Resource_hf15k"), SubResource("Resource_dyeju"), SubResource("Resource_0aepj"), SubResource("Resource_fs8d1")])
+initial_clip = "Intro"
 shuffle_playback = false
-beat_system_enable = true
-editor_preview = true
-_stop = false
-volume_db = 7.45058e-08
-pitch_scale = 1.0
-time_fade_in = 0.0
-time_fade_out = 0.0

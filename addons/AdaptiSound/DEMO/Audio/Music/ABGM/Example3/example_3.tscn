@@ -52,3 +52,4 @@ pitch_scale = 1.0
 fade_time = 1.0
 beat_system_enable = true
 beat_system = SubResource("Resource_kfvn2")
+beat_system_debug = false

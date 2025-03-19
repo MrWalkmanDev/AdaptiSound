@@ -1,15 +1,11 @@
 @tool
-extends VBoxContainer
+extends BoxContainer
 class_name AdaptiClipSlot
 
 const BEAT_BAR = preload("res://addons/AdaptiSound/EditorInspector/BeatEditorPanel/beat_bar.tscn")
 
 signal play_pressed(clip_slot)
-#signal name_changed(clip_name)
-#signal advance_changed(value)
-#signal clip_changed(clip)
-#signal bpm_changed(value)
-#signal measure_changed(value)
+signal remove_pressed(clip_slot)
 
 
 @onready var clip_name : LineEdit = %ClipName
@@ -18,20 +14,36 @@ signal play_pressed(clip_slot)
 @onready var bpm : SpinBox = %BPM
 @onready var measure : SpinBox = %Measure
 @onready var audio_slider : HSlider = %AudioSlider
+@onready var clip_time : Label = %ClipTime
 
 @onready var bar_container : Control = %BarContainer
 @onready var next_clip : OptionButton = %NextClip
 
+@onready var travel_label : Label = %TravelingLabel
+
+@onready var grid : CheckButton = %Grid
+
 var clip_resource : AdaptiClipResource
 var audio_interactive_player : AudioInteractivePlayer
+var audio_stream : AdaptiAudioStreamPlayer
 
 var beat_duration_in_sec : float = 0.0
+var snap_value : float = 0.0
+
+var on_grid : bool = true
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
+		set_process(true)
 		if audio_interactive_player:
+			next_clip.clear()
+			var idx = 0
 			for i in audio_interactive_player.clips:
 				next_clip.add_item(i.clip_name)
+				if i.clip_name == clip_resource._next_clip:
+					idx = audio_interactive_player.clips.find(i)
+			next_clip.select(idx)
+			clip_resource._next_clip = next_clip.get_item_text(idx)
 		if !clip_resource:
 			return
 			
@@ -42,11 +54,49 @@ func _ready() -> void:
 		bpm.value = clip_resource.bpm
 		measure.value = clip_resource.beats_per_bar
 		
+		#%TransType.select(clip_resource.entry_transition)
+		#_on_trans_type_item_selected(clip_resource.entry_transition)
+		#%FadeInValue.value = clip_resource.fade_in_time
+		#%FadeOutValue.value = clip_resource.fade_out_time
+		
+		%Interrupted.button_pressed = clip_resource.can_be_interrupted
+		
 		beat_duration_in_sec = 60.0 / bpm.value
+		snap_value = beat_duration_in_sec
 		
+		grid.button_pressed = on_grid
+	else:
+		set_process(false)
 		
+	
+func _process(delta: float) -> void:
+	if audio_stream:
+		if audio_stream.playing:
+			var song_position = audio_stream.get_playback_position()\
+			+ AudioServer.get_time_since_last_mix()
+			song_position -= AudioServer.get_output_latency()
+			#var song_position_in_beats = int(floor(song_position / beat_duration_in_sec))
+			audio_slider.value = song_position
+			clip_time.text = format_time(song_position)
+		else:
+			if audio_slider.value == 0.0:
+				clip_time.text = "0:00:000"
+			else:
+				clip_time.text = format_time(audio_slider.value)
+
+func format_time(seconds: float) -> String:
+	var minutes = int(seconds) / 60
+	var secs = int(seconds) % 60
+	var millisecs = int((seconds - int(seconds)) * 1000)
+	return "%02d:%02d:%03d" % [minutes, secs, millisecs]
+	
 
 func update_bars():
+	await get_tree().process_frame
+	if !clip_resource.clip:
+		print(clip_resource.clip_name + ": audio file not found")
+		return
+	
 	audio_slider.max_value = clip_resource.clip.get_length()
 	
 	for i in bar_container.get_children():
@@ -54,7 +104,7 @@ func update_bars():
 	beat_duration_in_sec = 60.0 / bpm.value
 	var bar_duration = beat_duration_in_sec * measure.value
 	var total_bars = clip_resource.clip.get_length() / bar_duration
-	var x_size = bar_container.size.x
+	var x_size = %BarVisualizer.size.x
 	var total_beats = clip_resource.clip.get_length() / beat_duration_in_sec
 	
 	var distance_beat = x_size / total_beats
@@ -79,29 +129,44 @@ func _on_key_pressed(value:bool, key_idx:int):
 			clip_resource.key_bars.erase(key_idx)
 
 
-## Buttons Signals ##
+##------------------------------------------------------------------------------
+## Playback ##
 func _on_play_pressed() -> void:
 	play_pressed.emit(self)
 
+
+##------------------------------------------------------------------------------
+## Clip Settings ##
 func _on_clip_name_text_changed(new_text: String) -> void:
 	clip_resource.clip_name = new_text
 	#name_changed.emit(new_text)
 
+func _on_clip_resource_changed(resource: Resource) -> void:
+	clip_resource.clip = resource
+	#clip_changed.emit(resource)
+	
+
+##------------------------------------------------------------------------------
+## Advance Type Methods ##
 func _on_advance_type_item_selected(index: int) -> void:
 	clip_resource.advance_type = index
 	set_advance_type(index)
 	
 func set_advance_type(index:int):
 	if index == 1:
-		%NextClipContainer.visible = true
+		next_clip.visible = true
+		%NextClipLabel.visible = true
 	else:
-		%NextClipContainer.visible = false
+		next_clip.visible = false
+		%NextClipLabel.visible = false
 	#advance_changed.emit(index)
 
-func _on_clip_resource_changed(resource: Resource) -> void:
-	clip_resource.clip = resource
-	#clip_changed.emit(resource)
+func _on_next_clip_item_selected(index: int) -> void:
+	clip_resource._next_clip = next_clip.get_item_text(index)
 
+
+##------------------------------------------------------------------------------
+## Beat Count System
 func _on_bpm_value_changed(value: float) -> void:
 	clip_resource.bpm = int(value)
 	update_bars()
@@ -113,13 +178,49 @@ func _on_measure_value_changed(value: float) -> void:
 	#measure_changed.emit(value)
 
 
+##------------------------------------------------------------------------------
+## Mouse Draggin ##
 func _on_audio_slider_drag_started() -> void:
-	audio_slider.step = beat_duration_in_sec
+	if on_grid:
+		audio_slider.step = snap_value
+	else:
+		audio_slider.step = 0.0
 	
 func _on_audio_slider_drag_ended(_value_changed: bool) -> void:
 	audio_slider.step = 0.0
+	
+	
 
 
+
+##------------------------------------------------------------------------------
+## Transition Buttons ##
+func _on_trans_type_item_selected(index: int) -> void:
+	clip_resource.entry_transition = index
+	if index != 1:
+		%FadeInC.visible = false
+		%FadeOutC.visible = false
+	else:
+		%FadeInC.visible = true
+		%FadeOutC.visible = true
+	
+	
+func _on_fade_in_value_value_changed(value: float) -> void:
+	clip_resource.fade_in_time = value
+	
+func _on_fade_out_value_value_changed(value: float) -> void:
+	clip_resource.fade_out_time = value
+
+#func _on_transition_toggled(toggled_on: bool) -> void:
+	#%All.visible = toggled_on
+	#%None.visible = toggled_on
+	#bar_container.visible = toggled_on
+	#if toggled_on:
+		#update_bars()
+	#else:
+		#for i in bar_container.get_children():
+			#i.button_pressed = false
+			
 func _on_all_pressed() -> void:
 	for i in bar_container.get_children():
 		i.button_pressed = true
@@ -129,5 +230,16 @@ func _on_none_pressed() -> void:
 		i.button_pressed = false
 
 
-func _on_next_clip_item_selected(index: int) -> void:
-	clip_resource._next_clip = next_clip.get_item_text(index)
+##------------------------------------------------------------------------------
+## Bottom Options
+func _on_erase_pressed() -> void:
+	remove_pressed.emit(self)
+
+func _on_grid_toggled(toggled_on: bool) -> void:
+	on_grid = toggled_on
+
+func _on_snap_value_value_changed(value: float) -> void:
+	snap_value = 60.0 / (bpm.value * value)
+
+func _on_interrupted_toggled(toggled_on: bool) -> void:
+	clip_resource.can_be_interrupted = toggled_on

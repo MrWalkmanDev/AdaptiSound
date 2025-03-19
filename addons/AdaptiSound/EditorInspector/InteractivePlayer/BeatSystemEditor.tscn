@@ -1,9 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://cgstew7ca3vc8"]
+[gd_scene load_steps=8 format=3 uid="uid://cgstew7ca3vc8"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/EditorInspector/InteractivePlayer/beat_system_editor.gd" id="1_cdoum"]
+[ext_resource type="Texture2D" uid="uid://b70gnjvccrdjd" path="res://addons/AdaptiSound/Icons/Others/play.png" id="2_7n1xt"]
 [ext_resource type="Texture2D" uid="uid://cmyjhd4ubm3sl" path="res://addons/AdaptiSound/Icons/Others/stop.png" id="3_2jd0p"]
 [ext_resource type="Texture2D" uid="uid://bouo5dl1wkopg" path="res://addons/AdaptiSound/Icons/Others/Pause.png" id="4_7h4pl"]
-[ext_resource type="Texture2D" uid="uid://cgykn7welevhq" path="res://addons/AdaptiSound/Icons/Others/Next.png" id="6_ncfej"]
+[ext_resource type="Texture2D" uid="uid://dpli8c0sne5oe" path="res://addons/AdaptiSound/Icons/Others/Add.svg" id="6_hwnvw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h2srf"]
+bg_color = Color(0.338415, 0.549003, 0.415949, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ctfq"]
+bg_color = Color(0.256589, 0.415778, 0.367632, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="BeatSystemEditor" type="Control"]
 layout_mode = 3
@@ -30,7 +45,7 @@ size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 text = "Audio Editor Preview"
 horizontal_alignment = 1
 
@@ -92,6 +107,7 @@ value = 1.0
 alignment = 1
 
 [node name="Fades" type="GridContainer" parent="MarginContainer/VBoxContainer/General"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 columns = 3
@@ -138,15 +154,72 @@ max_value = 10.0
 step = 0.1
 alignment = 1
 
+[node name="AudioSynchOption" type="VBoxContainer" parent="MarginContainer/VBoxContainer/General"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="FadeTime" type="HBoxContainer" parent="MarginContainer/VBoxContainer/General/AudioSynchOption"]
+layout_mode = 2
+
+[node name="FadeTimeLab" type="Label" parent="MarginContainer/VBoxContainer/General/AudioSynchOption/FadeTime"]
+layout_mode = 2
+text = "Fade Time"
+
+[node name="FadeTime" type="HSlider" parent="MarginContainer/VBoxContainer/General/AudioSynchOption/FadeTime"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+focus_mode = 0
+max_value = 10.0
+step = 0.1
+
+[node name="FadeTimeValue" type="SpinBox" parent="MarginContainer/VBoxContainer/General/AudioSynchOption/FadeTime"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+max_value = 10.0
+step = 0.1
+alignment = 1
+
+[node name="BPM" type="HBoxContainer" parent="MarginContainer/VBoxContainer/General/AudioSynchOption"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/General/AudioSynchOption/BPM"]
+layout_mode = 2
+text = "BPM"
+
+[node name="BPM" type="SpinBox" parent="MarginContainer/VBoxContainer/General/AudioSynchOption/BPM"]
+unique_name_in_owner = true
+layout_mode = 2
+allow_greater = true
+alignment = 1
+
+[node name="measure" type="Label" parent="MarginContainer/VBoxContainer/General/AudioSynchOption/BPM"]
+layout_mode = 2
+text = "Beats per Bar"
+
+[node name="Mesaure" type="SpinBox" parent="MarginContainer/VBoxContainer/General/AudioSynchOption/BPM"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 16.0
+alignment = 1
+
+[node name="ShuffleMode" type="VBoxContainer" parent="MarginContainer/VBoxContainer/General"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ShuffleMode" type="CheckButton" parent="MarginContainer/VBoxContainer/General/ShuffleMode"]
+layout_mode = 2
+text = "Shuffle Playback"
+alignment = 2
+
 [node name="Update" type="Button" parent="MarginContainer/VBoxContainer/General"]
 layout_mode = 2
 focus_mode = 0
+theme_override_styles/hover = SubResource("StyleBoxFlat_h2srf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_4ctfq")
 text = "Update Panel"
-
-[node name="CheckButton" type="CheckButton" parent="MarginContainer/VBoxContainer/General"]
-visible = false
-layout_mode = 2
-text = "Grid"
 
 [node name="ClipSlots" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -159,36 +232,55 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PlaybackButtons" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Pause" type="Button" parent="MarginContainer/VBoxContainer/PlaybackButtons"]
-custom_minimum_size = Vector2(48, 32)
+[node name="PlaybackButtons" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="InitialClipContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/PlaybackButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/PlaybackButtons/InitialClipContainer"]
+layout_mode = 2
+text = "Initial Clip"
+
+[node name="InitialClip" type="OptionButton" parent="MarginContainer/VBoxContainer/HBoxContainer/PlaybackButtons/InitialClipContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PlayFromZero" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/PlaybackButtons"]
+custom_minimum_size = Vector2(84, 32)
+layout_mode = 2
+theme_override_styles/hover = SubResource("StyleBoxFlat_h2srf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_4ctfq")
+icon = ExtResource("2_7n1xt")
+icon_alignment = 1
+
+[node name="Pause" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/PlaybackButtons"]
+custom_minimum_size = Vector2(84, 32)
 layout_mode = 2
 icon = ExtResource("4_7h4pl")
 icon_alignment = 1
 
-[node name="Stop" type="Button" parent="MarginContainer/VBoxContainer/PlaybackButtons"]
-custom_minimum_size = Vector2(48, 32)
+[node name="Stop" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/PlaybackButtons"]
+custom_minimum_size = Vector2(84, 32)
 layout_mode = 2
 icon = ExtResource("3_2jd0p")
 icon_alignment = 1
 
-[node name="ChangeClip" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-visible = false
+[node name="ChangeClip" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-alignment = 1
+alignment = 2
 
-[node name="ChangeTrack" type="Button" parent="MarginContainer/VBoxContainer/ChangeClip"]
+[node name="AddClip" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/ChangeClip"]
 layout_mode = 2
-text = "Change to"
-icon = ExtResource("6_ncfej")
-icon_alignment = 2
-
-[node name="NextClip" type="OptionButton" parent="MarginContainer/VBoxContainer/ChangeClip"]
-unique_name_in_owner = true
-layout_mode = 2
+text = "Add Clip"
+icon = ExtResource("6_hwnvw")
 
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Options/Volume" to="." method="_on_volume_value_changed"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Options/VolValue" to="." method="_on_vol_value_value_changed"]
@@ -198,6 +290,14 @@ layout_mode = 2
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Fades/FadeInValue" to="." method="_on_fade_in_value_value_changed"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Fades/FadeOut" to="." method="_on_fade_out_value_changed"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/General/Fades/FadeOutValue" to="." method="_on_fade_out_value_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/AudioSynchOption/FadeTime/FadeTime" to="." method="_on_fade_time_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/AudioSynchOption/FadeTime/FadeTimeValue" to="." method="_on_fade_time_value_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/AudioSynchOption/BPM/BPM" to="." method="_on_bpm_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/General/AudioSynchOption/BPM/Mesaure" to="." method="_on_mesaure_value_changed"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/General/ShuffleMode/ShuffleMode" to="." method="_on_suffle_mode_toggled"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/General/Update" to="." method="_on_update_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/PlaybackButtons/Pause" to="." method="_on_pause_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/PlaybackButtons/Stop" to="." method="_on_stop_pressed"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer/PlaybackButtons/InitialClipContainer/InitialClip" to="." method="_on_initial_clip_item_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/PlaybackButtons/PlayFromZero" to="." method="_on_play_from_zero_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/PlaybackButtons/Pause" to="." method="_on_pause_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/PlaybackButtons/Stop" to="." method="_on_stop_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/ChangeClip/AddClip" to="." method="_on_add_clip_pressed"]

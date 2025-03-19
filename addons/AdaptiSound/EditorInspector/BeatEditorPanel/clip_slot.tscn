@@ -1,19 +1,56 @@
-[gd_scene load_steps=7 format=3 uid="uid://ccl30yyibxi07"]
+[gd_scene load_steps=15 format=3 uid="uid://ccl30yyibxi07"]
 
 [ext_resource type="Script" path="res://addons/AdaptiSound/EditorInspector/BeatEditorPanel/clip_slot.gd" id="1_bj6y4"]
 [ext_resource type="Script" path="res://addons/AdaptiSound/EditorInspector/BeatEditorPanel/addon_resource_picker.gd" id="1_rpfjw"]
-[ext_resource type="Texture2D" uid="uid://b70gnjvccrdjd" path="res://addons/AdaptiSound/Icons/Others/play.png" id="2_g0gwv"]
+[ext_resource type="Texture2D" uid="uid://dpli8c0sne5oe" path="res://addons/AdaptiSound/Icons/Others/Add.svg" id="3_6qivv"]
+[ext_resource type="Texture2D" uid="uid://b5imajdyrurrv" path="res://addons/AdaptiSound/Icons/Others/Lock.svg" id="3_22d3q"]
+[ext_resource type="Texture2D" uid="uid://cgykn7welevhq" path="res://addons/AdaptiSound/Icons/Others/Next.png" id="3_hoed5"]
 [ext_resource type="Texture2D" uid="uid://0hkorihdf3jg" path="res://addons/AdaptiSound/Icons/Others/BeatBar.png" id="3_tr6bm"]
+[ext_resource type="Texture2D" uid="uid://70vk1by7umv2" path="res://addons/AdaptiSound/Icons/Others/Remove.png" id="5_o3dby"]
+[ext_resource type="Texture2D" uid="uid://b03xj5vipdm5l" path="res://addons/AdaptiSound/Icons/Others/Snap.svg" id="6_a3jjc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggpw6"]
+content_margin_left = 32.0
+content_margin_top = 32.0
+content_margin_right = 32.0
+content_margin_bottom = 8.0
+bg_color = Color(0.168627, 0.211765, 0.266667, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.270588, 0.435294, 0.580392, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="LabelSettings" id="LabelSettings_xt6al"]
+font_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kqudi"]
+bg_color = Color(0.345585, 0.506353, 0.597241, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gy100"]
+bg_color = Color(0.262745, 0.419608, 0.556863, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_yh644"]
 color = Color(0.145098, 0.168627, 0.203922, 1)
-thickness = 64
+thickness = 48
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_md0gg"]
 color = Color(0.803922, 0.807843, 0.823529, 1)
-thickness = 64
+thickness = 48
 
-[node name="ClipSlot" type="VBoxContainer"]
+[node name="ClipSlot" type="BoxContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -22,37 +59,47 @@ grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("1_bj6y4")
 
-[node name="HSeparator" type="HSeparator" parent="."]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-
-[node name="ClipSettings" type="HBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ClipSettings"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ClipSettings" type="HBoxContainer" parent="ClipSettings/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer2"]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="Name" type="Label" parent="ClipSettings/VBoxContainer/ClipSettings"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer2"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ggpw6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ClipSettings" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="GridContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="Name" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer"]
 layout_mode = 2
 text = "Clip Name"
 horizontal_alignment = 2
 
-[node name="ClipName" type="LineEdit" parent="ClipSettings/VBoxContainer/ClipSettings"]
+[node name="ClipName" type="LineEdit" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Clip Name"
 
-[node name="Label" type="Label" parent="ClipSettings/VBoxContainer/ClipSettings"]
+[node name="Label" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer"]
 layout_mode = 2
 text = "Advance type"
 horizontal_alignment = 2
 
-[node name="AdvanceType" type="OptionButton" parent="ClipSettings/VBoxContainer/ClipSettings"]
+[node name="AdvanceType" type="OptionButton" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -64,131 +111,200 @@ popup/item_1/id = 1
 popup/item_2/text = "Once"
 popup/item_2/id = 2
 
-[node name="ClipResource" type="HBoxContainer" parent="ClipSettings/VBoxContainer"]
+[node name="ClipRe" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer"]
 layout_mode = 2
-
-[node name="ClipRe" type="Label" parent="ClipSettings/VBoxContainer/ClipResource"]
-layout_mode = 2
-text = "Clip Resource"
+text = "Clip File"
 horizontal_alignment = 2
 
-[node name="Clip" type="EditorResourcePicker" parent="ClipSettings/VBoxContainer/ClipResource"]
+[node name="Clip" type="EditorResourcePicker" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 base_type = "AudioStream"
 script = ExtResource("1_rpfjw")
 
-[node name="NextClipContainer" type="HBoxContainer" parent="ClipSettings/VBoxContainer/ClipResource"]
+[node name="NextClipLabel" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NextClipLabel" type="Label" parent="ClipSettings/VBoxContainer/ClipResource/NextClipContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
 text = "Next Clip"
 horizontal_alignment = 2
 
-[node name="NextClip" type="OptionButton" parent="ClipSettings/VBoxContainer/ClipResource/NextClipContainer"]
+[node name="NextClip" type="OptionButton" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="VSeparator" type="VSeparator" parent="ClipSettings"]
-custom_minimum_size = Vector2(32, 0)
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings"]
+custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="BeatSettings" type="GridContainer" parent="ClipSettings"]
+[node name="BeatSettings" type="GridContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings"]
 layout_mode = 2
-size_flags_horizontal = 3
-columns = 4
+columns = 2
 
-[node name="bpm" type="Label" parent="ClipSettings/BeatSettings"]
+[node name="bpm" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/BeatSettings"]
 layout_mode = 2
 text = "BPM"
 horizontal_alignment = 2
 
-[node name="BPM" type="SpinBox" parent="ClipSettings/BeatSettings"]
+[node name="BPM" type="SpinBox" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/BeatSettings"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 500.0
+max_value = 1000.0
 value = 120.0
+allow_greater = true
 alignment = 1
-suffix = "bpm"
 
-[node name="BeatsxBar" type="Label" parent="ClipSettings/BeatSettings"]
+[node name="BeatsxBar" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/BeatSettings"]
 layout_mode = 2
 text = "Beats per bar"
 horizontal_alignment = 2
 
-[node name="Measure" type="SpinBox" parent="ClipSettings/BeatSettings"]
+[node name="Measure" type="SpinBox" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/BeatSettings"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 value = 4.0
 alignment = 1
 
-[node name="Transition" type="Label" parent="ClipSettings/BeatSettings"]
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings"]
+custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
-horizontal_alignment = 2
 
-[node name="Transition2" type="Label" parent="ClipSettings/BeatSettings"]
+[node name="TransitionType" type="GridContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings"]
 layout_mode = 2
-text = "Transition keys"
-horizontal_alignment = 2
+columns = 2
 
-[node name="All" type="Button" parent="ClipSettings/BeatSettings"]
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-text = "All"
-
-[node name="None" type="Button" parent="ClipSettings/BeatSettings"]
+[node name="TransitionType" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-focus_mode = 0
-text = "None"
+text = "Entry Transition"
+horizontal_alignment = 2
 
-[node name="AudioPreview" type="HBoxContainer" parent="."]
+[node name="TransType" type="OptionButton" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Inmediate"
+popup/item_1/text = "Crossfade"
+popup/item_1/id = 1
+popup/item_2/text = "Disabled"
+popup/item_2/id = 2
+
+[node name="FadeInC" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/FadeInC"]
+layout_mode = 2
+text = "FadeIn"
+vertical_alignment = 1
+
+[node name="FadeInValue" type="SpinBox" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/FadeInC"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 10.0
+step = 0.1
+alignment = 1
+suffix = "sec"
+
+[node name="FadeOutC" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/FadeOutC"]
+layout_mode = 2
+text = "FadeOut"
+vertical_alignment = 1
+
+[node name="FadeOutValue" type="SpinBox" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/FadeOutC"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 10.0
+step = 0.1
+alignment = 1
+suffix = "sec"
+
+[node name="TransitionLabel" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType"]
+layout_mode = 2
+text = "Transition Keys"
+horizontal_alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType"]
+layout_mode = 2
+
+[node name="All" type="Button" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "All Keys"
+
+[node name="None" type="Button" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "None Key"
+
+[node name="AddKey" type="Button" parent="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType"]
+visible = false
+layout_mode = 2
+text = "Add Key"
+icon = ExtResource("3_6qivv")
+
+[node name="AudioPreview" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="AudioPreview"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview"]
 layout_mode = 2
 alignment = 2
 
-[node name="Label" type="Control" parent="AudioPreview/VBoxContainer2"]
+[node name="TravelingLabel" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview/VBoxContainer2"]
+unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_vertical = 0
+text = "wait key..."
+label_settings = SubResource("LabelSettings_xt6al")
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Play" type="Button" parent="AudioPreview/VBoxContainer2"]
-custom_minimum_size = Vector2(64, 64)
+[node name="Play" type="Button" parent="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview/VBoxContainer2"]
+custom_minimum_size = Vector2(64, 48)
 layout_mode = 2
-size_flags_vertical = 3
-icon = ExtResource("2_g0gwv")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kqudi")
+theme_override_styles/normal = SubResource("StyleBoxFlat_gy100")
+icon = ExtResource("3_hoed5")
 icon_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AudioPreview"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BoxContainer" type="BoxContainer" parent="AudioPreview/VBoxContainer"]
+[node name="BarVisualizer" type="BoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview/VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 alignment = 1
 
-[node name="BarContainer" type="Control" parent="AudioPreview/VBoxContainer/BoxContainer"]
+[node name="BarContainer" type="Control" parent="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview/VBoxContainer/BarVisualizer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AudioSlider" type="HSlider" parent="AudioPreview/VBoxContainer"]
+[node name="AudioSlider" type="HSlider" parent="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 64)
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 theme_override_icons/grabber = ExtResource("3_tr6bm")
 theme_override_icons/grabber_highlight = ExtResource("3_tr6bm")
@@ -198,14 +314,72 @@ theme_override_styles/grabber_area_highlight = SubResource("StyleBoxLine_md0gg")
 step = 0.0
 scrollable = false
 
-[connection signal="text_changed" from="ClipSettings/VBoxContainer/ClipSettings/ClipName" to="." method="_on_clip_name_text_changed"]
-[connection signal="item_selected" from="ClipSettings/VBoxContainer/ClipSettings/AdvanceType" to="." method="_on_advance_type_item_selected"]
-[connection signal="resource_changed" from="ClipSettings/VBoxContainer/ClipResource/Clip" to="." method="_on_clip_resource_changed"]
-[connection signal="item_selected" from="ClipSettings/VBoxContainer/ClipResource/NextClipContainer/NextClip" to="." method="_on_next_clip_item_selected"]
-[connection signal="value_changed" from="ClipSettings/BeatSettings/BPM" to="." method="_on_bpm_value_changed"]
-[connection signal="value_changed" from="ClipSettings/BeatSettings/Measure" to="." method="_on_measure_value_changed"]
-[connection signal="pressed" from="ClipSettings/BeatSettings/All" to="." method="_on_all_pressed"]
-[connection signal="pressed" from="ClipSettings/BeatSettings/None" to="." method="_on_none_pressed"]
-[connection signal="pressed" from="AudioPreview/VBoxContainer2/Play" to="." method="_on_play_pressed"]
-[connection signal="drag_ended" from="AudioPreview/VBoxContainer/AudioSlider" to="." method="_on_audio_slider_drag_ended"]
-[connection signal="drag_started" from="AudioPreview/VBoxContainer/AudioSlider" to="." method="_on_audio_slider_drag_started"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview"]
+layout_mode = 2
+
+[node name="Label" type="Control" parent="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="ClipTime" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview/VBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+size_flags_vertical = 3
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Interrupted" type="CheckButton" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Can be Interrupted"
+icon = ExtResource("3_22d3q")
+
+[node name="BottomOptions" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Grid" type="CheckButton" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/BottomOptions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Snap"
+icon = ExtResource("6_a3jjc")
+
+[node name="SnapValue" type="SpinBox" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/BottomOptions"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+prefix = "x"
+
+[node name="Erase" type="Button" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/BottomOptions"]
+layout_mode = 2
+text = "Remove clip"
+icon = ExtResource("5_o3dby")
+
+[connection signal="text_changed" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer/ClipName" to="." method="_on_clip_name_text_changed"]
+[connection signal="item_selected" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer/AdvanceType" to="." method="_on_advance_type_item_selected"]
+[connection signal="resource_changed" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer/Clip" to="." method="_on_clip_resource_changed"]
+[connection signal="item_selected" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/VBoxContainer/NextClip" to="." method="_on_next_clip_item_selected"]
+[connection signal="value_changed" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/BeatSettings/BPM" to="." method="_on_bpm_value_changed"]
+[connection signal="value_changed" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/BeatSettings/Measure" to="." method="_on_measure_value_changed"]
+[connection signal="item_selected" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/TransType" to="." method="_on_trans_type_item_selected"]
+[connection signal="value_changed" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/FadeInC/FadeInValue" to="." method="_on_fade_in_value_value_changed"]
+[connection signal="value_changed" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/FadeOutC/FadeOutValue" to="." method="_on_fade_out_value_value_changed"]
+[connection signal="pressed" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/HBoxContainer/All" to="." method="_on_all_pressed"]
+[connection signal="pressed" from="VBoxContainer2/PanelContainer/VBoxContainer/ClipSettings/TransitionType/HBoxContainer/None" to="." method="_on_none_pressed"]
+[connection signal="pressed" from="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview/VBoxContainer2/Play" to="." method="_on_play_pressed"]
+[connection signal="drag_ended" from="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview/VBoxContainer/AudioSlider" to="." method="_on_audio_slider_drag_ended"]
+[connection signal="drag_started" from="VBoxContainer2/PanelContainer/VBoxContainer/AudioPreview/VBoxContainer/AudioSlider" to="." method="_on_audio_slider_drag_started"]
+[connection signal="toggled" from="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/Interrupted" to="." method="_on_interrupted_toggled"]
+[connection signal="toggled" from="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/BottomOptions/Grid" to="." method="_on_grid_toggled"]
+[connection signal="value_changed" from="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/BottomOptions/SnapValue" to="." method="_on_snap_value_value_changed"]
+[connection signal="pressed" from="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/BottomOptions/Erase" to="." method="_on_erase_pressed"]

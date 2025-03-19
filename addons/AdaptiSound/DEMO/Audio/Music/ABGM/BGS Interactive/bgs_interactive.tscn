@@ -1,0 +1,47 @@
+[gd_scene load_steps=11 format=3 uid="uid://cteprruajoljg"]
+
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioSynchronizedPlayer/AudioSynchronizedPlayer.gd" id="1_yfre3"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/BeatSystem.gd" id="2_3ncg0"]
+[ext_resource type="Script" path="res://addons/AdaptiSound/Nodes/AudioSynchronizedPlayer/AdaptiLayerResource.gd" id="2_ddr0c"]
+[ext_resource type="AudioStream" uid="uid://k8gwt7bdlqaj" path="res://addons/AdaptiSound/DEMO/Audio/Music/BGS/Forest.wav" id="3_odo0w"]
+[ext_resource type="AudioStream" uid="uid://cglq1s28qfsnm" path="res://addons/AdaptiSound/DEMO/Audio/Music/BGS/Rain.wav" id="4_wrpjt"]
+[ext_resource type="AudioStream" uid="uid://b0p5bk4idlm0v" path="res://addons/AdaptiSound/DEMO/Audio/Music/BGS/Wind.wav" id="5_y1ib6"]
+
+[sub_resource type="Resource" id="Resource_psn6h"]
+resource_name = "Layer 0"
+script = ExtResource("2_ddr0c")
+layer_name = &"Forest"
+clip = ExtResource("3_odo0w")
+mute = false
+
+[sub_resource type="Resource" id="Resource_h87ot"]
+resource_name = "Layer 1"
+script = ExtResource("2_ddr0c")
+layer_name = &"Rain"
+clip = ExtResource("4_wrpjt")
+mute = true
+
+[sub_resource type="Resource" id="Resource_whjww"]
+resource_name = "Layer 2"
+script = ExtResource("2_ddr0c")
+layer_name = &"Wind"
+clip = ExtResource("5_y1ib6")
+mute = true
+
+[sub_resource type="Resource" id="Resource_t03qp"]
+script = ExtResource("2_3ncg0")
+bpm = 120
+beats_per_bar = 4
+
+[node name="BGS_Interactive" type="Node"]
+script = ExtResource("1_yfre3")
+layers = Array[ExtResource("2_ddr0c")]([SubResource("Resource_psn6h"), SubResource("Resource_h87ot"), SubResource("Resource_whjww")])
+beat_system = SubResource("Resource_t03qp")
+editor_preview = true
+_play = false
+_stop = false
+volume_db = 0.0
+pitch_scale = 1.0
+fade_time = 1.0
+beat_system_enable = false
+beat_system = SubResource("Resource_t03qp")

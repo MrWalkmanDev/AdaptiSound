@@ -1,10 +1,8 @@
 @tool
 extends Control
 
-const BEAT_BAR = preload("res://addons/AdaptiSound/EditorInspector/BeatEditorPanel/beat_bar.tscn")
-const CLIP_SLOT = preload("res://addons/AdaptiSound/EditorInspector/BeatEditorPanel/clip_slot.tscn")
-
 @onready var clip_slots_container = %ClipSlots
+@onready var initial_clip : OptionButton = %InitialClip
 ## Settings Buttons ##
 @onready var volume_slider : HSlider = %Volume
 @onready var volume_spin : SpinBox = %VolValue
@@ -15,118 +13,110 @@ const CLIP_SLOT = preload("res://addons/AdaptiSound/EditorInspector/BeatEditorPa
 @onready var fade_out : HSlider = %FadeOut
 @onready var fade_out_value = %FadeOutValue
 
-var clips_slots : Array[AdaptiClipSlot] = []
-
 var node_selected : AdaptiNode
-var audio_stream : AudioStreamPlayer
-var current_clip_slot : AdaptiClipSlot
-
-var beat_duration_in_sec : float
-
+var layer_methods = AdaptiLayerPreviewMethods.new()
+var clip_methods = AdaptiClipPreviewMethods.new()
 
 func initialize_panel(selection:AdaptiNode):
-	set_process(false)
+	set_process(true)
 	node_selected = selection
 	
 	if node_selected is AudioInteractivePlayer:
-		current_clip_slot = null
-		audio_stream = null
+		%AudioSynchOption.visible = false
+		%ShuffleMode.visible = true
+		%Fades.visible = true
+		%InitialClipContainer.visible = true
 		
-		if !node_selected.ClipChanged.is_connected(clip_changed):
-			node_selected.ClipChanged.connect(clip_changed)
-		fade_in.value = node_selected.time_fade_in
-		fade_out.value = node_selected.time_fade_out
-		volume_slider.value = node_selected.volume_db
-		pitch_slider.value = node_selected.pitch_scale
-		update_clips()
-		await get_tree().process_frame
-		update_bars()
+		clip_methods.node_selected = node_selected
+		clip_methods.clip_slots_container = clip_slots_container
+		clip_methods.initial_clip = initial_clip
+		clip_methods.volume_slider = volume_slider
+		clip_methods.volume_spin = volume_spin
+		clip_methods.pitch_slider = pitch_slider
+		clip_methods.pitch_spin = pitch_spin
+		clip_methods.fade_in = fade_in
+		clip_methods.fade_in_value = fade_in_value
+		clip_methods.fade_out = fade_out
+		clip_methods.fade_out_value = fade_out_value
+		clip_methods.initialize_panel()
 		
 	elif node_selected is AudioSynchronizedPlayer:
-		return
-		#print(node_selected.layers[0].clip.get_length())
-		#audio_preview.max_value = node_selected.layers[0].clip.get_length()
+		%AudioSynchOption.visible = true
+		%ShuffleMode.visible = false
+		%Fades.visible = false
+		%InitialClipContainer.visible = false
+		
+		%BPM.value = node_selected.beat_system.bpm
+		%Mesaure.value = node_selected.beat_system.beats_per_bar
+		%FadeTime.value = node_selected.fade_time
+		
+		layer_methods.node_selected = node_selected
+		layer_methods.layer_slots_container = clip_slots_container
+		layer_methods.volume_slider = volume_slider
+		layer_methods.volume_spin = volume_spin
+		layer_methods.pitch_slider = pitch_slider
+		layer_methods.pitch_spin = pitch_spin
+		layer_methods.fade_time = fade_in
+		layer_methods.fade_time_value = fade_in_value
+		layer_methods.initialize_panel()
 
-func clip_changed(clip_res : AdaptiClipResource):
-	## Reset last clip playing ##
-	if current_clip_slot:
-		current_clip_slot.audio_slider.value = 0.0
-	## Set new Clip Slot ##
-	audio_stream = node_selected.get_audio_stream_player(clip_res.clip_name)
-	for i in clips_slots:
-		if i.clip_resource == clip_res:
-			current_clip_slot = i
-			break
-			
-	
+
 func update_clips():
-	for i in clip_slots_container.get_children():
-		i.queue_free()
-	clips_slots.clear()
-	for i : AdaptiClipResource in node_selected.clips:
-		if i.clip_name:
-			var clip_slot = CLIP_SLOT.instantiate()
-			clip_slot.clip_resource = i
-			clip_slot.audio_interactive_player = node_selected
-			clip_slot.play_pressed.connect(_on_play_pressed)
-			clip_slots_container.add_child(clip_slot)
-			clips_slots.append(clip_slot)
+	if node_selected is AudioInteractivePlayer:
+		clip_methods.update_clips()
 
 
 func update_bars():
-	for clip_slot : AdaptiClipSlot in clips_slots:
-		clip_slot.update_bars()
-	
+	if node_selected is AudioInteractivePlayer:
+		clip_methods.update_bars()
+		
 		
 func _process(delta: float) -> void:
-	if audio_stream:
-		if audio_stream.playing:
-			var song_position = audio_stream.get_playback_position()\
-			+ AudioServer.get_time_since_last_mix()
-			song_position -= AudioServer.get_output_latency()
-			#var song_position_in_beats = int(floor(song_position / beat_duration_in_sec))
-			current_clip_slot.audio_slider.value = song_position
-				
+	if visible:
+		update_bars()
+		set_process(false)
+
 
 ## -------------------------------------------------------------------------------------------
 ## PLAYBACK BUTTONS ##
+func _on_suffle_mode_toggled(toggled_on: bool) -> void:
+	if node_selected is AudioInteractivePlayer:
+		clip_methods._on_suffle_mode_toggled(toggled_on)
+
+func _on_initial_clip_item_selected(index: int) -> void:
+	if node_selected is AudioInteractivePlayer:
+		clip_methods._on_initial_clip_item_selected(index)
+
+func _on_play_from_zero_pressed() -> void:
+	if node_selected is AudioInteractivePlayer:
+		clip_methods._on_play_from_zero_pressed()
+	else:
+		layer_methods._on_play_from_zero_pressed()
+
 func _on_play_pressed(clip_slot:AdaptiClipSlot):
-	var clip_name = clip_slot.clip_resource.clip_name
-	clip_slot.audio_slider.max_value = clip_slot.clip_resource.clip.get_length()
-	
-	## Reset last clip playing ##
-	if current_clip_slot:
-		current_clip_slot.audio_slider.value = 0.0
-	
-	## Play new clip ##
-	audio_stream = node_selected.get_audio_stream_player(clip_name)
-	if audio_stream:
-		if clip_slot.audio_slider.value != 0.0:
-			node_selected.beat_editor_play(clip_name, 
-			clip_slot.audio_slider.value - \
-			AudioServer.get_time_since_last_mix() - \
-			AudioServer.get_output_latency())
-		else:
-			node_selected.play(clip_name)
-		current_clip_slot = clip_slot
-		set_process(true)
-	
+	if node_selected is AudioInteractivePlayer:
+		clip_methods._on_play_pressed(clip_slot)
 
 func _on_stop_pressed() -> void:
-	node_selected.stop()
-	if current_clip_slot:
-		current_clip_slot.audio_slider.value = 0.0
-	set_process(false)
+	if node_selected is AudioInteractivePlayer:
+		clip_methods._on_stop_pressed()
+	else:
+		layer_methods._on_stop_pressed()
 	
 func _on_pause_pressed() -> void:
-	node_selected.stop()
-	set_process(false)
-
+	if node_selected is AudioInteractivePlayer:
+		clip_methods._on_pause_pressed()
+	else:
+		layer_methods._on_pause_pressed()
 
 ## -------------------------------------------------------------------------------------------
 ## NAVIGATION METHODS ##
 func _on_update_pressed() -> void:
-	update_bars()
+	if node_selected is AudioInteractivePlayer:
+		clip_methods._on_update_pressed()
+	else:
+		layer_methods._on_update_pressed()
+
 
 ## -------------------------------------------------------------------------------------------
 ## SETTINGS BUTTONS ##
@@ -146,14 +136,51 @@ func _on_pitch_value_value_changed(value: float) -> void:
 
 func _on_fade_in_value_changed(value: float) -> void:
 	fade_in_value.value = value
-	node_selected.time_fade_in = value
+	if node_selected is AudioInteractivePlayer:
+		node_selected.fade_in_time = value
 
 func _on_fade_in_value_value_changed(value: float) -> void:
 	fade_in.value = value
 
 func _on_fade_out_value_changed(value: float) -> void:
 	fade_out_value.value = value
-	node_selected.time_fade_out = value
+	if node_selected is AudioInteractivePlayer:
+		node_selected.fade_out_time = value
 
 func _on_fade_out_value_value_changed(value: float) -> void:
 	fade_out.value = value
+	
+## AudioSynchronizedPlayer ##
+func _on_fade_time_value_changed(value: float) -> void:
+	%FadeTimeValue.value = value
+	if node_selected is AudioSynchronizedPlayer:
+		node_selected.fade_time = value
+
+func _on_fade_time_value_value_changed(value: float) -> void:
+	%FadeTime.value = value
+	
+func _on_bpm_value_changed(value: float) -> void:
+	if node_selected is AudioSynchronizedPlayer:
+		node_selected.beat_system.bpm = value
+
+func _on_mesaure_value_changed(value: float) -> void:
+	if node_selected is AudioSynchronizedPlayer:
+		node_selected.beat_system.beats_per_bar = value
+
+
+## Clips Array Methods ##
+func _on_add_clip_pressed() -> void:
+	if node_selected is AudioInteractivePlayer:
+		clip_methods._on_add_clip_pressed()
+	else:
+		layer_methods._on_add_clip_pressed()
+
+func clips_array_changed() -> void:
+	_on_update_pressed()
+
+
+
+## -------------------------------------------------------------------------------------------------
+## DEBUG ##
+func _print(message:String):
+	print("AudioEditorPreview: " + str(message))
