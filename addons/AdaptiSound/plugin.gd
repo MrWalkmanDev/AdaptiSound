@@ -10,14 +10,12 @@ const interactive_icon = preload("res://addons/AdaptiSound/Icons/Interactive.png
 ## NODES ##
 const synchronized_player = preload("res://addons/AdaptiSound/Nodes/AudioSynchronizedPlayer/AudioSynchronizedPlayer.gd")
 const interactive_player = preload("res://addons/AdaptiSound/Nodes/AudioInteractivePlayer/AudioInteractivePlayer.gd")
-const adaptitrack = preload("res://addons/AdaptiSound/Nodes/AdaptiTrack/AdaptiTrack.gd")
 
 ## PANELS ##
 const MainPanel = preload("res://addons/AdaptiSound/Panel/MainPanel.tscn")
 const INSPECTOR = preload("res://addons/AdaptiSound/EditorInspector/InspectorPlugin.gd")
 const BEAT_EDITOR_PANEL = preload("res://addons/AdaptiSound/EditorInspector/InteractivePlayer/BeatSystemEditor.tscn")
 
-#var audio_tool
 var beat_panel
 var main_instance
 var inspector_plugin
