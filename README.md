@@ -1,6 +1,6 @@
 # AdaptiSound
 
-![AdaptiSound-fotor-20230704182528](https://i.imgur.com/0AQxKDq.png)
+![AdaptiSound-fotor-20230704182528](https://i.imgur.com/eagX5Zp.jpeg)
 
 Complete Audio Manager for Godot 4.1
 
@@ -21,7 +21,7 @@ If you want to know more about installing plugins you can read the [Godot docs p
 
 ## 🎛Documentation
 
-- [Features](https://github.com/MrWalkmanDev/AdaptiSound/blob/main/addons/AdaptiSound/Documentation/Contents.md)
+- [Docs](https://github.com/MrWalkmanDev/AdaptiSound/blob/main/addons/AdaptiSound/Documentation/Contents.md)
 - [AdaptiSound Videos](https://www.youtube.com/playlist?list=PLTTGsGhb99NankmxWTExGjzpuvo5aj-Pn)
 
 ### 📃Credits
