@@ -29,7 +29,7 @@ The left button updates the bus options.
 ![img](https://i.imgur.com/olhUkrm.png)
 
 #### Preload System
-For each category a pool of files is created that is preloaded when the singleton starts, making audio playback more efficient. However, this option is not required for the plugin to work. You can dynamically load the files you want to play at a convenient time. The methods for achieving dynamic loading are found in AudioManager.md
+For each category a pool of files is created that is preloaded when the singleton starts, making audio playback more efficient. However, this option is not required for the plugin to work. You can dynamically load the files you want to play at a convenient time. The methods for achieving dynamic loading are found in [AudioManager](Documentation/AudioManager.md).
 
 To enable the preload system, you must set the `Audio Files Preload` and `Adaptive Scene Preload` properties for BGM, and `Audio and Scenes Files Preload` for BGS.
 
