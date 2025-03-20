@@ -1,6 +1,7 @@
 ﻿# AudioInteractivePlaylist
 
 Inherits from the AdaptiNode class.
+
 AudioInteractivePlaylist is a node that allows you to arrange multiple audio clips in a playlist, with only one clip playing at a time.
 Each clip has adjustable parameters, allowing for different behaviors.
 
@@ -16,6 +17,7 @@ This is the editor inspector view.
 
 ### Clips
 All the audio clips you want to have in this node are added to this array. Each clip is a resource of type `AdaptiClipResource`, and has internal options to configure its playback behavior.
+
 ![img](https://i.imgur.com/AaB9nzS.png[/img])
 
 To configure the clips, it is recommended to use the `Audio Editor Preview` Panel; its operation will be explained later.
