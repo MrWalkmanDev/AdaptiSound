@@ -118,3 +118,9 @@ Finally, we have the buttons at the bottom:
 The audio slider control snaps to the clip grid or not. The value next to it is used to increase the subdivision of the grid.
 * **Remove Clip**:
 Removes the clip from the Clips Array.
+
+## Signals
+* **ClipChanged(Value)**: Emitted when the playback of a clip has been changed. Value (AdaptiClipResource) is the new clip that is played.
+* **BeatChanged(Value)**: Emitted when a **beat** is received from the current playback clip. Value (int) is beat number in playback.
+* **BarChanged(Value)**: Emitted when a **bar** is received from the current playback clip. Value (int) is bar number in playback.
+* **LoopBegin**: Emitted when a clip loop starts again.
