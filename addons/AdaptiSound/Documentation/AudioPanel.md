@@ -40,6 +40,10 @@ With the *search* button you can view the files found in the directories.
 
 *`Note`: Adaptive Scenes Preload will search only .tscn files, as it will use only the scenes created with AudioInteractive, or AudioSynchronized Nodes*
 
+
+#### Preloaded files are saved with the file name as the key to access them, so you should ensure that the files you play have **unique names**.
+
+
 ![img](https://i.imgur.com/wbKBNil.png)
 
 #### Audio Extensions
