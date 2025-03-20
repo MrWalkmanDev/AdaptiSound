@@ -1,5 +1,6 @@
 ﻿# AudioSynchronized
 Inherits from the AdaptiNode class.
+
 AudioSynchronized is a node that allows multiple tracks to play simultaneously in parallel. Each track is a layer and can be controlled individually.
 
 To access this node, you must create a scene with the AudioSynchronized node and save it to the "Audio Scene Preload" directory in AudioPanel to preload the file.
