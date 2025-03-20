@@ -56,9 +56,37 @@ func _validate_property(property):
 	## BEAT SYSTEM ##
 	if property.name == "beat_system" and !beat_system_enable:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
+		
+	if property.name == "_play" and !editor_preview:
+		property.usage = PROPERTY_USAGE_NO_EDITOR
+		
+	if property.name == "_stop" and !editor_preview:
+		property.usage = PROPERTY_USAGE_NO_EDITOR
+		
+	if property.name == "volume_db" and !editor_preview:
+		property.usage = PROPERTY_USAGE_NO_EDITOR
+		
+	if property.name == "pitch_scale" and !editor_preview:
+		property.usage = PROPERTY_USAGE_NO_EDITOR
+		
+	if property.name == "fade_time" and !editor_preview:
+		property.usage = PROPERTY_USAGE_NO_EDITOR
 
 func _get_property_list():
 	var properties = []
+	
+	properties.append({
+		"name" : "beat_system_enable",
+		"type" : TYPE_BOOL,
+		"hint" : PROPERTY_HINT_NONE,
+	})
+	
+	properties.append({
+		"name" : "beat_system",
+		"type" : TYPE_OBJECT,
+		"hint" : PROPERTY_HINT_RESOURCE_TYPE,
+		"hint_string" : "BeatSystemResource"
+	})
 	
 	## EDITOR TOOL ##
 	properties.append({
@@ -100,19 +128,6 @@ func _get_property_list():
 		"type" : TYPE_FLOAT,
 		"hint" : PROPERTY_HINT_RANGE,
 		"hint_string" : "0.0, 10.0, 0.1"
-	})
-	
-	properties.append({
-		"name" : "beat_system_enable",
-		"type" : TYPE_BOOL,
-		"hint" : PROPERTY_HINT_NONE,
-	})
-	
-	properties.append({
-		"name" : "beat_system",
-		"type" : TYPE_OBJECT,
-		"hint" : PROPERTY_HINT_RESOURCE_TYPE,
-		"hint_string" : "BeatSystemResource"
 	})
 	
 	return properties
