@@ -4,6 +4,7 @@
 
 The `AudioPanel` will save audio files to pools and preload them into memory. This way, all preloaded audio files can be used simply by calling the `AudioManager` singleton's playback methods.
 **When making any changes in this panel, they must be saved by pressing the save button for the changes to take effect.**
+
 ![img](https://i.imgur.com/ED7M2Ec.png)
 
 
