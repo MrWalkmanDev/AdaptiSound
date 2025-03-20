@@ -8,6 +8,9 @@ class_name AudioInteractivePlayer
 
 
 signal ClipChanged(clip_resource:AdaptiClipResource)
+
+## Beat System Signals
+signal BeatChanged(value)
 signal BarChanged(value)
 signal LoopBegin
 
@@ -118,6 +121,8 @@ func enable_process_mode(value:bool):
 func initialize_beat_system():
 	if beat_system == null:
 		beat_system = BeatSystemResource.new()
+	if !beat_system.BeatChanged.is_connected(beat_signal_emit):
+		beat_system.BeatChanged.connect(beat_signal_emit)
 	if !beat_system.BarChanged.is_connected(bar_signal_emit):
 		beat_system.BarChanged.connect(bar_signal_emit)
 	if !beat_system.LoopBegin.is_connected(loop_begin_emit):
@@ -177,6 +182,9 @@ func create_audio_players():
 #################
 ## BEAT SYSTEM ##
 #################
+func beat_signal_emit(value):
+	BeatChanged.emit(value)
+	
 func bar_signal_emit(value):
 	if beat_system_debug:
 		_print("BeatSystem: Measure count: " + str(value))

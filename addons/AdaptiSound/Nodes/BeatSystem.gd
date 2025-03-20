@@ -2,6 +2,7 @@
 extends Resource
 class_name BeatSystemResource
 
+signal BeatChanged(value)
 signal BarChanged(value)
 signal LoopBegin
 
@@ -22,6 +23,9 @@ var _beat = 0
 var beat_measure_count = 1
 var measures = 1
 
+var can_beat_count : bool = true
+var current_beat_count:int=0
+
 func _init():
 	reset_beat_parameters(bpm)
 
@@ -34,6 +38,13 @@ func beat_process(delta, current_playback:AudioStreamPlayer):
 	report_beat()
 
 func report_beat():
+	if current_beat_count != song_position_in_beats and song_position_in_beats >= 0:
+		can_beat_count = true
+	if can_beat_count and song_position_in_beats >= 0:
+		current_beat_count = song_position_in_beats
+		can_beat_count = false
+		BeatChanged.emit(current_beat_count)
+	
 	## First Beat (Loop) ##
 	if song_position_in_beats <= 0 \
 	#and last_reported_beat == total_beat_count - 1 \
@@ -62,6 +73,7 @@ func report_beat():
 			BarChanged.emit(measures)
 		
 		last_reported_beat = song_position_in_beats
+		
 
 
 func reset_beat_parameters(_bpm:int):
