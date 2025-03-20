@@ -10,7 +10,7 @@ This tool is designed with the objective of implementing global background music
 ![img](https://i.imgur.com/JAO2IRF.png[/img])
 
 There are two categories of files that can be played: Simple Audio files: .wav, .mp3, .ogg, and AdaptiNodes (AudioInteractive, AudioSynchronized), which are nodes created to implement adaptive music.
-To learn more about these nodes see LINK
+To learn more about these nodes see [AudioInteractive](https://github.com/MrWalkmanDev/AdaptiSound/blob/main/addons/AdaptiSound/Documentation/AudioInteractivePlaylist.md) [AudioSynchronized](https://github.com/MrWalkmanDev/AdaptiSound/blob/main/addons/AdaptiSound/Documentation/AudioSynchronized.md)
 
 ## Audio Pool Methods
 ### load_audio_from_stream / load_audio_from_packedscene / load_audio_from_filepath
