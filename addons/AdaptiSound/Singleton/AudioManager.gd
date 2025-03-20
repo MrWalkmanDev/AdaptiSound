@@ -346,9 +346,9 @@ func mute_bgs_all_layers(mute_state: bool, fade_time := 2.0):
 
 
 ## -------------------------------------------------------------------------------------------------
-#####################
-## General Methods ##
-#####################
+############################
+## General Adapti Methods ##
+############################
 
 ## Set a custom method to execute after specific track stops
 ## For example, you can pass AudioManager.set_sequence(name, custom_method),
