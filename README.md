@@ -1,6 +1,6 @@
 # AdaptiSound
 
-![AdaptiSound-fotor-20230704182528](https://i.imgur.com/eagX5Zp.jpeg)
+![AdaptiSound-fotor-20230704182528](https://i.imgur.com/iuKM637.jpeg)
 
 Complete Audio Manager for Godot 4.3
 
