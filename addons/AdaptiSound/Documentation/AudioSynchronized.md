@@ -88,4 +88,4 @@ Removes the clip from the Clips Array.
 ## Signals
 * **BeatChanged(Value)**: Emitted when a **beat** is received from the current playback clip. Value (int) is beat number in playback.
 * **BarChanged(Value)**: Emitted when a **bar** is received from the current playback clip. Value (int) is bar number in playback.
-* **LoopBegin**: Emitted when a clip loop starts again.
+* **LoopBegin**: Emitted when a track loop starts again.
