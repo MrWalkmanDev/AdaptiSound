@@ -20,36 +20,35 @@ resource_name = "Layer 1"
 script = ExtResource("2_bew41")
 layer_name = &"Layer 1"
 clip = ExtResource("4_8jb6n")
-mute = true
+mute = false
 
 [sub_resource type="Resource" id="Resource_8fqpl"]
 resource_name = "Layer 2"
 script = ExtResource("2_bew41")
 layer_name = &"Layer 2"
 clip = ExtResource("5_ckobc")
-mute = true
+mute = false
 
 [sub_resource type="Resource" id="Resource_jiblv"]
 resource_name = "Layer 3"
 script = ExtResource("2_bew41")
 layer_name = &"Layer 3"
 clip = ExtResource("6_a1uio")
-mute = true
+mute = false
 
 [sub_resource type="Resource" id="Resource_kfvn2"]
 script = ExtResource("2_wueed")
-bpm = 75
+bpm = 150
 beats_per_bar = 4
 
 [node name="Example3" type="Node"]
 script = ExtResource("1_imuo6")
 layers = Array[ExtResource("2_bew41")]([SubResource("Resource_tbskp"), SubResource("Resource_itn1i"), SubResource("Resource_8fqpl"), SubResource("Resource_jiblv")])
+beat_system_enable = true
+beat_system = SubResource("Resource_kfvn2")
 editor_preview = true
 _play = false
 _stop = false
 volume_db = 0.0
 pitch_scale = 1.0
-fade_time = 1.0
-beat_system_enable = true
-beat_system = SubResource("Resource_kfvn2")
-beat_system_debug = false
+fade_time = 2.3
