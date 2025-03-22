@@ -22,7 +22,7 @@ If you want to know more about installing plugins you can read the [Godot docs p
 ## 🎛Documentation
 
 - [Docs](https://github.com/MrWalkmanDev/AdaptiSound/blob/main/addons/AdaptiSound/Documentation/Contents.md)
-- [AdaptiSound Videos](https://www.youtube.com/playlist?list=PLTTGsGhb99NankmxWTExGjzpuvo5aj-Pn)(
+- [AdaptiSound Videos]([https://www.youtube.com/playlist?list=PLTTGsGhb99NankmxWTExGjzpuvo5aj-Pn](https://www.youtube.com/watch?v=12IeYKnhCSI&t=7s))(
 not updated)
 
 ### 📃Credits
